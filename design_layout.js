@@ -1,6 +1,21 @@
 <!-- You must include this JavaScript file -->
 <script src="https://assets.crowd.aws/crowd-html-elements.js"></script>
 
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <div class="container">
+      <hr/>
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="range">
+            <input type="range" name="range" min="1" max="100" value="50" onchange="range.value=value">
+            <output id="range">50</output>
+          </div>
+        </div>
+    </div>
+
 <!-- For the full list of available Crowd HTML Elements and their input/output documentation,
       please refer to https://docs.aws.amazon.com/sagemaker/latest/dg/sms-ui-template-reference.html -->
 
