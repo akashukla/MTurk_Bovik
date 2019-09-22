@@ -4,7 +4,7 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
+<!--
     <div class="container">
       <hr/>
       <div class="row">
@@ -15,6 +15,7 @@
           </div>
         </div>
     </div>
+-->
 
 <!-- For the full list of available Crowd HTML Elements and their input/output documentation,
       please refer to https://docs.aws.amazon.com/sagemaker/latest/dg/sms-ui-template-reference.html -->
@@ -29,23 +30,35 @@
           when you publish a batch with a CSV input file containing multiple image file URLs.
           To preview the element with an example image, try setting the src attribute to
           "https://s3.amazonaws.com/cv-demo-images/two-birds.jpg" -->
-    <crowd-image-classifier 
-        src="${image_url}"
-        categories="['Yes', 'No', 'Cannot Determine']"
-        header="Select the highest compression level at which the image is still clear"
-        name="acceptable-image-compression">
-
+    <!--<crowd-image-classifier -->
+    <h2>Use the sloder to select the highest compression level at which the image is still clear</h2>
+<img src="https://c402277.ssl.cf1.rackcdn.com/photos/1257/images/hero_full/SeaTurtle-1600x600px.jpg?1345590072"
+     alt="turtle"
+     width="549"
+     height="206">
+    
+    <crowd-slider name="acceptable-image-compression"
+    max=30
+    min=0
+    step=1
+    pin=True>
+    </crowd-slider>
+</crowd-form>
+    <!--
+    categories="['Yes', 'No', 'Cannot Determine']"
+    header="Select the highest compression level at which the image is still clear"
+    name="acceptable-image-compression"-->
        <!-- Use the short-instructions section for quick instructions that the Worker
               will see while working on the task. Including some basic examples of 
               good and bad answers here can help get good results. You can include 
               any HTML here. -->
-        <short-instructions>
+        <!--<short-instructions-->
 
         <!-- Use the full-instructions section for more detailed instructions that the 
               Worker can open while working on the task. Including more detailed 
               instructions and additional examples of good and bad answers here can
               help get good results. You can include any HTML here. -->
-        <full-instructions header="Does this image contain the object of interest?">
+        <!--<full-instructions header="Does this image contain the object of interest?">
             <h2>Detailed instructions</h2>
             <p>Instructions for determining if the image contains the object:</p>
             <ol>
@@ -54,5 +67,5 @@
 	        <li>If it the object exists in the image, select that option; otherwise, indicate it does not</li>
             </ol>
         </full-instructions>
-    </crowd-image-classifier>
-</crowd-form>
+    <!--</crowd-image-classifier> -->
+    
