@@ -1,0 +1,54 @@
+<!--Slider can change which image is displayed based on the value of the slider in realtime, -->
+<!--i.e. the user does not need to release the slider for the slider value (and image) to update. -->
+<!--A skeleton structure for the HTML, CSS, and JS code is present.-->
+
+<!-- You must include this JavaScript file -->
+<script src="https://assets.crowd.aws/crowd-html-elements.js"></script>
+
+<!-- For the full list of available Crowd HTML Elements and their input/output documentation,
+      please refer to https://docs.aws.amazon.com/sagemaker/latest/dg/sms-ui-template-reference.html -->
+
+<!-- You must include crowd-form so that your task submits answers to MTurk -->
+<crowd-form answer-format="flatten-objects">
+    <!--The image-->
+    <div>
+        <h2>Turtle or Corgi?</h2>
+        <img id="id_image" name="n_image" src="https://c402277.ssl.cf1.rackcdn.com/photos/1257/images/hero_full/SeaTurtle-1600x600px.jpg?1345590072" alt="turtle" width="rangeSuccess" height="206">
+    </div>
+    
+    <!--Slider bar, HTML-->
+    <div>
+        <h2>For turtle, set the slider to something less than 50. For corgi, set the slider to something greater than or equal to 50. </h2>
+        <input type='range' name="name_slider" min='0' max='100' value='0' id='id_slider' class="class_slider"></input>
+        <output id="id_slider_disp">100</output></p>
+        
+        <!--Slider bar, CSS-->
+        <style>
+            .class_slider {
+              width: 300px;
+            }
+        </style>
+    </div>
+    <div id='id_disp_div' style='margin-top:2em;'></div> <!-- idk what this line does -->
+
+    <!--Slider bar, JS-->
+    <script>
+        var slider = document.getElementById("id_slider");
+        var a = 0; //variable to be controlled
+        var disp_div = document.getElementById("id_disp_div");
+        var img = document.getElementById("id_image");
+        var slider_disp = document.getElementById("id_slider_disp");
+        setInterval(function() {
+          a = slider.value;
+          disp_div.innerHTML = "Slider value: " + a;
+          slider_disp.value = slider.value;
+          if (a < 50) {
+            img.setAttribute("src", "https://c402277.ssl.cf1.rackcdn.com/photos/1257/images/hero_full/SeaTurtle-1600x600px.jpg?1345590072")
+          }
+          else {
+            img.setAttribute("src", "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/WelshCorgi.jpeg/440px-WelshCorgi.jpeg")
+          }
+        })
+    </script>
+    
+</crowd-form>
