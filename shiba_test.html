@@ -69,7 +69,7 @@
      var slider = document.getElementById("slider");
      var a = 0;
      var dispDiv = document.getElementById("dispDiv");
-     dispDiv.innerHTML = "Compression value is " + a;
+     dispDiv.innerHTML = "Slider value is " + a;
      
      var img = document.getElementById('img');
      var img_array = 
@@ -124,13 +124,13 @@
      
      slider.addEventListener("change", function(){
          a = slider.value;
-         dispDiv.innerHTML = "Compression value is "+a;
+         dispDiv.innerHTML = "Slider value is "+a;
 
      })
          
     setInterval(function() {
       a = slider.value;
-      dispDiv.innerHTML = "Compression value is " + a;
+      dispDiv.innerHTML = "Slider value is " + a;
       
 
     }, 100)
