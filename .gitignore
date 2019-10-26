@@ -47,4 +47,5 @@ Model_Root/data_experiments/LIVE/databaserelease2/wn
 # Environment
 #
 *.vimrc
- 
+*.DS_Store
+*.localized
