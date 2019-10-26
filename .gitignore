@@ -3,11 +3,17 @@
 #
 # Target and Gen Dirs
 #
-Model_Root/data_experiments/target/
+Model_Root/data_experiments/target
+
 
 #
-# LIVE Database
+# Databases
 # 
+
+# 8K Images
+Model_Root/datasets/Zhenqiang_8K_Images
+
+# LIVE Database
 Model_Root/data_experiments/LIVE/databaserelease2/fastfading
 Model_Root/data_experiments/LIVE/databaserelease2/gblur
 Model_Root/data_experiments/LIVE/databaserelease2/jp2k
