@@ -1,0 +1,38 @@
+# Files and content not to be tracked
+
+#
+# Target and Gen Dirs
+#
+Model_Root/data_experiments/target/
+
+#
+# LIVE Database
+# 
+Model_Root/data_experiments/LIVE/databaserelease2/fastfading
+Model_Root/data_experiments/LIVE/databaserelease2/gblur
+Model_Root/data_experiments/LIVE/databaserelease2/jp2k
+Model_Root/data_experiments/LIVE/databaserelease2/jpeg
+Model_Root/data_experiments/LIVE/databaserelease2/refimgs
+Model_Root/data_experiments/LIVE/databaserelease2/wn
+
+
+#
+# Compiled Sources
+# 
+
+# General
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Latex specific (continuous compiler)
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+ 
