@@ -41,4 +41,10 @@ Model_Root/data_experiments/LIVE/databaserelease2/wn
 *.log
 *.out
 *.synctex.gz
+
+
+#
+# Environment
+#
+*.vimrc
  
