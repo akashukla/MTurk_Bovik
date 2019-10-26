@@ -3,20 +3,9 @@
 #
 # Target and Gen Dirs
 #
-model_root/data_experiments/target
+*/target/
+*/gen/
 
-
-#
-# Databases
-# 
-
-# LIVE Database
-model_root/data_experiments/LIVE/databaserelease2/fastfading
-model_root/data_experiments/LIVE/databaserelease2/gblur
-mode_root/data_experiments/LIVE/databaserelease2/jp2k
-model_root/data_experiments/LIVE/databaserelease2/jpeg
-model_root/data_experiments/LIVE/databaserelease2/refimgs
-model_root/data_experiments/LIVE/databaserelease2/wn
 
 
 #
