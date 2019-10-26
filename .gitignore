@@ -11,7 +11,7 @@ Model/root/data_experiments/target
 # 
 
 # 8K Images
-Model/root/datasets/Zhenqiang_8K_Images
+Model/datasets/Zhenqiang_8K_Images
 
 # LIVE Database
 Model/root/data_experiments/LIVE/databaserelease2/fastfading
