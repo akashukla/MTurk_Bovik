@@ -3,7 +3,7 @@
 #
 # Target and Gen Dirs
 #
-Model/root/data_experiments/target
+model/root/data_experiments/target
 
 
 #
@@ -11,15 +11,15 @@ Model/root/data_experiments/target
 # 
 
 # 8K Images
-Model/datasets/Zhenqiang_8K_Images
+model/datasets/Zhenqiang_8K_Images
 
 # LIVE Database
-Model/root/data_experiments/LIVE/databaserelease2/fastfading
-Model/root/data_experiments/LIVE/databaserelease2/gblur
-Model/root/data_experiments/LIVE/databaserelease2/jp2k
-Model/root/data_experiments/LIVE/databaserelease2/jpeg
-Model/root/data_experiments/LIVE/databaserelease2/refimgs
-Model/root/data_experiments/LIVE/databaserelease2/wn
+model/root/data_experiments/LIVE/databaserelease2/fastfading
+model/root/data_experiments/LIVE/databaserelease2/gblur
+model/root/data_experiments/LIVE/databaserelease2/jp2k
+model/root/data_experiments/LIVE/databaserelease2/jpeg
+model/root/data_experiments/LIVE/databaserelease2/refimgs
+model/root/data_experiments/LIVE/databaserelease2/wn
 
 
 #
