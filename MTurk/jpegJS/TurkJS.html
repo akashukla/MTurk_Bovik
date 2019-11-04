@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Turk JPEG</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="http://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" type="text/css" media="all" />
+
+    <script src="js/JIC.min.js" type="text/javascript"></script>
+    <script src="js/demo.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+    <h1>JPEG Javascript test</h1>
+
+    <input type='file' onchange="readURL(this);" />
+    <img id="source_image" src="#" alt="image" style="display:none" />
+    <br>
+    <img id="result_image">
+
+    <fieldset style="width:800px">
+        <legend>Compressor settings</legend>
+        <div id="slider-range-min"></div>
+        <div>Compression ratio :
+            <input id="jpeg_encode_quality" size='3' readonly='true' type="text" value="50" /> %
+        </div>
+        </div>
+    </fieldset>
+
+</body>
+
+<script>
+</script>
+
+</html>
