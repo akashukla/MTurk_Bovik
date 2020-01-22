@@ -8,6 +8,8 @@ count=np.r_[0,0]
 names=np.genfromtxt('8k_image_names.csv','str', delimiter=',')
 num_images=names.shape[0]
 names=names[:,0]
+#hit_names=np.zeros((3200,50),dtype='str')
+hit_names=[]
 ids=np.arange(num_images)
 np.savetxt('counts.csv',np.r_[count], '%d')
 
@@ -24,8 +26,10 @@ for count in range(3200):
             shuffle(ids)
             print(ids)
         hit_ids=ids[(count[1]*50)%num_images:(count[1]*50)%num_images+50]
-        hit_names=names[hit_ids]
+        hit_names.append(names[hit_ids])
         np.savetxt('counts.csv',count, '%d')
     #else:
         #break
+hit_names=np.array(hit_names)
+np.savetxt('hit_list.csv',hit_names,delimiter=',',fmt='%s')
   
