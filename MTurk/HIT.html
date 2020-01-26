@@ -2,13 +2,13 @@
 <html>
 <head>
 <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://assets.crowd.aws/crowd-html-elements.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
-<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" media="all" rel="stylesheet" type="text/css">
-<link href="http://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" media="all" rel="stylesheet" type="text/css">
+<link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" media="all" rel="stylesheet" type="text/css">
+<link href="https://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" media="all" rel="stylesheet" type="text/css">
 
 <style>
   #slider{
@@ -16,70 +16,63 @@
   }
   #slider.ui-slider-range { background: #f6931f; }
   #slider.ui-slider-handle { border-color: #f6931f; }
-  </style>
+</style>
 
 <script>
     var names
     var nexts = 0 
+    var bucket_url = "https://snako.s3.us-east-2.amazonaws.com/";
     var hit_list_url = "https://snako.s3.us-east-2.amazonaws.com/1_hit_list.csv"
     var hit_number_url = "https://snako.s3.us-east-2.amazonaws.com/1_hit_number.txt"
     var proxy_url = "https://cors-anywhere.herokuapp.com/";
-    var bucket_url = "https://snako.s3.us-east-2.amazonaws.com/";
     var allText;
     var hit_sets;
     var hit_number;
-
+    
     function setImageb(button){
-        source_image.src = "https://snako.s3.us-east-2.amazonaws.com/" + names[nexts+1];
-        result_image.src = "https://snako.s3.us-east-2.amazonaws.com/" + names[nexts+1];
-           //Slider init
-           $("#slider").slider({
-               orientation: "horizontal",
-               range: "max",
-               value: 40,
-               min: 0,
-               max: 40,
-
-           });
-           $("#jpeg_encode_quality").val($("#slider").slider("value"));
+        source_image.src = proxy_url + bucket_url + names[nexts+1];
+        result_image.src = proxy_url + bucket_url + names[nexts+1];
+        //Slider init
+        $("#slider").slider({
+            orientation: "horizontal",
+            range: "max",
+            value: 40,
+            min: 0,
+            max: 40,
+        });
+        $("#jpeg_encode_quality").val($("#slider").slider("value"));
         nexts = nexts+1;
     }
-
-
-    
     $.get(proxy_url + hit_number_url, function( data ) {
-      hit_number = data;
-      $.ajax({
+        hit_number = data;
+        $.ajax({
     	    type: "GET",  
     	    url: proxy_url + hit_list_url,
     	    dataType: "text",       
     	    success: function(response)  
     	    {
-    		    var option = "random";
+    		    var set_number = document.getElementById("set_number"); // the element that will export the set number in the results csv
     		    hit_sets = $.csv.toArrays(response);
     		    var i_set = (hit_number % hit_sets.length)
     		    var hit_set = hit_sets[i_set].toString();
     		    names = hit_set.split(",");
                 image_name=names[0]
-    		    source_image.src = "https://snako.s3.us-east-2.amazonaws.com/" + image_name;
-    		    result_image.src = "https://snako.s3.us-east-2.amazonaws.com/" + image_name;
-    		    
+    		    source_image.src = proxy_url + bucket_url + image_name;
+    		    result_image.src = proxy_url + bucket_url + image_name;
+    		    set_number.value = hit_number;
             }   
         });
     });
 
-
-       $(function(){
+    $(function(){
         var source_image = document.getElementById('source_image');
         var downloadingImage = new Image();
         downloadingImage.onload = function(){
             source_image.src = this.src;   
         };
         downloadingImage=toDataURL(source_image.src, function(dataUrl) {
-          console.log('RESULT:', dataUrl)
+            console.log('RESULT:', dataUrl)
         })
-
-
         var result_image = document.getElementById('result_image');
         var downloadingImage2 = new Image();
         downloadingImage2.onload = function(){
@@ -88,75 +81,75 @@
         downloadingImage2=toDataURL(result_image.src, function(dataUrl) {
           console.log('RESULT:', dataUrl)
         })
+        var output_format = "jpg";
 
-           var output_format = "jpg";
-
-           //Slider init
-           $("#slider").slider({
-               orientation: "horizontal",
-               range: "max",
-               value: 40,
-               min: 0,
-               max: 40,
-               slide: function(event, ui) {
-                   $("#jpeg_encode_quality").val(ui.value);
-               }
-           });
-           $("#jpeg_encode_quality").val($("#slider").slider("value"));
-           $( "#slider" ).on("slide", function( event, ui ) {
-               var encodeQuality = document.getElementById('jpeg_encode_quality');
-               var source_image = document.getElementById('source_image');
-               var result_image = document.getElementById('result_image');
-               if (source_image.src == "") {
-                   alert("You must load an image first!");
-                   return false;
-               }
-               var quality = parseInt(encodeQuality.value);        
-               result_image.src = compress(source_image,quality,output_format).src;   
-    } );
-
-       });
-
-       function compress(source_img_obj, quality, output_format){
-                
-                var mime_type;
-                if(output_format==="png"){
-                   mime_type = "image/png";
-                } else if(output_format==="webp") {
-                   mime_type = "image/webp";
-                } else {
-                   mime_type = "image/jpeg";
-                }
-
-                var cvs = document.createElement('canvas');
-                cvs.width = source_img_obj.naturalWidth;
-                cvs.height = source_img_obj.naturalHeight;
-                var ctx = cvs.getContext("2d").drawImage(source_img_obj, 0, 0);
-                var newImageData = cvs.toDataURL(mime_type, quality/100);
-                var result_image_obj = new Image();
-                result_image_obj.src = newImageData;
-                return result_image_obj;
-       };
-
-       function toDataURL(url, callback) {
-          var xhr = new XMLHttpRequest();
-          xhr.onload = function() {
-            var reader = new FileReader();
-            reader.onloadend = function() {
-              callback(reader.result);
+        //Slider init
+        $("#slider").slider({
+            orientation: "horizontal",
+            range: "max",
+            value: 40,
+            min: 0,
+            max: 40,
+            slide: function(event, ui) {
+                $("#jpeg_encode_quality").val(ui.value);
             }
-            reader.readAsDataURL(xhr.response);
-          };
-          xhr.open('GET', url);
-          xhr.responseType = 'blob';
-          xhr.send();
+        });
+        $("#jpeg_encode_quality").val($("#slider").slider("value"));
+        $( "#slider" ).on("slide", function( event, ui ) {
+            var encodeQuality = document.getElementById('jpeg_encode_quality');
+            var source_image = document.getElementById('source_image');
+            var result_image = document.getElementById('result_image');
+            if (source_image.src == "") {
+                alert("You must load an image first!");
+                return false;
+            }
+            var quality = parseInt(encodeQuality.value);        
+            result_image.src = compress(source_image,quality,output_format).src;   
+        });
+
+    });
+
+    function compress(source_img_obj, quality, output_format){
+                
+        var mime_type;
+        if(output_format==="png"){
+           mime_type = "image/png";
+        } else if(output_format==="webp") {
+           mime_type = "image/webp";
+        } else {
+           mime_type = "image/jpeg";
         }
 
-        toDataURL(source_image.src, function(dataUrl) {
-          console.log('RESULT:', dataUrl)
-        })
-    </script>
+        var cvs = document.createElement('canvas');
+        cvs.width = source_img_obj.naturalWidth;
+        cvs.height = source_img_obj.naturalHeight;
+        var ctx = cvs.getContext("2d").drawImage(source_img_obj, 0, 0);
+        var newImageData = cvs.toDataURL(mime_type, quality/100);
+        var result_image_obj = new Image();
+        result_image_obj.src = newImageData;
+        return result_image_obj;
+    };
+
+    function toDataURL(url, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                callback(reader.result);
+            }
+            reader.readAsDataURL(xhr.response);
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
+    }
+
+    toDataURL(source_image.src, function(dataUrl) {
+        console.log('RESULT:', dataUrl)
+    })
+</script>
 </head>
+
 <body>
 <crowd-form answer-format="flatten-objects">
   <crowd-instructions link-text="View instructions" link-type="button">
@@ -188,7 +181,7 @@
 
 
 <div>
-    <img id="source_image"  style="display: none;"> 
+    <img id="source_image"  style="display: none;" crossOrigin="anonymous"> 
     <img id="result_image">
 <!--
     <fieldset style="width:800px">
@@ -203,15 +196,15 @@
 <div>
 <p>
   <label for="jpeg_encode_quality">Compression Ratio:</label>
-  <input type="text" id="jpeg_encode_quality" readonly style="border:0; color:#f6931f; font-weight:bold;"
+  <input type="text" id="jpeg_encode_quality" readonly style="border:0; color:#f6931f; font-weight:bold;">
 </p>
-    <div id="slider" calss = slider></div>
+    <div id="slider" class = slider></div>
 </div>
 
 <div>
-    <p>
-    <input type="button" onclick="setImageb(1)" id='Next button' name='nextbutton' class="btn btn-primary">Next Button</input>
-</p>
+    <p><input type="button" onclick="setImageb(1)" id='Next button' name='nextbutton' value="Next" class="btn btn-primary"></input></p>
+    <crowd-input id='set_number' name='set_number' value='initial' type='hidden'></crowd-input>
+
 </div>
 
 </body>
