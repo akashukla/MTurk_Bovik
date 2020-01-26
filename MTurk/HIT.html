@@ -28,8 +28,11 @@
     var allText;
     var hit_sets;
     var hit_number;
+    var slider_vals = '';
+
     
     function setImageb(button){
+        slider_vals = slider_vals + $("#slider").slider("value").toString() + ',';
         source_image.src = proxy_url + bucket_url + names[nexts+1];
         result_image.src = proxy_url + bucket_url + names[nexts+1];
         //Slider init
@@ -42,7 +45,14 @@
         });
         $("#jpeg_encode_quality").val($("#slider").slider("value"));
         nexts = nexts+1;
+        
+        console.log(slider_vals);
+        if(nexts == names.length){
+            slider_values.value = slider_vals;
+            document.getElementById("submitButton").style = "display: block;";
+        }
     }
+
     $.get(proxy_url + hit_number_url, function( data ) {
         hit_number = data;
         $.ajax({
@@ -56,6 +66,7 @@
     		    var i_set = (hit_number % hit_sets.length)
     		    var hit_set = hit_sets[i_set].toString();
     		    names = hit_set.split(",");
+    		    names = names.slice(0,3);
                 image_name=names[0]
     		    source_image.src = proxy_url + bucket_url + image_name;
     		    result_image.src = proxy_url + bucket_url + image_name;
@@ -71,7 +82,7 @@
             source_image.src = this.src;   
         };
         downloadingImage=toDataURL(source_image.src, function(dataUrl) {
-            console.log('RESULT:', dataUrl)
+            console.log('RESULT:', '1') // dataUrl
         })
         var result_image = document.getElementById('result_image');
         var downloadingImage2 = new Image();
@@ -79,7 +90,7 @@
             result_image.src = this.src;   
         };
         downloadingImage2=toDataURL(result_image.src, function(dataUrl) {
-          console.log('RESULT:', dataUrl)
+          console.log('RESULT:', '1') // dataUrl
         })
         var output_format = "jpg";
 
@@ -151,6 +162,7 @@
 </head>
 
 <body>
+
 <crowd-form answer-format="flatten-objects">
   <crowd-instructions link-text="View instructions" link-type="button">
     <short-summary>
@@ -203,9 +215,11 @@
 
 <div>
     <p><input type="button" onclick="setImageb(1)" id='Next button' name='nextbutton' value="Next" class="btn btn-primary"></input></p>
-    <crowd-input id='set_number' name='set_number' value='initial' type='hidden'></crowd-input>
-
+    <crowd-input id='set_number' name='set_number' value='initial' type='hidden' style='display: none;'></crowd-input>
+    <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
+    <!--<crowd-button><iron-icon icon="search" form-action="submit"></iron-icon></crowd-button>-->
+    <input type="submit" id="submitButton" type='hidden' style='display: none;'>
 </div>
-
+</crowd-form>
 </body>
 </html>
