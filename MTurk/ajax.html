@@ -54,7 +54,7 @@
  <div>
     <h2 class = "center class_slider">Slide to compress image</h2>
     <!-- <input onchange='setImage(this)' type='range' min='0' max='24' value='0' id='slider' name ="slider" width ="100px"></input> -->
-    <input onchange='setImage(this)' type='range' min='1' max='40' value='0' id='slider' name ="slider" class="center class_slider"  editable = 'true' pin ='true'> </input>
+    <input onchange='setImage(this)' type='range' min='1' max='40' value='40' id='slider' name ="slider" class="center class_slider"  editable = 'true' pin ='true'> </input>
     <div id='dispDiv' style='margin-top:2em;'class="center class_slider"></div>
         <style>
             .class_slider {
@@ -124,9 +124,38 @@
     }
 
     function setImage(slider){
-        var value = slider.value;
-        img.src = img_array[value];
+        var output_format = "jpg";
+               if (rand_image_disp.src == "") {
+                   alert("You must load an image first!");
+                   return false;
+               }
+
+        var quality = slider.value
+        img.src = compress(rand_image_disp,quality,output_format).src;   
     }
+
+       function compress(source_img_obj, quality, output_format){
+                var mime_type;
+                if(output_format==="png"){
+                   mime_type = "image/png";
+                } else if(output_format==="webp") {
+                   mime_type = "image/webp";
+                } else {
+                   mime_type = "image/jpeg";
+                }
+
+                var cvs = document.createElement('canvas');
+                cvs.width = source_img_obj.naturalWidth;
+                cvs.height = source_img_obj.naturalHeight;
+                var ctx = cvs.getContext("2d").drawImage(source_img_obj, 0, 0);
+                var newImageData = cvs.toDataURL(mime_type, quality/100);
+                var result_image_obj = new Image();
+                result_image_obj.src = newImageData;
+                return result_image_obj;
+       };
+
+
+
     setInterval(function(){ setImage(slider);}, 100);
     
      
@@ -139,7 +168,23 @@
       a = slider.value;
       dispDiv.innerHTML = "Slider value is " + a;
     }, 100)
-     
+
+    function toDataURL(url, callback) {
+          var xhr = new XMLHttpRequest();
+          xhr.onload = function() {
+            var reader = new FileReader();
+            reader.onloadend = function() {
+              callback(reader.result);
+            }
+            reader.readAsDataURL(xhr.response);
+          };
+          xhr.open('GET', url);
+          xhr.responseType = 'blob';
+          xhr.send();
+        }
+
+
+    
  </script>
   <div>
        <img id='rand_image' src ="https://snako.s3.us-east-2.amazonaws.com/AVA__20278.jpg" style="width:600px;" class = "center">
@@ -187,6 +232,59 @@
             }   
         });
     });
+
+       $(function(){
+
+        var source_image= document.getElementById('rand_image');
+        var downloadingImage = new Image();
+        downloadingImage.onload = function(){
+            source_image.src = this.src;   
+        };
+
+        var downloadingImage=toDataURL(rand_image_disp.src, function(dataUrl) {
+          console.log('RESULT:', dataUrl)
+        })
+
+
+        var result_image = document.getElementById('result_image');
+        var downloadingImage2 = new Image();
+        downloadingImage2.onload = function(){
+            result_image.src = this.src;   
+        };
+
+           var output_format = "jpg";
+
+           //Slider init
+           $("#slider-range-min").slider({
+               range: "min",
+               value: 100,
+               min: 0,
+               max: 100,
+               slide: function(event, ui) {
+                   $("#jpeg_encode_quality").val(ui.value);
+               }
+
+           });
+           $("#jpeg_encode_quality").val($("#slider-range-min").slider("value"));
+
+           $( "#slider-range-min" ).on("slide", function( event, ui ) {
+               
+
+               var encodeQuality = document.getElementById('jpeg_encode_quality');
+               var source_image = document.getElementById('source_image');
+               var result_image = document.getElementById('result_image');
+               if (source_image.src == "") {
+                   alert("You must load an image first!");
+                   return false;
+               }
+
+               var quality = parseInt(encodeQuality.value);        
+               result_image.src = compress(source_image,quality,output_format).src;   
+
+    } );
+
+       });
+
   </script>
 </crowd-form>
 
