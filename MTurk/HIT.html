@@ -1,58 +1,23 @@
-<meta charset="utf-8"/>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://assets.crowd.aws/crowd-html-elements.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
-
+<link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" media="all" rel="stylesheet" type="text/css">
 <link href="http://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" media="all" rel="stylesheet" type="text/css">
-<link href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" media="all" rel="stylesheet" type="text/css">
 
-<crowd-form answer-format="flatten-objects">
-  <crowd-instructions link-text="View instructions" link-type="button">
-    <short-summary>
-      <p>Adjust the slider so that the image is as compressed as it can be without changing the image quality.</p>
-    </short-summary>
+<style>
+  #slider{
+    width: 600px;
+  }
+  #slider.ui-slider-range { background: #f6931f; }
+  #slider.ui-slider-handle { border-color: #f6931f; }
+  </style>
 
-    <detailed-instructions>
-      <h3>Provide more detailed instructions here</h3>
-      <p>The slider bar under each image controls the compression level of the image.</p>
-    </detailed-instructions>
-
-    <positive-example>
-      <p>Provide an example of a good answer here</p>
-      <p>Explain why it's a good answer</p>
-    </positive-example>
-
-    <negative-example>
-      <p>Provide an example of a bad answer here</p>
-      <p>Explain why it's a bad answer</p>
-    </negative-example>
-  </crowd-instructions>
-
-  <div>
-    <p>(Sandbox version)</p>
-    <p>How old are you?</p>
-    <crowd-input name="age" placeholder="Age" required></crowd-input>
-  </div>
-
-
-<div>
-    <img id="source_image"  style="display: none;"> 
-    <img id="result_image">
-    <fieldset style="width:800px">
-        <legend>Compressor settings</legend>
-        <div id="slider-range-max"></div>
-        <div>
-            Compression ratio : <input id="jpeg_encode_quality" readonly='true' size='3' type="text" value="40"></input>
-        </div>
-    </fieldset>
-
-</div>
-<div>
-    <h2 class="btn btn-primary">click for next image </h2>
-    <input type="button" onclick="setImageb(1)" id='next button' name='next button' class="btn btn-primary">Next Button</input>
-</div>
- 
 <script>
     var names
     var nexts = 0 
@@ -68,16 +33,15 @@
         source_image.src = "https://snako.s3.us-east-2.amazonaws.com/" + names[nexts+1];
         result_image.src = "https://snako.s3.us-east-2.amazonaws.com/" + names[nexts+1];
            //Slider init
-           $("#slider-range-max").slider({
+           $("#slider").slider({
+               orientation: "horizontal",
                range: "max",
                value: 40,
                min: 0,
                max: 40,
-               slide: function(event, ui) {
-                   $("#jpeg_encode_quality").val(ui.value);
-               }
 
            });
+           $("#jpeg_encode_quality").val($("#slider").slider("value"));
         nexts = nexts+1;
     }
 
@@ -128,7 +92,8 @@
            var output_format = "jpg";
 
            //Slider init
-           $("#slider-range-max").slider({
+           $("#slider").slider({
+               orientation: "horizontal",
                range: "max",
                value: 40,
                min: 0,
@@ -136,13 +101,9 @@
                slide: function(event, ui) {
                    $("#jpeg_encode_quality").val(ui.value);
                }
-
            });
-           $("#jpeg_encode_quality").val($("#slider-range-max").slider("value"));
-
-           $( "#slider-range-max" ).on("slide", function( event, ui ) {
-               
-
+           $("#jpeg_encode_quality").val($("#slider").slider("value"));
+           $( "#slider" ).on("slide", function( event, ui ) {
                var encodeQuality = document.getElementById('jpeg_encode_quality');
                var source_image = document.getElementById('source_image');
                var result_image = document.getElementById('result_image');
@@ -150,10 +111,8 @@
                    alert("You must load an image first!");
                    return false;
                }
-
                var quality = parseInt(encodeQuality.value);        
                result_image.src = compress(source_image,quality,output_format).src;   
-
     } );
 
        });
@@ -197,5 +156,63 @@
           console.log('RESULT:', dataUrl)
         })
     </script>
+</head>
+<body>
+<crowd-form answer-format="flatten-objects">
+  <crowd-instructions link-text="View instructions" link-type="button">
+    <short-summary>
+      <p>Adjust the slider so that the image is as compressed as it can be without changing the image quality.</p>
+    </short-summary>
+
+    <detailed-instructions>
+      <h3>Provide more detailed instructions here</h3>
+      <p>The slider bar under each image controls the compression level of the image.</p>
+    </detailed-instructions>
+
+    <positive-example>
+      <p>Provide an example of a good answer here</p>
+      <p>Explain why it's a good answer</p>
+    </positive-example>
+
+    <negative-example>
+      <p>Provide an example of a bad answer here</p>
+      <p>Explain why it's a bad answer</p>
+    </negative-example>
+  </crowd-instructions>
+
+  <div>
+    <p>(Sandbox version)</p>
+    <p>How old are you?</p>
+    <crowd-input name="age" placeholder="Age" required></crowd-input>
+  </div>
+
+
+<div>
+    <img id="source_image"  style="display: none;"> 
+    <img id="result_image">
+<!--
+    <fieldset style="width:800px">
+        <legend>Compressor settings</legend>
+        <div id="slider-range-max" class = "slider"></div>
+        <div>
+            Compression ratio : <input id="jpeg_encode_quality" readonly='true' size='3' type="text" value="40"></input>
+        </div>
+    </fieldset>
+-->
+</div>
+<div>
+<p>
+  <label for="jpeg_encode_quality">Compression Ratio:</label>
+  <input type="text" id="jpeg_encode_quality" readonly style="border:0; color:#f6931f; font-weight:bold;"
+</p>
+    <div id="slider" calss = slider></div>
+</div>
+
+<div>
+    <p>
+    <input type="button" onclick="setImageb(1)" id='Next button' name='nextbutton' class="btn btn-primary">Next Button</input>
+</p>
+</div>
+
 </body>
 </html>
