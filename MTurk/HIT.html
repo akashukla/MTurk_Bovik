@@ -29,27 +29,105 @@
     var hit_sets;
     var hit_number;
     var slider_vals = '';
-
+    var phase = 'beginning';
+    var tutorial_names = ['AVA__243298.jpg', 'AVA__330138.jpg', 'AVA__34284.jpg']
+    var tutorial_nexts = 0;
+    var first_image = true;
+    
+    function init(){
+        showClass('begin_class');
+        hideClass('image_class');
+        hideClass('end_class'); 
+        hideClass('slider_class');
+        hideClass('tutorial_complete_class');
+    }
+    
+    window.onload = init;
+    
+    function showClass(class_name){
+        var x = document.getElementsByClassName(class_name); 
+        for (var i = 0; i < x.length; i++) { 
+            if(x[i].id != 'source_image'){
+                x[i].style.display = "block"; 
+            }
+        } 
+    }
+    
+    function hideClass(class_name){
+        var x = document.getElementsByClassName(class_name); 
+        for (var i = 0; i < x.length; i++) { 
+            x[i].style.display = "none"; 
+        } 
+    }
+    
+    function hideElement(id){
+        document.getElementById(id).style = 'display: none;';
+    }
+    
+    function showElement(id){
+        document.getElementById(id).style = 'display: block;';
+    }
     
     function setImageb(button){
-        slider_vals = slider_vals + $("#slider").slider("value").toString() + ',';
-        source_image.src = proxy_url + bucket_url + names[nexts+1];
-        result_image.src = proxy_url + bucket_url + names[nexts+1];
-        //Slider init
-        $("#slider").slider({
-            orientation: "horizontal",
-            range: "max",
-            value: 40,
-            min: 0,
-            max: 40,
-        });
-        $("#jpeg_encode_quality").val($("#slider").slider("value"));
-        nexts = nexts+1;
-        
-        console.log(slider_vals);
-        if(nexts == names.length){
-            slider_values.value = slider_vals;
-            document.getElementById("submitButton").style = "display: block;";
+        if(phase === 'beginning'){
+            if(tutorial_nexts === tutorial_names.length-1){
+                showClass('tutorial_complete_class');
+                hideClass('slider_class');
+                hideClass('image_class');
+                phase = 'study';
+            } else { 
+                showClass('slider_class');
+                showClass('image_class');
+                hideClass('begin_class');
+                source_image.src = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
+                result_image.src = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
+                //Slider init
+                $("#slider").slider({
+                    orientation: "horizontal",
+                    range: "max",
+                    value: 40,
+                    min: 0,
+                    max: 40,
+                });
+                $("#jpeg_encode_quality").val($("#slider").slider("value"));
+                tutorial_nexts = tutorial_nexts+1;
+            }
+        }
+        else if(phase === 'study'){
+            hideClass('begin_class');
+            hideClass('tutorial_complete_class');
+            showClass('image_class');
+            showClass('slider_class');
+            if (first_image === false){
+                slider_vals = slider_vals + $("#slider").slider("value").toString() + ',';
+            } else {
+                first_image = false;
+            }
+            source_image.src = proxy_url + bucket_url + names[nexts];
+            result_image.src = proxy_url + bucket_url + names[nexts];
+            //Slider init
+            $("#slider").slider({
+                orientation: "horizontal",
+                range: "max",
+                value: 40,
+                min: 0,
+                max: 40,
+            });
+            $("#jpeg_encode_quality").val($("#slider").slider("value"));
+            
+            
+            if(nexts === names.length){ // end screen
+                slider_values.value = slider_vals;
+                hideClass('image_class');
+                hideClass('slider_class');
+                showClass('end_class');
+                document.getElementById('submitButton').style = 'display: block;';
+                document.getElementById('Next button').style = 'display: none;';
+                
+            }
+            nexts = nexts+1;
+        } else { // showing end screen
+            alert('Not supposed to be here');
         }
     }
 
@@ -117,11 +195,9 @@
             var quality = parseInt(encodeQuality.value);        
             result_image.src = compress(source_image,quality,output_format).src;   
         });
-
     });
 
     function compress(source_img_obj, quality, output_format){
-                
         var mime_type;
         if(output_format==="png"){
            mime_type = "image/png";
@@ -185,14 +261,23 @@
     </negative-example>
   </crowd-instructions>
 
-  <div>
-    <p>(Sandbox version)</p>
-    <p>How old are you?</p>
-    <crowd-input name="age" placeholder="Age" required></crowd-input>
+  <div class="begin_class">
+      <p>Insert stuff for tutorial here.</p>
+
+  </div>
+  
+  <div class='tutorial_complete_class'>
+      <p>Tutorial complete! When ready, click "Next" to proceed.</p>
+  </div>
+
+  <div class="end_class">
+    <!--<p>How old are you?</p>-->
+    <!--<crowd-input name="age" placeholder="Age" required></crowd-input>-->
+    <p id="task_complete">Task complete! Please click "Submit".</p>
   </div>
 
 
-<div>
+<div class="image_class">
     <img id="source_image"  style="display: none;" crossOrigin="anonymous"> 
     <img id="result_image">
 <!--
@@ -205,21 +290,21 @@
     </fieldset>
 -->
 </div>
-<div>
-<p>
-  <label for="jpeg_encode_quality">Compression Ratio:</label>
-  <input type="text" id="jpeg_encode_quality" readonly style="border:0; color:#f6931f; font-weight:bold;">
-</p>
+<div class="slider_class">
+    <p>
+      <label id="text_compression_ratio" for="jpeg_encode_quality">Compression Ratio:</label>
+      <input type="text" id="jpeg_encode_quality" readonly style="border:0; color:#f6931f; font-weight:bold;">
+    </p>
     <div id="slider" class = slider></div>
 </div>
 
 <div>
-    <p><input type="button" onclick="setImageb(1)" id='Next button' name='nextbutton' value="Next" class="btn btn-primary"></input></p>
+    <p><input type="button" onclick="setImageb(1)" id='Next button' value="Next" class="btn btn-primary"></input></p>
     <crowd-input id='set_number' name='set_number' value='initial' type='hidden' style='display: none;'></crowd-input>
     <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
-    <!--<crowd-button><iron-icon icon="search" form-action="submit"></iron-icon></crowd-button>-->
     <input type="submit" id="submitButton" type='hidden' style='display: none;'>
 </div>
+
 </crowd-form>
 </body>
 </html>
