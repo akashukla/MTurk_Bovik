@@ -32,7 +32,7 @@
     var hit_number;
     var slider_vals = '';
     var phase = 'beginning';
-    var tutorial_names = ['AVA__809598.jpg', 'EMOTIC__COCO_train2014_000000104079.jpg', 'EMOTIC__COCO_train2014_000000154329.jpg', 'EMOTIC__COCO_train2014_000000128826.jpg']
+    var tutorial_names = ['AVA__809598.jpg', 'EMOTIC__COCO_train2014_000000154329.jpg', 'EMOTIC__COCO_train2014_000000128826.jpg'] // 'EMOTIC__COCO_train2014_000000104079.jpg', 
     var golden_names = ['EMOTIC__COCO_train2014_000000208055.jpg',
  'EMOTIC__COCO_train2014_000000211272.jpg',
  'EMOTIC__COCO_train2014_000000211486.jpg',
@@ -146,12 +146,13 @@
                 hideClass('tutorial_text_class');
                 phase = 'study';
             } else { 
-                if(tutorial_nexts === 0){
+                if(tutorial_nexts === -1){
                     showClass('tutorial_text_class');
+                    showClass('slider_class');
+                    showClass('image_class');
+                    hideClass('begin_class');
                 }
-                showClass('slider_class');
-                showClass('image_class');
-                hideClass('begin_class');
+                
                 source_image.src = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
                 result_image.src = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
                 //Slider init
@@ -167,14 +168,13 @@
             }
         }
         else if(phase === 'study'){
-            hideClass('begin_class');
-            hideClass('tutorial_complete_class');
-            showClass('image_class');
-            showClass('slider_class');
             if (first_image === false){
                 slider_vals = slider_vals + $("#slider").slider("value").toString() + ',';
-            } else {
+            } else { // only runs when transitioning from 'end of tutorial' screen to 'actual study' screen
                 first_image = false;
+                hideClass('tutorial_complete_class');
+                showClass('image_class');
+                showClass('slider_class');
             }
             source_image.src = proxy_url + bucket_url + names[nexts];
             result_image.src = proxy_url + bucket_url + names[nexts];
@@ -183,12 +183,11 @@
             $("#slider").slider({
                 orientation: "horizontal",
                 range: "max",
-                value: 40,
+                value: n_slider_levels,
                 min: 0,
-                max: 40,
+                max: n_slider_levels,
             });
             $("#jpeg_encode_quality").val($("#slider").slider("value"));
-            
             
             if(nexts === names.length){ // end screen
                 slider_values.value = slider_vals;
@@ -321,7 +320,7 @@
 <crowd-form answer-format="flatten-objects">
   <crowd-instructions link-text="View instructions" link-type="button">
     <short-summary>
-      <p>Adjust the slider so that the image is as compressed as it can be without changing the image quality.</p>
+      <p>Adjust the slider so that the image is as compressed as much as it can be without changing the image quality.</p>
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
     </short-summary>
 
@@ -334,7 +333,7 @@
 
     <positive-example>
       <p>This is a good example of performing the task.</p>
-      <p>The image is compressed at a level where image quality is not compromised.</p>
+      <p>The image is compressed at a level where image quality is not changed..</p>
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
     </positive-example>
 
@@ -346,15 +345,16 @@
   </crowd-instructions>
 
   <div class="begin_class">
+      <h2>Instructions:</h2>
       <p>The slider bar under each image controls the compression level of the image.</p>
-      <p>Adjust the slider to the point at which you think is the balance between image quality and compression level.</p>
+      <p>Adjust the slider to compress the image and try to find the point at which the image just begins to show visible distortion.</p>
       <p>Perform this task for 50 images.</p>    
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
       <p>Press 'View instructions' for more detailed instructions.</p>  
   </div>
   
   <div class='tutorial_complete_class'>
-      <p>Tutorial complete! When ready, click "Next" to proceed.</p>
+      <p>Tutorial complete! When ready, click "Next" to proceed to the full study.</p>
   </div>
 
   <div class="end_class">
