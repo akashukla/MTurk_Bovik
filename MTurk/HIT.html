@@ -16,6 +16,21 @@
   }
   #slider.ui-slider-range { background: #f6931f; }
   #slider.ui-slider-handle { border-color: #f6931f; }
+
+  #Next_button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+
 </style>
 
 <script>
@@ -155,6 +170,8 @@
                 
                 source_image.src = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
                 result_image.src = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
+
+                document.getElementById('Next_button').style = 'display: none';
                 //Slider init
                 $("#slider").slider({
                     orientation: "horizontal",
@@ -178,6 +195,8 @@
             }
             source_image.src = proxy_url + bucket_url + names[nexts];
             result_image.src = proxy_url + bucket_url + names[nexts];
+
+            document.getElementById('Next_button').style = 'display: none';
             
             //Slider init
             $("#slider").slider({
@@ -195,7 +214,7 @@
                 hideClass('slider_class');
                 showClass('end_class');
                 document.getElementById('submitButton').style = 'display: block;';
-                document.getElementById('Next button').style = 'display: none;';
+                document.getElementById('Next_button').style = 'display: none;';
                 
             }
             nexts = nexts+1;
@@ -270,7 +289,10 @@
                 return false;
             }
             var quality = parseInt(encodeQuality.value);        
-            result_image.src = compress(source_image,quality,output_format).src;   
+            result_image.src = compress(source_image,quality,output_format).src;  
+
+            document.getElementById('Next_button').style = 'display: block';
+
         });
     });
 
@@ -370,15 +392,7 @@
   <div class="image_class">
     <img id="source_image"  style="display: none;" crossOrigin="anonymous"> 
     <img id="result_image">
-<!--
-    <fieldset style="width:800px">
-        <legend>Compressor settings</legend>
-        <div id="slider-range-max" class = "slider"></div>
-        <div>
-            Compression ratio : <input id="jpeg_encode_quality" readonly='true' size='3' type="text" value="40"></input>
-        </div>
-    </fieldset>
--->
+
 </div>
 <div class="slider_class">
     <p>
@@ -389,7 +403,7 @@
 </div>
 
 <div>
-    <p><input type="button" onclick="setImageb(1)" id='Next button' value="Next" class="btn btn-primary"></input></p>
+    <p><input type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary"></input></p>
     <crowd-input id='set_number' name='set_number' value='initial' type='hidden' style='display: none;'></crowd-input>
     <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
     <input type="submit" id="submitButton" type='hidden' style='display: none;'>
