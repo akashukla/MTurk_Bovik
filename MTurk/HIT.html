@@ -171,7 +171,7 @@
                 source_image.src = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
                 result_image.src = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
 
-                document.getElementById('Next_button').style = 'display: none';
+                document.getElementById('Next_button').style = 'visibility: hidden';
                 //Slider init
                 $("#slider").slider({
                     orientation: "horizontal",
@@ -196,7 +196,7 @@
             source_image.src = proxy_url + bucket_url + names[nexts];
             result_image.src = proxy_url + bucket_url + names[nexts];
 
-            document.getElementById('Next_button').style = 'display: none';
+            document.getElementById('Next_button').style = 'visibility: hidden';
             
             //Slider init
             $("#slider").slider({
@@ -291,7 +291,7 @@
             var quality = parseInt(encodeQuality.value);        
             result_image.src = compress(source_image,quality,output_format).src;  
 
-            document.getElementById('Next_button').style = 'display: block';
+            document.getElementById('Next_button').style = 'visibility: visible';
 
         });
     });
