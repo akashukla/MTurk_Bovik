@@ -179,9 +179,9 @@
                     value: n_slider_levels,
                     min: 0,
                     max: n_slider_levels,
-                    background: '#d00000',
 
                 });
+                document.getElementById('slider').style.background = '#89b677';
                 $("#jpeg_encode_quality").val($("#slider").slider("value"));
                 tutorial_nexts = tutorial_nexts+1;
             }
@@ -208,6 +208,7 @@
                 min: 0,
                 max: n_slider_levels,
             });
+            document.getElementById('slider').style.background = '#89b677';
             $("#jpeg_encode_quality").val($("#slider").slider("value"));
             
             if(nexts === names.length){ // end screen
