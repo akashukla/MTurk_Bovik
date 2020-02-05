@@ -15,7 +15,7 @@
     width: 600px;
   }
   #slider.ui-slider-range { background: #f6931f; }
-  #slider.ui-slider-handle { border-color: #f6931f; }
+  #slider.ui-slider-handle{ border-color: #729fcf;}
 
   #Next_button {
   background-color: #4CAF50; /* Green */
@@ -28,9 +28,19 @@
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
-}
-
-
+  }
+  #submitButton {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  }
 </style>
 
 <script>
@@ -48,75 +58,78 @@
     var slider_vals = '';
     var phase = 'beginning';
     var tutorial_names = ['AVA__809598.jpg', 'EMOTIC__COCO_train2014_000000154329.jpg', 'EMOTIC__COCO_train2014_000000128826.jpg'] // 'EMOTIC__COCO_train2014_000000104079.jpg', 
-    var golden_names = ['EMOTIC__COCO_train2014_000000208055.jpg',
- 'EMOTIC__COCO_train2014_000000211272.jpg',
- 'EMOTIC__COCO_train2014_000000211486.jpg', 
- 'EMOTIC__COCO_train2014_000000212083.jpg',
- 'EMOTIC__COCO_train2014_000000221881.jpg', 
- 'EMOTIC__COCO_train2014_000000222140.jpg',
- 'EMOTIC__COCO_train2014_000000223888.jpg', 
- 'EMOTIC__COCO_train2014_000000226597.jpg',
- 'EMOTIC__COCO_train2014_000000229188.jpg', 
- 'EMOTIC__COCO_train2014_000000230433.jpg',
- 'EMOTIC__COCO_train2014_000000239307.jpg',
- 'EMOTIC__COCO_train2014_000000241421.jpg',
- 'EMOTIC__COCO_train2014_000000250357.jpg',
- 'EMOTIC__COCO_train2014_000000257297.jpg',
- 'EMOTIC__COCO_train2014_000000265100.jpg',
- 'EMOTIC__COCO_train2014_000000266479.jpg',
- 'EMOTIC__COCO_train2014_000000268209.jpg',
- 'EMOTIC__COCO_train2014_000000276128.jpg',
- 'EMOTIC__COCO_train2014_000000277122.jpg',
- 'EMOTIC__COCO_train2014_000000297359.jpg',
- 'EMOTIC__COCO_train2014_000000300598.jpg',
- 'EMOTIC__COCO_train2014_000000301855.jpg',
- 'EMOTIC__COCO_train2014_000000302102.jpg',
- 'EMOTIC__COCO_train2014_000000304548.jpg',
- 'EMOTIC__COCO_train2014_000000305105.jpg',
- 'EMOTIC__COCO_train2014_000000307894.jpg',
- 'EMOTIC__COCO_train2014_000000308353.jpg',
- 'EMOTIC__COCO_train2014_000000311706.jpg',
- 'EMOTIC__COCO_train2014_000000318496.jpg',
- 'EMOTIC__COCO_train2014_000000319690.jpg',
- 'EMOTIC__COCO_train2014_000000319905.jpg',
- 'EMOTIC__COCO_train2014_000000322212.jpg',
- 'EMOTIC__COCO_train2014_000000325981.jpg',
- 'EMOTIC__COCO_train2014_000000326504.jpg',
- 'EMOTIC__COCO_train2014_000000327810.jpg',
- 'EMOTIC__COCO_train2014_000000329587.jpg',
- 'EMOTIC__COCO_train2014_000000329942.jpg',
- 'EMOTIC__COCO_train2014_000000334338.jpg',
- 'EMOTIC__COCO_train2014_000000341623.jpg',
- 'EMOTIC__COCO_train2014_000000341905.jpg',
- 'EMOTIC__COCO_train2014_000000342969.jpg',
- 'EMOTIC__COCO_train2014_000000344031.jpg',
- 'EMOTIC__COCO_train2014_000000347133.jpg',
- 'EMOTIC__COCO_train2014_000000349698.jpg',
- 'EMOTIC__COCO_train2014_000000351610.jpg',
- 'EMOTIC__COCO_train2014_000000353483.jpg',
- 'EMOTIC__COCO_train2014_000000355425.jpg',
- 'EMOTIC__COCO_train2014_000000360017.jpg',
- 'EMOTIC__COCO_train2014_000000361190.jpg',
- 'EMOTIC__COCO_train2014_000000362658.jpg',
- 'EMOTIC__bj6qnim3c43cj2j7n3.jpg',
- 'EMOTIC__COCO_train2014_000000051735.jpg',
- 'VOC2012__2007_000063.jpg',
- 'VOC2012__2007_000068.jpg',
- 'VOC2012__2007_000793.jpg',
- 'VOC2012__2007_001487.jpg',
- 'VOC2012__2007_001583.jpg',
- 'VOC2012__2007_001704.jpg',
- 'VOC2012__2007_002565.jpg',
- 'VOC2012__2007_002643.jpg',
- 'VOC2012__2007_003104.jpg',
- 'VOC2012__2008_005594.jpg',
- 'VOC2012__2008_005600.jpg',
- 'VOC2012__2008_005607.jpg',
- 'VOC2012__2008_005615.jpg']
+    var golden_names = [ 'EMOTIC__COCO_train2014_000000208055.jpg',
+                         'EMOTIC__COCO_train2014_000000211272.jpg',
+                         'EMOTIC__COCO_train2014_000000211486.jpg', 
+                         'EMOTIC__COCO_train2014_000000212083.jpg',
+                         'EMOTIC__COCO_train2014_000000221881.jpg', 
+                         'EMOTIC__COCO_train2014_000000222140.jpg',
+                         'EMOTIC__COCO_train2014_000000223888.jpg', 
+                         'EMOTIC__COCO_train2014_000000226597.jpg',
+                         'EMOTIC__COCO_train2014_000000229188.jpg', 
+                         'EMOTIC__COCO_train2014_000000230433.jpg',
+                         'EMOTIC__COCO_train2014_000000239307.jpg',
+                         'EMOTIC__COCO_train2014_000000241421.jpg',
+                         'EMOTIC__COCO_train2014_000000250357.jpg',
+                         'EMOTIC__COCO_train2014_000000257297.jpg',
+                         'EMOTIC__COCO_train2014_000000265100.jpg',
+                         'EMOTIC__COCO_train2014_000000266479.jpg',
+                         'EMOTIC__COCO_train2014_000000268209.jpg',
+                         'EMOTIC__COCO_train2014_000000276128.jpg',
+                         'EMOTIC__COCO_train2014_000000277122.jpg',
+                         'EMOTIC__COCO_train2014_000000297359.jpg',
+                         'EMOTIC__COCO_train2014_000000300598.jpg',
+                         'EMOTIC__COCO_train2014_000000301855.jpg',
+                         'EMOTIC__COCO_train2014_000000302102.jpg',
+                         'EMOTIC__COCO_train2014_000000304548.jpg',
+                         'EMOTIC__COCO_train2014_000000305105.jpg',
+                         'EMOTIC__COCO_train2014_000000307894.jpg',
+                         'EMOTIC__COCO_train2014_000000308353.jpg',
+                         'EMOTIC__COCO_train2014_000000311706.jpg',
+                         'EMOTIC__COCO_train2014_000000318496.jpg',
+                         'EMOTIC__COCO_train2014_000000319690.jpg',
+                         'EMOTIC__COCO_train2014_000000319905.jpg',
+                         'EMOTIC__COCO_train2014_000000322212.jpg',
+                         'EMOTIC__COCO_train2014_000000325981.jpg',
+                         'EMOTIC__COCO_train2014_000000326504.jpg',
+                         'EMOTIC__COCO_train2014_000000327810.jpg',
+                         'EMOTIC__COCO_train2014_000000329587.jpg',
+                         'EMOTIC__COCO_train2014_000000329942.jpg',
+                         'EMOTIC__COCO_train2014_000000334338.jpg',
+                         'EMOTIC__COCO_train2014_000000341623.jpg',
+                         'EMOTIC__COCO_train2014_000000341905.jpg',
+                         'EMOTIC__COCO_train2014_000000342969.jpg',
+                         'EMOTIC__COCO_train2014_000000344031.jpg',
+                         'EMOTIC__COCO_train2014_000000347133.jpg',
+                         'EMOTIC__COCO_train2014_000000349698.jpg',
+                         'EMOTIC__COCO_train2014_000000351610.jpg',
+                         'EMOTIC__COCO_train2014_000000353483.jpg',
+                         'EMOTIC__COCO_train2014_000000355425.jpg',
+                         'EMOTIC__COCO_train2014_000000360017.jpg',
+                         'EMOTIC__COCO_train2014_000000361190.jpg',
+                         'EMOTIC__COCO_train2014_000000362658.jpg',
+                         'EMOTIC__bj6qnim3c43cj2j7n3.jpg',
+                         'EMOTIC__COCO_train2014_000000051735.jpg',
+                         'VOC2012__2007_000063.jpg',
+                         'VOC2012__2007_000068.jpg',
+                         'VOC2012__2007_000793.jpg',
+                         'VOC2012__2007_001487.jpg',
+                         'VOC2012__2007_001583.jpg',
+                         'VOC2012__2007_001704.jpg',
+                         'VOC2012__2007_002565.jpg',
+                         'VOC2012__2007_002643.jpg',
+                         'VOC2012__2007_003104.jpg',
+                         'VOC2012__2008_005594.jpg',
+                         'VOC2012__2008_005600.jpg',
+                         'VOC2012__2008_005607.jpg',
+                         'VOC2012__2008_005615.jpg']
+                         
     var tutorial_nexts = -1; // index for which tutorial image to display
     var first_image = true;
-
+    var slight_change;
     
+    // runs when the window loads
+    // shows tutorial, hides everything else
     function init(){
         showClass('begin_class');
         hideClass('image_class');
@@ -125,9 +138,9 @@
         hideClass('tutorial_complete_class');
         hideClass('tutorial_text_class');
     }
-    
     window.onload = init;
     
+    // shows all HTML elements in the specified class (except source_image)
     function showClass(class_name){
         var x = document.getElementsByClassName(class_name); 
         for (var i = 0; i < x.length; i++) { 
@@ -137,6 +150,7 @@
         } 
     }
     
+    // hides all HTML elements in the specified class
     function hideClass(class_name){
         var x = document.getElementsByClassName(class_name); 
         for (var i = 0; i < x.length; i++) { 
@@ -144,34 +158,34 @@
         } 
     }
     
-    function hideElement(id){
-        document.getElementById(id).style = 'display: none;';
-    }
-    
-    function showElement(id){
-        document.getElementById(id).style = 'display: block;';
-    }
-    
+    // runs when "Next" button runs
+    // note: tutorial_nexts and nexts increment at end of function
     function setImageb(button){
+        // if showing tutorial
         if(phase === 'beginning'){
+            // if tutorial complete
             if(tutorial_nexts === tutorial_names.length-1){
                 showClass('tutorial_complete_class');
                 hideClass('slider_class');
                 hideClass('image_class');
                 hideClass('tutorial_text_class');
                 phase = 'study';
+            // if showing a tutorial image
             } else { 
+                // if showing first tutorial image
                 if(tutorial_nexts === -1){
                     showClass('tutorial_text_class');
                     showClass('slider_class');
                     showClass('image_class');
                     hideClass('begin_class');
                 }
+                // showing the next image (uncompressed)
+                var url = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
+                result_image.src = url;
+                source_image.src = url;
                 
-                source_image.src = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
-                result_image.src = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
-
                 document.getElementById('Next_button').style = 'visibility: hidden';
+                
                 //Slider init
                 $("#slider").slider({
                     orientation: "horizontal",
@@ -180,19 +194,27 @@
                     min: 0,
                     max: n_slider_levels,
                 });
+                document.getElementById('slider').style.background='#4CAF50';
                 $("#jpeg_encode_quality").val($("#slider").slider("value"));
+                
                 tutorial_nexts = tutorial_nexts+1;
             }
         }
+        
+        // if showing images in actual study
         else if(phase === 'study'){
+            // normal operation 
             if (first_image === false){
                 slider_vals = slider_vals + $("#slider").slider("value").toString() + ',';
-            } else { // only runs when transitioning from 'end of tutorial' screen to 'actual study' screen
+            // only runs when transitioning from 'end of tutorial' screen to 'actual study' screen    
+            } else { 
                 first_image = false;
                 hideClass('tutorial_complete_class');
                 showClass('image_class');
                 showClass('slider_class');
             }
+            
+            // updating image
             source_image.src = proxy_url + bucket_url + names[nexts];
             result_image.src = proxy_url + bucket_url + names[nexts];
 
@@ -204,25 +226,29 @@
                 range: "max",
                 value: n_slider_levels,
                 min: 0,
-                max: n_slider_levels,
+                max: n_slider_levels
             });
             $("#jpeg_encode_quality").val($("#slider").slider("value"));
-            
-            if(nexts === names.length){ // end screen
+
+            // end screen
+            if(nexts === names.length){ 
                 slider_values.value = slider_vals;
                 hideClass('image_class');
                 hideClass('slider_class');
                 showClass('end_class');
                 document.getElementById('submitButton').style = 'display: block;';
                 document.getElementById('Next_button').style = 'display: none;';
-                
             }
+            
             nexts = nexts+1;
-        } else { // showing end screen
-            alert('Not supposed to be here');
+        } else { 
+            console.log('Not supposed to be here');
         }
     }
 
+    // ajax call to get hit_list.csv and hit_number
+    // hit_number: the set index
+    // hit_list.csv: 2d array of sets
     $.get(proxy_url + hit_number_url, function( data ) {
         hit_number = data;
         $.ajax({
@@ -232,19 +258,17 @@
     	    success: function(response)  
     	    {
     		    var set_number = document.getElementById("set_number"); // the element that will export the set number in the results csv
+    		    set_number.value = hit_number;
     		    hit_sets = $.csv.toArrays(response);
     		    var i_set = (hit_number % hit_sets.length)
     		    var hit_set = hit_sets[i_set].toString();
     		    if(golden_image_study === true){
     		        names = golden_names;
+    		      //  names = names.slice(0,3);
     		    } else {
         		    names = hit_set.split(",");
-        		    names = names.slice(0,3);
+        		  //  names = names.slice(0,3);
     		    }
-                image_name=names[0]
-    		    source_image.src = proxy_url + bucket_url + image_name;
-    		    result_image.src = proxy_url + bucket_url + image_name;
-    		    set_number.value = hit_number;
             }   
         });
     });
@@ -254,17 +278,19 @@
         var downloadingImage = new Image();
         downloadingImage.onload = function(){
             source_image.src = this.src;   
+            console.log(this.src);
         };
         downloadingImage=toDataURL(source_image.src, function(dataUrl) {
-            console.log('RESULT:', '1') // dataUrl
+            console.log('RESULT:', dataUrl) // dataUrl
         })
         var result_image = document.getElementById('result_image');
         var downloadingImage2 = new Image();
         downloadingImage2.onload = function(){
             result_image.src = this.src;   
+            console.log(this.src);
         };
         downloadingImage2=toDataURL(result_image.src, function(dataUrl) {
-          console.log('RESULT:', '1') // dataUrl
+          console.log('RESULT:', dataUrl) // dataUrl
         })
         var output_format = "jpg";
 
@@ -275,12 +301,16 @@
             value: 40,
             min: 0,
             max: 40,
+
             slide: function(event, ui) {
                 $("#jpeg_encode_quality").val(ui.value);
             }
         });
         $("#jpeg_encode_quality").val($("#slider").slider("value"));
         $( "#slider" ).on("slide", function( event, ui ) {
+                document.getElementById('result_image').style.display = 'block';
+              document.getElementById('source_image').style.display = 'none';
+           
             var encodeQuality = document.getElementById('jpeg_encode_quality');
             var source_image = document.getElementById('source_image');
             var result_image = document.getElementById('result_image');
@@ -290,7 +320,7 @@
             }
             var quality = parseInt(encodeQuality.value);        
             result_image.src = compress(source_image,quality,output_format).src;  
-
+            
             document.getElementById('Next_button').style = 'visibility: visible';
 
         });
@@ -349,7 +379,7 @@
     <detailed-instructions>
       <p>The slider bar under each image controls the compression level of the image.</p>
       <p>Adjust the slider to try to find the point at which the image just begins to show visible distortion.</p>
-      <p>Perform this task for 50 images.</p>  
+      <p>Perform this task for all of the images.</p>  
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif"> 
     </detailed-instructions>
 
@@ -369,8 +399,8 @@
   <div class="begin_class">
       <h2>Instructions:</h2>
       <p>The slider bar under each image controls the compression level of the image.</p>
-      <p>Adjust the slider to compress the image and try to find the point at which the image just begins to show visible distortion.</p>
-      <p>Perform this task for 50 images.</p>    
+      <p>Adjust the slider to compress the image and try to find the point at which the quality of the image just begins to decrease.</p>
+      <p>Perform this task for all of the images.</p>    
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
       <p>Press 'View instructions' for more detailed instructions.</p>  
   </div>
@@ -380,8 +410,6 @@
   </div>
 
   <div class="end_class">
-    <!--<p>How old are you?</p>-->
-    <!--<crowd-input name="age" placeholder="Age" required></crowd-input>-->
     <p id="task_complete">Task complete! Please click "Submit".</p>
   </div>
 
@@ -391,7 +419,7 @@
   
   <div class="image_class">
     <img id="source_image"  style="display: none;" crossOrigin="anonymous"> 
-    <img id="result_image">
+    <img id="result_image" style="display: block;" crossOrigin="anonymous">
 
 </div>
 <div class="slider_class">
