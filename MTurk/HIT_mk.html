@@ -183,6 +183,13 @@
                 });
                 document.getElementById('slider').style.background = '#89b677';
                 document.getElementById('slider').style.height = '30px';
+                $("#slider").slider::-webkit-slider-thumb {
+                -webkit-appearence: none,
+                appearance: none,
+                width: 30px,
+                height: 30px,
+                background: '#5e5e5e'
+                }
                 $("#jpeg_encode_quality").val($("#slider").slider("value"));
                 tutorial_nexts = tutorial_nexts+1;
             }
@@ -211,6 +218,13 @@
             });
             document.getElementById('slider').style.background = '#89b677';
             document.getElementById('slider').style.height = '30px';
+            $("#slider").slider::-webkit-slider-thumb {
+                -webkit-appearence: none,
+                appearance: none,
+                width: 30px,
+                height: 30px,
+                background: '#5e5e5e'
+            }
             $("#jpeg_encode_quality").val($("#slider").slider("value"));
             
             if(nexts === names.length){ // end screen
