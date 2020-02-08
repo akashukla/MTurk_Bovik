@@ -1,12 +1,14 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
+<!--<meta charset="utf-8">-->
+<!--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />-->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://assets.crowd.aws/crowd-html-elements.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
 <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" media="all" rel="stylesheet" type="text/css">
 <link href="https://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" media="all" rel="stylesheet" type="text/css">
 
@@ -50,7 +52,8 @@
     var nexts = 0; 
     var bucket_url = "https://snako.s3.us-east-2.amazonaws.com/";
     var hit_list_url = "https://snako.s3.us-east-2.amazonaws.com/1_hit_list.csv"
-    var hit_number_url = "https://snako.s3.us-east-2.amazonaws.com/1_hit_number.txt"
+    var key = "1_hit_number0.txt";
+    var hit_number_url = bucket_url + key;
     var proxy_url = "https://cors-anywhere.herokuapp.com/";
     var allText;
     var hit_sets;
@@ -246,11 +249,87 @@
         }
     }
 
+    function update_hit_number(num){
+        // configure identity pool
+        AWS.config.update({
+          region: 'us-east-2',
+          credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: 'us-east-2:cdec4f3c-4db2-46ea-86b1-a2081d62859e'
+          })
+        });
+        // create s3 object
+        var s3 = new AWS.S3({
+          apiVersion: "2006-03-01",
+          params: { Bucket: "snako" }
+        });
+
+        var params = {
+          Bucket: "snako", 
+          Key: key
+        };
+        
+        var hit_number_in;
+        s3.getObject(params, function(err, data) {
+            if (err) console.log(err, err.stack); // an error occurred
+            else {
+                console.log(data);
+            }; 
+        });
+
+        var blob = new Blob([num.toString()], {type:"text/plain"});  
+
+        params = {Bucket: 'snako', 
+                  Key: key, 
+                  Body: blob,
+                  ACL: 'public-read-write',
+                      
+        };
+        s3.upload(params, function(err, data) {
+            console.log(err, data);
+        });
+        
+        // // Old code we want to save in case something goes wrong
+        // var params = {
+        //   AccessControlPolicy: {
+        //   }, 
+        //   Bucket: "snako", 
+        //   GrantFullControl: "uri=http://acs.amazonaws.com/groups/global/AllUsers",     
+        //   Key: key,
+        //  };
+        //  s3.putObjectAcl(params, function(err, data) {
+        //   if (err) console.log(err, err.stack); // an error occurred
+        //   else     console.log(data);           // successful response
+        //  });
+        // Use S3 ManagedUpload class as it supports multipart uploads
+        // var upload = new AWS.S3.ManagedUpload({
+        // params: params
+        // {
+        //   Bucket: "snako",
+        //   Key: key,
+        //   Body: blob,
+        //   ACL: "public-read"
+        // }
+        // });
+        
+        // var promise = upload.promise();
+        // promise.then(
+        // function(data) {
+        //   alert("Successfully uploaded file.");
+        // },
+        // function(err) {
+        //   return alert("There was an error in updating the HIT number: ", err.message);
+        // }
+        // );
+    }
+
     // ajax call to get hit_list.csv and hit_number
     // hit_number: the set index
     // hit_list.csv: 2d array of sets
+    
+    
     $.get(proxy_url + hit_number_url, function( data ) {
-        hit_number = data;
+        hit_number = parseInt(data);
+        console.log('hit_number original read: ', data);
         $.ajax({
     	    type: "GET",  
     	    url: proxy_url + hit_list_url,
@@ -262,6 +341,7 @@
     		    hit_sets = $.csv.toArrays(response);
     		    var i_set = (hit_number % hit_sets.length)
     		    var hit_set = hit_sets[i_set].toString();
+    		    console.log('i_set: ', i_set);
     		    if(golden_image_study === true){
     		        names = golden_names;
     		      //  names = names.slice(0,3);
@@ -269,6 +349,7 @@
         		    names = hit_set.split(",");
         		  //  names = names.slice(0,3);
     		    }
+    		    update_hit_number(hit_number+1);
             }   
         });
     });
@@ -278,19 +359,17 @@
         var downloadingImage = new Image();
         downloadingImage.onload = function(){
             source_image.src = this.src;   
-            console.log(this.src);
         };
         downloadingImage=toDataURL(source_image.src, function(dataUrl) {
-            console.log('RESULT:', dataUrl) // dataUrl
+            console.log('RESULT:', '1') // dataUrl
         })
         var result_image = document.getElementById('result_image');
         var downloadingImage2 = new Image();
         downloadingImage2.onload = function(){
             result_image.src = this.src;   
-            console.log(this.src);
         };
         downloadingImage2=toDataURL(result_image.src, function(dataUrl) {
-          console.log('RESULT:', dataUrl) // dataUrl
+          console.log('RESULT:', '1') // dataUrl
         })
         var output_format = "jpg";
 
@@ -403,6 +482,22 @@
       <p>Perform this task for all of the images.</p>    
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
       <p>Press 'View instructions' for more detailed instructions.</p>  
+      
+      <!--<form action="https://snako.s3.us-east-2.amazonaws.com/" method="post" enctype="multipart/form-data">-->
+      <!--  Key to upload: <input type="input" name="key" value="user/eric/" /><br />-->
+      <!--  <input type="hidden" name="acl" value="public-read" />-->
+        <!--<input type="hidden" name="success_action_redirect" value="https://snako.s3.us-east-2.amazonaws.com/1_hit_number.txt" />-->
+      <!--  Content-Type: <input type="hidden" name="Content-Type" value="text/plain" /><br />-->
+      <!--  <input type="hidden" name="x-amz-meta-uuid" value="14365123651274" />-->
+      <!--  Tags for File: <input type="hidden" name="x-amz-meta-tag" value="" /><br />-->
+      <!--  <input type="hidden" name="AWSAccessKeyId" value="AKIAIOSFODNN7EXAMPLE" />-->
+      <!--  <input type="hidden" name="Policy" value="POLICY" />-->
+      <!--  <input type="hidden" name="Signature" value="SIGNATURE" />-->
+      <!--  File: <input type="file" name="file" /> <br />-->
+      <!--   The elements after this will be ignored -->
+      <!--  <input type="submit" name="submit" value="Upload to Amazon S3" style="display: none;"/>-->
+      <!--</form>-->
+      
   </div>
   
   <div class='tutorial_complete_class'>
