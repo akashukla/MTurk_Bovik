@@ -168,12 +168,11 @@
         if(phase === 'beginning'){
             // if tutorial complete
             if(tutorial_nexts === tutorial_names.length-1){
-                hideClass('tutorial_complete_class');
+                showClass('tutorial_complete_class');
                 hideClass('slider_class');
                 hideClass('image_class');
-                showClass('tutorial_text_class');
+                hideClass('tutorial_text_class');
                 phase = 'study';
-            }
             // if showing a tutorial image
             } else { 
                 // if showing first tutorial image
@@ -454,11 +453,10 @@
     <short-summary>
       <p>Adjust the slider so that the image is as compressed as much as it can be without changing the image quality.</p>
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
-
     </short-summary>
 
     <detailed-instructions>
-      <p>The slider bar under each image controls the compression level of that image.</p>
+      <p>The slider bar under each image controls the compression level of the image.</p>
       <p>Adjust the slider to try to find the point at which the image just begins to show visible distortion.</p>
       <p>Perform this task for all of the images.</p>  
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif"> 
@@ -482,24 +480,7 @@
       <p>The slider bar under each image controls the compression level of the image.</p>
       <p>Adjust the slider to compress the image and try to find the point at which the quality of the image just begins to decrease.</p>
       <p>Perform this task for all of the images.</p>    
-      <p>The slider bar under each image controls the compression level of that image.</p>
-      <p>Adjust the slider to try to find the point at which the image just begins to show visible distortion.</p>
-      
-      <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif"> 
-
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
-    <positive-example>
-      <p>This is a good example of performing the task.</p>
-      <p>The image is compressed at a level where image quality is not changed..</p>
-      <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
-    </positive-example>
-
-    <negative-example>
-      <p>This is a bad example of performing the task</p>
-      <p>The image is too compressed and too distorted. Distortion is visible at a much earlier point.</p>
-      <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif">
-    </negative-example>
-
       <p>Press 'View instructions' for more detailed instructions.</p>  
       
       <!--<form action="https://snako.s3.us-east-2.amazonaws.com/" method="post" enctype="multipart/form-data">-->
