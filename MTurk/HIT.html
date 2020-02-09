@@ -46,7 +46,7 @@
 </style>
 
 <script>
-    var golden_image_study = true;
+    var golden_image_study = false;
     var names;
     var n_slider_levels = 50; 
     var nexts = 0; 
@@ -54,7 +54,8 @@
     var hit_list_url = "https://snako.s3.us-east-2.amazonaws.com/1_hit_list.csv"
     var key = "1_hit_number0.txt";
     var hit_number_url = bucket_url + key;
-    var proxy_url = "https://cors-anywhere.herokuapp.com/";
+    // var proxy_url = "https://cors-anywhere.herokuapp.com/";
+    var proxy_url = "";
     var allText;
     var hit_sets;
     var hit_number;
@@ -161,7 +162,7 @@
         } 
     }
     
-    // runs when "Next" button runs
+    // runs when "Next" button is pressed
     // note: tutorial_nexts and nexts increment at end of function
     function setImageb(button){
         // if showing tutorial
@@ -173,6 +174,7 @@
                 hideClass('image_class');
                 hideClass('tutorial_text_class');
                 phase = 'study';
+                get_set();
             // if showing a tutorial image
             } else { 
                 // if showing first tutorial image
@@ -204,7 +206,7 @@
             }
         }
         
-        // if showing images in actual study
+        // if showing non-tutorial images
         else if(phase === 'study'){
             // normal operation 
             if (first_image === false){
@@ -249,6 +251,7 @@
         }
     }
 
+    // overwrites the set index file in bucket with new index
     function update_hit_number(num){
         // configure identity pool
         AWS.config.update({
@@ -257,27 +260,32 @@
             IdentityPoolId: 'us-east-2:cdec4f3c-4db2-46ea-86b1-a2081d62859e'
           })
         });
+        
         // create s3 object
         var s3 = new AWS.S3({
           apiVersion: "2006-03-01",
           params: { Bucket: "snako" }
         });
-
-        var params = {
-          Bucket: "snako", 
-          Key: key
-        };
         
-        var hit_number_in;
-        s3.getObject(params, function(err, data) {
-            if (err) console.log(err, err.stack); // an error occurred
-            else {
-                console.log(data);
-            }; 
-        });
+        // var params = {
+        //   Bucket: "snako", 
+        //   Key: key
+        // };
+        // s3.getObject(params, function(err, data) {
+        //     if (err) { // an error occurred
+        //         // console.log(err, err.stack);
+        //         console.log('error');
+        //     } 
+        //     else {
+        //         // console.log(data);
+        //         console.log('1');
+        //     }; 
+        // });
 
+        // make the new text file (with updated set index) that is to be uploaded
         var blob = new Blob([num.toString()], {type:"text/plain"});  
 
+        // upload the file
         params = {Bucket: 'snako', 
                   Key: key, 
                   Body: blob,
@@ -285,7 +293,8 @@
                       
         };
         s3.upload(params, function(err, data) {
-            console.log(err, data);
+            // console.log(err, data);
+            console.log('error');
         });
         
         // // Old code we want to save in case something goes wrong
@@ -322,37 +331,37 @@
         // );
     }
 
-    // ajax call to get hit_list.csv and hit_number
+    // get hit_list.csv and hit_number
     // hit_number: the set index
     // hit_list.csv: 2d array of sets
-    
-    
-    $.get(proxy_url + hit_number_url, function( data ) {
-        hit_number = parseInt(data);
-        console.log('hit_number original read: ', data);
-        $.ajax({
-    	    type: "GET",  
-    	    url: proxy_url + hit_list_url,
-    	    dataType: "text",       
-    	    success: function(response)  
-    	    {
-    		    var set_number = document.getElementById("set_number"); // the element that will export the set number in the results csv
-    		    set_number.value = hit_number;
-    		    hit_sets = $.csv.toArrays(response);
-    		    var i_set = (hit_number % hit_sets.length)
-    		    var hit_set = hit_sets[i_set].toString();
-    		    console.log('i_set: ', i_set);
-    		    if(golden_image_study === true){
-    		        names = golden_names;
-    		      //  names = names.slice(0,3);
-    		    } else {
-        		    names = hit_set.split(",");
-        		  //  names = names.slice(0,3);
-    		    }
-    		    update_hit_number(hit_number+1);
-            }   
+    function get_set(){
+        $.get(proxy_url + hit_number_url, function( data ) {
+            hit_number = parseInt(data);
+            console.log('hit_number original read: ', data);
+            $.ajax({
+        	    type: "GET",  
+        	    url: proxy_url + hit_list_url,
+        	    dataType: "text",       
+        	    success: function(response)  
+        	    {
+        		    var set_number = document.getElementById("set_number"); // the element that will export the set number in the results csv
+        		    set_number.value = hit_number;
+        		    hit_sets = $.csv.toArrays(response);
+        		    var i_set = (hit_number % hit_sets.length)
+        		    var hit_set = hit_sets[i_set].toString();
+        		    console.log('i_set: ', i_set);
+        		    if(golden_image_study === true){
+        		        names = golden_names;
+        		      //  names = names.slice(0,3);
+        		    } else {
+            		    names = hit_set.split(",");
+            		  //  names = names.slice(0,3);
+        		    }
+        		    update_hit_number(hit_number+1);
+                }   
+            });
         });
-    });
+    }
 
     $(function(){
         var source_image = document.getElementById('source_image');
