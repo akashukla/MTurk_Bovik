@@ -59,7 +59,7 @@
     var hit_sets;
     var hit_number;
     var slider_vals = '';
-    var phase = 'beginning';
+    var phase = 'instruction';
     var tutorial_names = ['AVA__809598.jpg', 'EMOTIC__COCO_train2014_000000154329.jpg', 'EMOTIC__COCO_train2014_000000128826.jpg'] // 'EMOTIC__COCO_train2014_000000104079.jpg', 
     var golden_names = [ 'EMOTIC__COCO_train2014_000000208055.jpg',
                          'EMOTIC__COCO_train2014_000000211272.jpg',
@@ -164,15 +164,25 @@
     // runs when "Next" button runs
     // note: tutorial_nexts and nexts increment at end of function
     function setImageb(button){
+        // if showing instructions
+        if (phase === 'instruction'){
+            hideClass('tutorial_complete_class');
+            hideClass('slider_class');
+            hideClass('image_class');
+            showClass('tutorial_text_class');
+            phase = 'beginning';
+
+        }
         // if showing tutorial
         if(phase === 'beginning'){
             // if tutorial complete
             if(tutorial_nexts === tutorial_names.length-1){
-                showClass('tutorial_complete_class');
+                hideClass('tutorial_complete_class');
                 hideClass('slider_class');
                 hideClass('image_class');
-                hideClass('tutorial_text_class');
+                showClass('tutorial_text_class');
                 phase = 'study';
+            }
             // if showing a tutorial image
             } else { 
                 // if showing first tutorial image
