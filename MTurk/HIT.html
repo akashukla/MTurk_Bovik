@@ -19,6 +19,10 @@
   #slider.ui-slider-range { background: #f6931f; }
   #slider.ui-slider-handle{ border-color: #729fcf;}
 
+  #progressbar{
+    width: 600px;
+  }
+
   #Next_button {
   background-color: #4CAF50; /* Green */
   border: none;
@@ -224,6 +228,11 @@
             result_image.src = proxy_url + bucket_url + names[nexts];
 
             document.getElementById('Next_button').style = 'visibility: hidden';
+
+            $( "#progressbar" ).progressbar({
+                value: nexts,
+                create: function(event, ui) {$(this).find('.ui-widget-header').css({'background-color':'lightskyblue'})}
+            });
             
             //Slider init
             $("#slider").slider({
@@ -525,6 +534,10 @@
   <div class="end_class">
     <p id="task_complete">Task complete! Please click "Submit".</p>
   </div>
+
+  <br>
+  <div id="progressbar" style="height: 20px"></div>
+  <br>
 
   <div class="tutorial_text_class">
       <p>Tutorial image:</p>
