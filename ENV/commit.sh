@@ -1,3 +1,20 @@
+# 
+# Helpful auto commit script.
+#
+# Functionality: eiher pass in commit objects
+# such as files or directories and it will 
+# commit them OR it will default to adding all
+# untracked and pre-staged objects then doing a
+# commit and push.
+#
+# Note: This script will automatically perform a git pull
+# before initiating the commit. The script will die
+# in the presence of merge conflicts so you can 
+# resolve them.
+#
+# Author: MK Swaminathan
+#
+
 #!/bin/bash
 
 COMMIT_OBJ=$@
