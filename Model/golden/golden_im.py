@@ -1,3 +1,4 @@
+import cv2
 import os, sys
 import urllib
 import numpy as np
