@@ -1,17 +1,22 @@
 import cv2
 import os, sys
-import urllib
+import urllib.request
 import numpy as np
 
 
 def get_im(imlink):
-    resp = urllib.urlopen(base_url + imlink)
-    image = np.asarray(bytearray(resp.read()), dtype='uint8')
-    image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+    try: 
+        resp = urllib.request.urlopen(base_url + imlink)
+        image = np.asarray(bytearray(resp.read()), dtype='uint8')
+        image = cv2.imdecode(image, cv2.IMREAD_COLOR)
 
-    return image
+        return image
+  
+    # Catching the exception generated     
+    except Exception as e : 
+        print(str(e)) 
 
-base_url = 'http://snako.s3.us-east-2.amazonawds.com/' 
+base_url = 'http://snako.s3.us-east-2.amazonaws.com/' 
 
 golden_names = np.asarray(['EMOTIC__COCO_train2014_000000208055.jpg',
                          'EMOTIC__COCO_train2014_000000211272.jpg',
