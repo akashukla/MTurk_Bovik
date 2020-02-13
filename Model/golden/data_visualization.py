@@ -29,6 +29,8 @@ dat = np.asarray([golden_res.loc[:,'Answer.slider_values'][i].split(',')
 var_i = np.argsort(np.var(dat, axis=0))
 
 
+
+
 # Plot to inspect spread of data overall and expected value
 for i in range(len(dat)):
     plt.scatter(np.arange(len(dat[0])), dat[i,var_i])
@@ -55,5 +57,5 @@ for i in range(len(dat)):
 
 plt.errorbar(np.arange(len(dat[0])), np.mean(dat,axis=0)[var_i], 1.5*np.std(dat, axis=0)[var_i], fmt='o')
 
-#plt.show()
+plt.show()
 

@@ -1,17 +1,24 @@
 import cv2
 import os, sys
 import urllib
+import urllib.request
 import numpy as np
 
 
+base_url = 'http://snako.s3.us-east-2.amazonaws.com/' 
 def get_im(imlink):
-    resp = urllib.urlopen(base_url + imlink)
+    url = 
+    resp = urllib.request.urlopen(base_url + imlink)
     image = np.asarray(bytearray(resp.read()), dtype='uint8')
     image = cv2.imdecode(image, cv2.IMREAD_COLOR)
 
     return image
 
-base_url = 'http://snako.s3.us-east-2.amazonawds.com/' 
+#cv2.imshow('first', get_im(golden_names[0]))
+#cv2.waitKey(0)
+
+
+
 
 golden_names = np.asarray(['EMOTIC__COCO_train2014_000000208055.jpg',
                          'EMOTIC__COCO_train2014_000000211272.jpg',
