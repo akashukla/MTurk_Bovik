@@ -11,7 +11,9 @@
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
 <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" media="all" rel="stylesheet" type="text/css">
 <link href="https://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" media="all" rel="stylesheet" type="text/css">
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <style>
   #slider{
     width: 600px;
@@ -21,6 +23,7 @@
 
   #progressbar{
     width: 600px;
+    justify-content: center;
   }
 
   #Next_button {
@@ -182,6 +185,7 @@
             // if showing a tutorial image
             } else { 
                 // if showing first tutorial image
+                document.getElementById("crowd-instr").style.display = "block";
                 if(tutorial_nexts === -1){
                     showClass('tutorial_text_class');
                     showClass('slider_class');
@@ -233,7 +237,8 @@
                 value: nexts,
                 create: function(event, ui) {$(this).find('.ui-widget-header').css({'background-color':'lightskyblue'})}
             });
-            
+            //document.getElementById('progressbar').style.width= (w + nexts) +'%';
+            document.getElementById("progress_bar_items").style.display = "block";
             //Slider init
             $("#slider").slider({
                 orientation: "horizontal",
@@ -464,17 +469,23 @@
 </head>
 
 <body>
-<h1>Optimal Image Compression - Human Study</h1>
+    <div class = "container">
+<h1 style="text-align: center;" class="display-4">Optimal Image Compression - Human Study</h1>
+<hr>
+<br>
 
-<crowd-form answer-format="flatten-objects">
-  <crowd-instructions link-text="View instructions" link-type="button">
+<crowd-form answer-format="flatten-objects" style="text-align: center;">
+  <crowd-instructions style="display: none;" link-text="View instructions" link-type="button" id ="crowd-instr" >
+      <br>
     <short-summary>
+        
         <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the quality of the image <b>just begins to show visible distortion</b>.</p>
 
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
     </short-summary>
 
   <detailed-instructions>
+   
       <p>The slider bar under each image controls the compression level of the image. The highest quality value is 50 and the lowest quality value is 0. Moving the slider to the right will lessen the quaity of the image.</p>
       <p>Adjust the slider to try to find the point at which the image <b>just begins to show visible distortion</b>. In essence, how far left can you move the slider before the image starts to lose its quality?</p>
       <p><b>Note:</b> the images may start off with different qualities. Base your answer relatively on how the image looks to begin with. With some images, you may need to move the slider to the right a lot, and other images you may not need to move the slider much at all in order to notice a quality difference.</p> 
@@ -482,48 +493,66 @@
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif"> 
     </detailed-instructions>
 
-    <positive-example>
+<br>
+      
+        <!-- <div class = "row">
+            <div class = "col"> -->
+    <positive-example> 
+       
       <p><b>This is a good example of performing the task.</b></p>
       <p>The image is compressed at a level where image quality is not changed yet, but moving it more will cause it to change..</p>
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
-    </positive-example>
+    
+</positive-example>
 
+<!-- </div>
+<div class = "col"> -->
+    
     <negative-example>
+       
       <p><b>This is a bad example of performing the task.</b></p> 
       <p>The image is too compressed and too distorted. Distortion is visible at a much earlier point.</p>
       <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif">
-    </negative-example>
+
+ </negative-example>
+ <!-- </div>
+</div> -->
+
+
+
   </crowd-instructions>
+  <br>
 
   <div class="begin_class">
-      <h2>Instructions:</h2>
+        <h2>Introduction:</h2>
+        <p>We are students at the University of Texas as Austin. We are conducting a study on optimal image compression rates, mainly, finding 
+            the optimal compression rate for a given image. We appreciate you taking the time to complete our study</p>
+      <br>
+            <h2>Instructions:</h2>
       <p>The slider bar under each image controls the compression level for that image. The highest quality value is 50 and the lowest quality value is 0. Moving the slider to the right will lessen the quality of the image.</p>
-      <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
-      <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the quality of the image <b>just begins to show visible distortion</b>. In essence, how far left can you move the slider before the image starts to lose its quality?</p>
-      <p><b>Note:</b> the images may start off with different qualities. Base your answer relatively on how the image looks to begin with. With some images, you may need to move the slider to the right a lot, and other images you may not need to move the slider much at all in order to notice a quality difference.</p> 
-      <p><b> This is a good example of how to perform the task.</b></p>
-      <p>The image is compressed at a level where image quality is not changed yet, but moving it more will cause it to change..</p>
-      <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif">
-      <p><b>This is a bad example of performing the task.</b></p>
-      <p>The image is too compressed and too distorted. Distortion is visible at a much earlier point.</p>
-      <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif">
+      <img style="text-indent: 25px;" src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
+      <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the <b>quality of the image just begins to change</b>. In essence, how far left can you move the slider before the image starts to lose its quality?</p>
+      <p><b>Note:</b> the images may start off with different qualities. Base your answer relatively on how the image looks to begin with. With some images, you may need to move the slider a lot, and other images you may not need to move the slider much at all in order to notice a quality difference.</p> 
+      <br>
+      <div class = "row">
+          <div class = "col">
+        <p><b> This is a <font color="green">GOOD</font> example of how to perform the task.</b></p>
+        <p>The image is compressed at a level where image quality is not changed yet, but moving it more will cause it to change.</p>
+        <!-- <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif"> -->
+        <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif"> 
+    </div>
+        <div class = "col">
+        <p><b>This is a <font color="red">BAD</font> example of performing the task.</b></p>
+        <p>The image is too compressed and too distorted. <b>Distortion is visible at a much earlier point.</b></p>
+        <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif">
+    </div>
+    </div>
+    <br>
       <p>Perform this task for all of the images.</p>    
       <p>Press 'View instructions' to refer back to these instructions anytime during the study.</p>  
-      
-      <!--<form action="https://snako.s3.us-east-2.amazonaws.com/" method="post" enctype="multipart/form-data">-->
-      <!--  Key to upload: <input type="input" name="key" value="user/eric/" /><br />-->
-      <!--  <input type="hidden" name="acl" value="public-read" />-->
-        <!--<input type="hidden" name="success_action_redirect" value="https://snako.s3.us-east-2.amazonaws.com/1_hit_number.txt" />-->
-      <!--  Content-Type: <input type="hidden" name="Content-Type" value="text/plain" /><br />-->
-      <!--  <input type="hidden" name="x-amz-meta-uuid" value="14365123651274" />-->
-      <!--  Tags for File: <input type="hidden" name="x-amz-meta-tag" value="" /><br />-->
-      <!--  <input type="hidden" name="AWSAccessKeyId" value="AKIAIOSFODNN7EXAMPLE" />-->
-      <!--  <input type="hidden" name="Policy" value="POLICY" />-->
-      <!--  <input type="hidden" name="Signature" value="SIGNATURE" />-->
-      <!--  File: <input type="file" name="file" /> <br />-->
-      <!--   The elements after this will be ignored -->
-      <!--  <input type="submit" name="submit" value="Upload to Amazon S3" style="display: none;"/>-->
-      <!--</form>-->
+      <p><b>Disclaimer: </b>In order to collect the best results possible, we have quality checks in place to verify the seriousness of your answers, and you will be asked to <b>return the HIT if you fail too many of them. </b></p>  
+      <p>This task page is supported on Google Chrome, Mozilla Firefox, Microsoft Edge, and Opera.</p>
+    
       
   </div>
   
@@ -535,34 +564,47 @@
     <p id="task_complete">Task complete! Please click "Submit".</p>
   </div>
 
-  <br>
-  <div id="progressbar" style="height: 20px"></div>
-  <br>
+<!-- <div  class="progress" id = "progress_class" > -->
+<div id ="progress_bar_items" style="display: none;">
 
-  <div class="tutorial_text_class">
+    <div id="progressbar" style="height: 20px;width: 100%;"></div>   
+    <br>
+</div>
+
+<!-- </div> -->
+  <div class="tutorial_text_class" style="text-align: center;">
       <p>Tutorial image:</p>
   </div>
-  
+  <div class = "row justify-content-center">
+      <div class = "col-6">
+          <!-- <br> -->
   <div class="image_class">
+      
     <img id="source_image"  style="display: none;" crossOrigin="anonymous"> 
     <img id="result_image" style="display: block;" crossOrigin="anonymous">
-
 </div>
+</div>
+  
 <div class="slider_class">
-    <p>
-      <label id="text_compression_ratio" for="jpeg_encode_quality">Compression Ratio:</label>
+    <p >
+      <label  id="text_compression_ratio" fodisr="jpeg_encode_quality">Compression Ratio:</label>
       <input type="text" id="jpeg_encode_quality" readonly style="border:0; color:#f6931f; font-weight:bold;">
     </p>
     <div id="slider" class = slider></div>
 </div>
+</div>
 
 <div>
-    <p><input type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary"></input></p>
+        <br>
+    <!-- <button type="button" class = "btn btn-primary btn-lg" onclick="setImageb(1)" id='Next_button' value="Next">Next</button>-->
+    <p><input type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary"></input></p> 
     <crowd-input id='set_number' name='set_number' value='initial' type='hidden' style='display: none;'></crowd-input>
     <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
     <input type="submit" id="submitButton" type='hidden' style='display: none;'>
 </div>
 
 </crowd-form>
+
+</div>
 </body>
 </html>
