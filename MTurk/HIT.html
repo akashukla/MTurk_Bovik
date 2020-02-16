@@ -53,7 +53,7 @@
 </style>
 
 <script>
-    var golden_image_study = false;
+    var golden_image_study = true;
     var names;
     var n_slider_levels = 50; 
     var nexts = 0; 
@@ -61,8 +61,8 @@
     var hit_list_url = "https://snako.s3.us-east-2.amazonaws.com/1_hit_list.csv"
     var key = "1_hit_number0.txt";
     var hit_number_url = bucket_url + key;
-    // var proxy_url = "https://cors-anywhere.herokuapp.com/";
-    var proxy_url = "";
+    var proxy_url = "https://cors-anywhere.herokuapp.com/";
+    // var proxy_url = "";
     var allText;
     var hit_sets;
     var hit_number;
@@ -228,8 +228,11 @@
             }
             
             // updating image
-            source_image.src = proxy_url + bucket_url + names[nexts];
-            result_image.src = proxy_url + bucket_url + names[nexts];
+            document.getElementById('result_image').crossOrigin = 'anonymous';
+            document.getElementById('source_image').crossOrigin = 'anonymous';
+            var image_src = proxy_url + bucket_url + names[nexts];
+            source_image.src = image_src;
+            result_image.src = image_src;
 
             document.getElementById('Next_button').style = 'visibility: hidden';
 
@@ -307,8 +310,8 @@
                       
         };
         s3.upload(params, function(err, data) {
-            // console.log(err, data);
-            console.log('error');
+            console.log(err, data);
+            // console.log('error');
         });
         
         // // Old code we want to save in case something goes wrong
@@ -442,7 +445,7 @@
         cvs.width = source_img_obj.naturalWidth;
         cvs.height = source_img_obj.naturalHeight;
         var ctx = cvs.getContext("2d").drawImage(source_img_obj, 0, 0);
-        var newImageData = cvs.toDataURL(mime_type, quality/100);
+        var newImageData = cvs.toDataURL(mime_type, 2*quality/100);
         var result_image_obj = new Image();
         result_image_obj.src = newImageData;
         return result_image_obj;
@@ -488,7 +491,10 @@
    
       <p>The slider bar under each image controls the compression level of the image. The highest quality value is 50 and the lowest quality value is 0. Moving the slider to the right will lessen the quaity of the image.</p>
       <p>Adjust the slider to try to find the point at which the image <b>just begins to show visible distortion</b>. In essence, how far left can you move the slider before the image starts to lose its quality?</p>
-      <p><b>Note:</b> the images may start off with different qualities. Base your answer relatively on how the image looks to begin with. With some images, you may need to move the slider to the right a lot, and other images you may not need to move the slider much at all in order to notice a quality difference.</p> 
+      <p><b>Note:</b> The images may start off with different initial qualities. Base your answer relative to 
+      the pristine uncompressed image, when the slider bar is all the way to the right (at 50). With some 
+      images, you may be able to move the slider a lot without affecting the quality of the image, while with
+      other images you may not need to move the slider before noticing a drop in quality.</p> 
       <p>Perform this task for all of the images.</p>  
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif"> 
     </detailed-instructions>
@@ -525,14 +531,20 @@
 
   <div class="begin_class">
         <h2>Introduction:</h2>
-        <p>We are students at the University of Texas as Austin. We are conducting a study on optimal image compression rates, mainly, finding 
-            the optimal compression rate for a given image. We appreciate you taking the time to complete our study</p>
+        <p>We are Electrical and Computer Engineering students at the University of Texas as Austin. We are conducting this study for our senior design project to find 
+            the optimal compression rate for an image. Your participation will provide valuable data for our project, and 
+            we appreciate you taking the time to complete our study.</p>
       <br>
             <h2>Instructions:</h2>
-      <p>The slider bar under each image controls the compression level for that image. The highest quality value is 50 and the lowest quality value is 0. Moving the slider to the right will lessen the quality of the image.</p>
+      <p>The slider bar under each image controls the compression level for that image. The highest quality value 
+      is 50 and the lowest quality value is 0. Moving the slider to the right will compress the image, causing the
+      quality of the image to decrease.</p>
       <img style="text-indent: 25px;" src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
-      <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the <b>quality of the image just begins to change</b>. In essence, how far left can you move the slider before the image starts to lose its quality?</p>
-      <p><b>Note:</b> the images may start off with different qualities. Base your answer relatively on how the image looks to begin with. With some images, you may need to move the slider a lot, and other images you may not need to move the slider much at all in order to notice a quality difference.</p> 
+      <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the <b>quality of the image just begins to change</b>. In essence, how far left can you move the slider before the image starts to lose its quality? Your task is <b>not</b> to rate the aesthetic appeal of the image.</p>
+      <p><b>Note:</b> The images may start off with different initial qualities. Base your answer relative to 
+      the pristine uncompressed image, when the slider bar is all the way to the right (at 50). With some 
+      images, you may be able to move the slider a lot without affecting the quality of the image, while with
+      other images you may not need to move the slider before noticing a drop in quality.</p> 
       <br>
       <div class = "row">
           <div class = "col">
@@ -550,8 +562,8 @@
     <br>
       <p>Perform this task for all of the images.</p>    
       <p>Press 'View instructions' to refer back to these instructions anytime during the study.</p>  
-      <p><b>Disclaimer: </b>In order to collect the best results possible, we have quality checks in place to verify the seriousness of your answers, and you will be asked to <b>return the HIT if you fail too many of them. </b></p>  
-      <p>This task page is supported on Google Chrome, Mozilla Firefox, Microsoft Edge, and Opera.</p>
+      <!--<p><b>Disclaimer: </b>In order to collect the best results possible, we have quality checks in place to verify the seriousness of your answers, and you will be asked to <b>return the HIT if you fail too many of them. </b></p>  -->
+      <p>This task page is supported on Google Chrome, Mozilla Firefox, Microsoft Edge, and Opera. Please use one of these browsers to complete our task.</p>
     
       
   </div>
