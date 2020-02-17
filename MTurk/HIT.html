@@ -53,6 +53,7 @@
 </style>
 
 <script>
+var flag = false;
     var golden_image_study = true;
     var names;
     var n_slider_levels = 50; 
@@ -134,12 +135,16 @@
         if(phase === 'beginning'){
             // if tutorial complete
             if(tutorial_nexts === tutorial_names.length-1){
+                
+                document.getElementById('Next_button').style = 'visibility: hidden';
                 showClass('tutorial_complete_class');
                 hideClass('slider_class');
                 hideClass('image_class');
                 hideClass('tutorial_text_class');
                 phase = 'study';
                 get_set();
+               
+            
             // if showing a tutorial image
             } else { 
                 // if showing first tutorial image
@@ -170,6 +175,7 @@
                 
                 tutorial_nexts = tutorial_nexts+1;
             }
+            //setTimeout(1000);
         }
         
         // if showing non-tutorial images
@@ -319,6 +325,7 @@
         	    dataType: "text",       
         	    success: function(response)  
         	    {
+        	        
         		    var set_number = document.getElementById("set_number"); // the element that will export the set number in the results csv
         		    set_number.value = hit_number;
         		    hit_sets = $.csv.toArrays(response);
@@ -333,6 +340,7 @@
             		  //  names = names.slice(0,3);
         		    }
         		    update_hit_number(hit_number+1);
+        		       document.getElementById('Next_button').style = 'visibility: block';
                 }   
             });
         });
@@ -448,7 +456,7 @@
   <detailed-instructions>
    
       <p>The slider bar under each image controls the compression level of the image. The highest quality value is 
-      50 and the lowest quality value is 0. Moving the slider to the right will lessen the quaity of the image.</p>
+      50 and the lowest quality value is 0. Moving the slider to the left will lessen the quaity of the image.</p>
       <p>Adjust the slider to try to find the point at which the <b>quality of the image just begins to change</b>. 
       In essence, how far left can you move the slider before the image starts to lose its quality? Your task is 
       not to rate the aesthetic appeal of the image. Rather, it is to indicate how much an image can be compressed
@@ -499,7 +507,7 @@
       <br>
             <h2>Instructions:</h2>
       <p>The slider bar under each image controls the compression level for that image. The highest quality value 
-      is 50 and the lowest quality value is 0. Moving the slider to the right will compress the image, causing the
+      is 50 and the lowest quality value is 0. Moving the slider to the left will compress the image, causing the
       quality of the image to decrease.</p>
       <img style="text-indent: 25px;" src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
       <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the 
