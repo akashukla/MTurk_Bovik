@@ -53,21 +53,25 @@
 </style>
 
 <script>
-var flag = false;
+    /* For rejection evaluation */
+    var subject_history =  [];
+    
+    /* ------------------------ */
+
+    var n_slider_levels = 50; 
+    var slider_vals = '';
+    var flag = false;
     var golden_image_study = true;
     var names;
-    var n_slider_levels = 50; 
     var nexts = 0; 
     var bucket_url = "https://snako.s3.us-east-2.amazonaws.com/";
     var hit_list_url = "https://snako.s3.us-east-2.amazonaws.com/1_hit_list.csv"
     var key = "1_hit_number0.txt";
     var hit_number_url = bucket_url + key;
     var proxy_url = "https://cors-anywhere.herokuapp.com/";
-    // var proxy_url = "";
     var allText;
     var hit_sets;
     var hit_number;
-    var slider_vals = '';
     var phase = 'beginning';
     var tutorial_names = ['AVA__809598.jpg', 'EMOTIC__COCO_train2014_000000154329.jpg', 'EMOTIC__COCO_train2014_000000128826.jpg'] // 'EMOTIC__COCO_train2014_000000104079.jpg', 
     var golden_names = ['AVA__20278.jpg', 'EMOTIC__4wl5mafxcb0nacmnzr.jpg', 'EMOTIC__COCO_train2014_000000571644.jpg', 
@@ -318,9 +322,22 @@ var flag = false;
         // );
     }
 
-    // get hit_list.csv and hit_number
-    // hit_number: the set index
-    // hit_list.csv: 2d array of sets
+    /*
+     * get hit_list.csv and hit_number
+     * hit_number: the set index
+     * hit_list.csv: 2d array of sets
+     *
+     * Data Format:
+     *   Number of study images
+     *   Image names,
+     *   Number of golden images
+     *   Number of repeated images
+     *   Golden image indeces 
+     *   Golden image mean values
+     *   Golden image stdev
+     *   Repeated image indeces (should be 2X number of repeated)
+     */
+    
     function get_set(){
         $.get(proxy_url + hit_number_url, function( data ) {
             hit_number = parseInt(data);
@@ -410,10 +427,10 @@ var flag = false;
      */
 
     // SKETCH OF REJECTION METHODS: TODO
-
-    // Data structure: stored answers from study
     // function evalRejection()
         // sets phase = 'reject'
+
+
 
     function compress(source_img_obj, quality, output_format){
         var mime_type;
