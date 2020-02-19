@@ -473,7 +473,10 @@ var flag = false;
       <br>
     <short-summary>
         
-        <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the <b>quality of the image just begins to change</b>.</p>
+        <!-- </1><p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the
+             <b>quality of the image just begins to change</b>.</p> -->
+        <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the 
+            <b>distortion due to compression just begins to compromise the quality of the image</b></p>
 
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
     </short-summary>
@@ -526,34 +529,69 @@ var flag = false;
 
   <div class="begin_class">
         <h2>Introduction:</h2>
-        <p>We are Electrical and Computer Engineering students at the University of Texas as Austin. We are conducting this study for our senior design project to find 
+        <!-- <p>We are Electrical and Computer Engineering students at the University of Texas as Austin. We are conducting this study for our senior design project to find 
             the optimal compression rate for an image. Your participation will provide valuable data for our project, and 
-            we appreciate you taking the time to complete our study.</p>
+            we appreciate you taking the time to complete our study.</p> -->
+        <p> 
+            We are Electrical and Computer Engineering students at the University of Texas at Austin. We are
+            conducting this study for our senior design project to find the optimal compression ratios for images.
+            Your participation will provide valuable data for our project, and we appreciate you taking the time to 
+            complete our study.
+        </p>
       <br>
-            <h2>Instructions:</h2>
+      <!--   <h2>Instructions:</h2>
       <p>The slider bar under each image controls the compression level for that image. The highest quality value 
       is 50 and the lowest quality value is 0. Moving the slider to the left will compress the image, causing the
       quality of the image to decrease.</p>
       <img style="text-indent: 25px;" src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
       <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the 
-      <b>quality of the image just begins to change</b>. In essence, how far left can you move the slider 
-      before the image starts to lose its quality? Your task is <b>not</b> to rate the aesthetic appeal of the image.
+      <b>quality of the image just begins to change</b>. In essence, how far left can you move the slider
+      <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which
+      <b>compression just begins to compromise the quality of the image</b>.
+      Your task is <b>not</b> to rate the aesthetic appeal of the image.
       Rather, it is to indicate how much an image can be compressed without decreasing its original quality.</p>
       <p><b>Note:</b> The images may start off with different initial qualities. Base your answer relative to 
       the pristine uncompressed image, when the slider bar is all the way to the right (at 50). With some 
       images, you may be able to move the slider a lot without affecting the quality of the image, while with
       other images, you may not need to move the slider before noticing a drop in quality.</p> 
-      <br>
+      <br> -->
+      <h2>Instructions:</h2>
+        <p>
+          The slider bar under each image controls the quality of the image by way of compression. The highest
+          quality value is 50, and the lowest quality value is 0. Moving the slider to the left will decrease 
+          the quality of the image.
+        </p>  
+        <img style="text-indent: 25px;" src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
+        <p>
+          <b>Your task:</b> Adjust the slider and try to find the point at which sliding the bar <b>just begins 
+             to compromise the quality of the image</b>. For example, if the slider is at a certain point 
+             <!-- KAN TODO: GIF OF IMAGE AT POINT PLEASE--> 
+             and the resulting image's quality is similar to the original's quality even after moving the slider 
+             a bit more to the left, 
+             <!-- KAN TODO: GIF OF SLIDER MOVING FROM POINT PLEASE--> 
+             then you can still move the slider to the left. If the slider is at a certain point and the resulting 
+             image's quality is substantially worse than the original's quality,
+             <!-- KAN TODO: GIF OF IMAGE AT POINT PLEASE--> 
+             then you have moved the slider too far to the left and must move the slider to the right. Your task 
+             is <b>not</b> to rate the aesthetic appeal of the image.
+        </p>
+        <p>
+          <b>Note:</b> The images may start off with different initial qualities. Because of this, base your 
+          answer <b>relative to the original, pristine image</b> (i.e when the slider bar is all the way to the 
+          right at 50). With some images, you may need to move the slider a lot without affecting the 
+          quality of images. With others, you may not need to move the slider too much before noticing a 
+          drop in quality.
+        </p>
       <div class = "row">
           <div class = "col">
         <p><b> This is a <font color="green">GOOD</font> example of how to perform the task.</b></p>
-        <p>The image is compressed at a level where image quality is not changed yet, but moving it more will cause it to change.</p>
+        <p>The slider is at a level where the image's quality is <b>mostly preserved</b>, but moving it more will compromise image quality.</p>
         <!-- <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif"> -->
         <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif"> 
     </div>
         <div class = "col">
         <p><b>This is a <font color="red">BAD</font> example of performing the task.</b></p>
-        <p>The image is too compressed and too distorted. <b>Distortion is visible at a much earlier point.</b></p>
+        <p>The image is too compressed. <b>Most of the image's quality is lost</b>, so image quality is compromised.</p>
         <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif">
     </div>
     </div>
