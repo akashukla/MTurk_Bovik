@@ -130,6 +130,7 @@ var flag = false;
     
     // runs when "Next" button is pressed
     // note: tutorial_nexts and nexts increment at end of function
+    // TODO set checks for 'reject' 
     function setImageb(button){
         // if showing tutorial
         if(phase === 'beginning'){
@@ -229,6 +230,9 @@ var flag = false;
             }
             
             nexts = nexts+1;
+        } else if (phase =='reject') {
+            //TODO
+        
         } else { 
             console.log('Not supposed to be here');
         }
@@ -404,6 +408,13 @@ var flag = false;
      * BACKEND Hauling Methods
      *
      */
+
+    // SKETCH OF REJECTION METHODS: TODO
+
+    // Data structure: stored answers from study
+    // function evalRejection()
+        // sets phase = 'reject'
+
     function compress(source_img_obj, quality, output_format){
         var mime_type;
         if(output_format==="png"){
@@ -441,6 +452,7 @@ var flag = false;
     toDataURL(source_image.src, function(dataUrl) {
         console.log('RESULT:', dataUrl)
     })
+
     /*
      * END BACKEND Hauling Methods
      *
