@@ -54,7 +54,14 @@
 </style>
 
 <script>
-var flag = false;
+    // For rejection evaluation
+    var history = [];
+    var golden_i = [];
+    var repeated_i = [];
+    var num_golden;
+    var num_repeated;
+
+    var flag = false;
     var golden_image_study = true;
     var names;
     var n_slider_levels = 50; 
