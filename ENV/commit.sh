@@ -20,9 +20,6 @@
 COMMIT_OBJ=$@
 echo "Using MK's easy commit script. Warning: if empty target, this will auto add all untracked objects and commit those along with pre-staged changes to the current branch head."
 
-echo "Pulling latest changes from current head..."
-git pull
-
 if [ -z "$@" ]; then
     echo "Empty target."
 else 
@@ -34,4 +31,7 @@ else
     git commit -a -m "Testing MK's auto commit script."
    
 fi
+echo "Pulling latest changes from current head..."
+git pull
+
 git push
