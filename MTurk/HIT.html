@@ -11,7 +11,9 @@
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
 <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" media="all" rel="stylesheet" type="text/css">
 <link href="https://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" media="all" rel="stylesheet" type="text/css">
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <style>
   #slider{
     width: 600px;
@@ -21,6 +23,7 @@
 
   #progressbar{
     width: 600px;
+   
   }
 
   #Next_button {
@@ -50,7 +53,8 @@
 </style>
 
 <script>
-    var golden_image_study = false;
+var flag = false;
+    var golden_image_study = true;
     var names;
     var n_slider_levels = 50; 
     var nexts = 0; 
@@ -58,79 +62,37 @@
     var hit_list_url = "https://snako.s3.us-east-2.amazonaws.com/1_hit_list.csv"
     var key = "1_hit_number0.txt";
     var hit_number_url = bucket_url + key;
-    // var proxy_url = "https://cors-anywhere.herokuapp.com/";
-    var proxy_url = "";
+    var proxy_url = "https://cors-anywhere.herokuapp.com/";
+    // var proxy_url = "";
     var allText;
     var hit_sets;
     var hit_number;
     var slider_vals = '';
     var phase = 'beginning';
     var tutorial_names = ['AVA__809598.jpg', 'EMOTIC__COCO_train2014_000000154329.jpg', 'EMOTIC__COCO_train2014_000000128826.jpg'] // 'EMOTIC__COCO_train2014_000000104079.jpg', 
-    var golden_names = [ 'EMOTIC__COCO_train2014_000000208055.jpg',
-                         'EMOTIC__COCO_train2014_000000211272.jpg',
-                         'EMOTIC__COCO_train2014_000000211486.jpg', 
-                         'EMOTIC__COCO_train2014_000000212083.jpg',
-                         'EMOTIC__COCO_train2014_000000221881.jpg', 
-                         'EMOTIC__COCO_train2014_000000222140.jpg',
-                         'EMOTIC__COCO_train2014_000000223888.jpg', 
-                         'EMOTIC__COCO_train2014_000000226597.jpg',
-                         'EMOTIC__COCO_train2014_000000229188.jpg', 
-                         'EMOTIC__COCO_train2014_000000230433.jpg',
-                         'EMOTIC__COCO_train2014_000000239307.jpg',
-                         'EMOTIC__COCO_train2014_000000241421.jpg',
-                         'EMOTIC__COCO_train2014_000000250357.jpg',
-                         'EMOTIC__COCO_train2014_000000257297.jpg',
-                         'EMOTIC__COCO_train2014_000000265100.jpg',
-                         'EMOTIC__COCO_train2014_000000266479.jpg',
-                         'EMOTIC__COCO_train2014_000000268209.jpg',
-                         'EMOTIC__COCO_train2014_000000276128.jpg',
-                         'EMOTIC__COCO_train2014_000000277122.jpg',
-                         'EMOTIC__COCO_train2014_000000297359.jpg',
-                         'EMOTIC__COCO_train2014_000000300598.jpg',
-                         'EMOTIC__COCO_train2014_000000301855.jpg',
-                         'EMOTIC__COCO_train2014_000000302102.jpg',
-                         'EMOTIC__COCO_train2014_000000304548.jpg',
-                         'EMOTIC__COCO_train2014_000000305105.jpg',
-                         'EMOTIC__COCO_train2014_000000307894.jpg',
-                         'EMOTIC__COCO_train2014_000000308353.jpg',
-                         'EMOTIC__COCO_train2014_000000311706.jpg',
-                         'EMOTIC__COCO_train2014_000000318496.jpg',
-                         'EMOTIC__COCO_train2014_000000319690.jpg',
-                         'EMOTIC__COCO_train2014_000000319905.jpg',
-                         'EMOTIC__COCO_train2014_000000322212.jpg',
-                         'EMOTIC__COCO_train2014_000000325981.jpg',
-                         'EMOTIC__COCO_train2014_000000326504.jpg',
-                         'EMOTIC__COCO_train2014_000000327810.jpg',
-                         'EMOTIC__COCO_train2014_000000329587.jpg',
-                         'EMOTIC__COCO_train2014_000000329942.jpg',
-                         'EMOTIC__COCO_train2014_000000334338.jpg',
-                         'EMOTIC__COCO_train2014_000000341623.jpg',
-                         'EMOTIC__COCO_train2014_000000341905.jpg',
-                         'EMOTIC__COCO_train2014_000000342969.jpg',
-                         'EMOTIC__COCO_train2014_000000344031.jpg',
-                         'EMOTIC__COCO_train2014_000000347133.jpg',
-                         'EMOTIC__COCO_train2014_000000349698.jpg',
-                         'EMOTIC__COCO_train2014_000000351610.jpg',
-                         'EMOTIC__COCO_train2014_000000353483.jpg',
-                         'EMOTIC__COCO_train2014_000000355425.jpg',
-                         'EMOTIC__COCO_train2014_000000360017.jpg',
-                         'EMOTIC__COCO_train2014_000000361190.jpg',
-                         'EMOTIC__COCO_train2014_000000362658.jpg',
-                         'EMOTIC__bj6qnim3c43cj2j7n3.jpg',
-                         'EMOTIC__COCO_train2014_000000051735.jpg',
-                         'VOC2012__2007_000063.jpg',
-                         'VOC2012__2007_000068.jpg',
-                         'VOC2012__2007_000793.jpg',
-                         'VOC2012__2007_001487.jpg',
-                         'VOC2012__2007_001583.jpg',
-                         'VOC2012__2007_001704.jpg',
-                         'VOC2012__2007_002565.jpg',
-                         'VOC2012__2007_002643.jpg',
-                         'VOC2012__2007_003104.jpg',
-                         'VOC2012__2008_005594.jpg',
-                         'VOC2012__2008_005600.jpg',
-                         'VOC2012__2008_005607.jpg',
-                         'VOC2012__2008_005615.jpg']
+    var golden_names = ['AVA__20278.jpg', 'EMOTIC__4wl5mafxcb0nacmnzr.jpg', 'EMOTIC__COCO_train2014_000000571644.jpg', 
+                        'EMOTIC__COCO_val2014_000000031983.jpg', 'EMOTIC__COCO_val2014_000000045685.jpg', 
+                        'EMOTIC__COCO_val2014_000000147471.jpg', 'EMOTIC__COCO_val2014_000000464134.jpg', 
+                        'EMOTIC__COCO_val2014_000000534041.jpg', 'JPEGImages__2007_003137.jpg', 
+                        'JPEGImages__2008_002845.jpg', 'JPEGImages__2008_003688.jpg', 'JPEGImages__2008_003701.jpg', 
+                        'JPEGImages__2008_004077.jpg', 'JPEGImages__2008_005266.jpg', 'JPEGImages__2008_006076.jpg', 
+                        'JPEGImages__2008_006461.jpg', 'JPEGImages__2008_006554.jpg', 'JPEGImages__2008_006946.jpg', 
+                        'JPEGImages__2008_007218.jpg', 'JPEGImages__2008_008544.jpg', 'JPEGImages__2009_000015.jpg', 
+                        'JPEGImages__2009_001078.jpg', 'JPEGImages__2009_002872.jpg', 'JPEGImages__2009_002893.jpg', 
+                        'JPEGImages__2009_004426.jpg', 'JPEGImages__2010_000088.jpg', 'JPEGImages__2010_002618.jpg', 
+                        'JPEGImages__2010_003648.jpg', 'JPEGImages__2010_004257.jpg', 'JPEGImages__2011_000180.jpg', 
+                        'JPEGImages__2011_002511.jpg', 'JPEGImages__2011_004079.jpg', 'JPEGImages__2011_006006.jpg', 
+                        'JPEGImages__2011_007016.jpg', 'JPEGImages__2011_007090.jpg', 'JPEGImages__2012_000805.jpg', 
+                        'JPEGImages__2012_003188.jpg', 'JPEGImages__2012_003896.jpg', 'JPEGImages__2012_004289.jpg', 
+                        'VOC2012__2008_001175.jpg', 'VOC2012__2008_001855.jpg', 'VOC2012__2008_002589.jpg', 
+                        'VOC2012__2008_003036.jpg', 'VOC2012__2008_004536.jpg', 'VOC2012__2008_008339.jpg', 
+                        'VOC2012__2008_008503.jpg', 'VOC2012__2009_000151.jpg', 'VOC2012__2009_000659.jpg', 
+                        'VOC2012__2009_000802.jpg', 'VOC2012__2009_001550.jpg', 'VOC2012__2009_002175.jpg', 
+                        'VOC2012__2009_002794.jpg', 'VOC2012__2009_003177.jpg', 'VOC2012__2009_003324.jpg', 
+                        'VOC2012__2009_004324.jpg', 'VOC2012__2010_000853.jpg', 'VOC2012__2010_005622.jpg', 
+                        'VOC2012__2011_002173.jpg', 'VOC2012__2011_002215.jpg', 'VOC2012__2011_002960.jpg', 
+                        'VOC2012__2011_003123.jpg', 'VOC2012__2011_003969.jpg', 'VOC2012__2011_005123.jpg', 
+                        'VOC2012__2012_001367.jpg', 'VOC2012__2012_003683.jpg']
                          
     var tutorial_nexts = -1; // index for which tutorial image to display
     var first_image = true;
@@ -168,20 +130,26 @@
     
     // runs when "Next" button is pressed
     // note: tutorial_nexts and nexts increment at end of function
+    // TODO set checks for 'reject' 
     function setImageb(button){
         // if showing tutorial
         if(phase === 'beginning'){
             // if tutorial complete
             if(tutorial_nexts === tutorial_names.length-1){
+                
+                document.getElementById('Next_button').style = 'visibility: hidden';
                 showClass('tutorial_complete_class');
                 hideClass('slider_class');
                 hideClass('image_class');
                 hideClass('tutorial_text_class');
                 phase = 'study';
                 get_set();
+               
+            
             // if showing a tutorial image
             } else { 
                 // if showing first tutorial image
+                document.getElementById("crowd-instr").style.display = "block";
                 if(tutorial_nexts === -1){
                     showClass('tutorial_text_class');
                     showClass('slider_class');
@@ -208,6 +176,7 @@
                 
                 tutorial_nexts = tutorial_nexts+1;
             }
+            //setTimeout(1000);
         }
         
         // if showing non-tutorial images
@@ -224,16 +193,22 @@
             }
             
             // updating image
-            source_image.src = proxy_url + bucket_url + names[nexts];
-            result_image.src = proxy_url + bucket_url + names[nexts];
+            document.getElementById('result_image').crossOrigin = 'anonymous';
+            document.getElementById('source_image').crossOrigin = 'anonymous';
+            document.getElementById('result_image').style.display="inline-block";
+            var image_src = proxy_url + bucket_url + names[nexts];
+            source_image.src = image_src;
+            result_image.src = image_src;
 
             document.getElementById('Next_button').style = 'visibility: hidden';
+            
 
             $( "#progressbar" ).progressbar({
-                value: nexts*2,
+                value: (nexts* (100/65)),
                 create: function(event, ui) {$(this).find('.ui-widget-header').css({'background-color':'lightskyblue'})}
             });
-            
+            document.getElementById('progress_bar_items').style.textAlign = 'center';
+            document.getElementById("progress_bar_items").style.display = "block";
             //Slider init
             $("#slider").slider({
                 orientation: "horizontal",
@@ -255,6 +230,9 @@
             }
             
             nexts = nexts+1;
+        } else if (phase =='reject') {
+            //TODO
+        
         } else { 
             console.log('Not supposed to be here');
         }
@@ -302,8 +280,8 @@
                       
         };
         s3.upload(params, function(err, data) {
-            // console.log(err, data);
-            console.log('error');
+            console.log(err, data);
+            // console.log('error');
         });
         
         // // Old code we want to save in case something goes wrong
@@ -353,6 +331,7 @@
         	    dataType: "text",       
         	    success: function(response)  
         	    {
+        	        
         		    var set_number = document.getElementById("set_number"); // the element that will export the set number in the results csv
         		    set_number.value = hit_number;
         		    hit_sets = $.csv.toArrays(response);
@@ -367,6 +346,7 @@
             		  //  names = names.slice(0,3);
         		    }
         		    update_hit_number(hit_number+1);
+        		       document.getElementById('Next_button').style = 'visibility: block';
                 }   
             });
         });
@@ -405,7 +385,7 @@
         });
         $("#jpeg_encode_quality").val($("#slider").slider("value"));
         $( "#slider" ).on("slide", function( event, ui ) {
-                document.getElementById('result_image').style.display = 'block';
+                document.getElementById('result_image').style.display = 'inline-block';
               document.getElementById('source_image').style.display = 'none';
            
             var encodeQuality = document.getElementById('jpeg_encode_quality');
@@ -423,6 +403,18 @@
         });
     });
 
+
+    /*
+     * BACKEND Hauling Methods
+     *
+     */
+
+    // SKETCH OF REJECTION METHODS: TODO
+
+    // Data structure: stored answers from study
+    // function evalRejection()
+        // sets phase = 'reject'
+
     function compress(source_img_obj, quality, output_format){
         var mime_type;
         if(output_format==="png"){
@@ -437,7 +429,7 @@
         cvs.width = source_img_obj.naturalWidth;
         cvs.height = source_img_obj.naturalHeight;
         var ctx = cvs.getContext("2d").drawImage(source_img_obj, 0, 0);
-        var newImageData = cvs.toDataURL(mime_type, quality/100);
+        var newImageData = cvs.toDataURL(mime_type, 2*quality/100);
         var result_image_obj = new Image();
         result_image_obj.src = newImageData;
         return result_image_obj;
@@ -460,70 +452,117 @@
     toDataURL(source_image.src, function(dataUrl) {
         console.log('RESULT:', dataUrl)
     })
+
+    /*
+     * END BACKEND Hauling Methods
+     *
+     */
+
+
 </script>
 </head>
 
 <body>
-<h1>Optimal Image Compression - Human Study</h1>
+    <div class = "container">
+<h1 style="text-align: center;" class="display-4">Optimal Image Compression - Human Study</h1>
+<hr>
+<br>
 
-<crowd-form answer-format="flatten-objects">
-  <crowd-instructions link-text="View instructions" link-type="button">
+<crowd-form answer-format="flatten-objects" style="text-align: center;">
+  <crowd-instructions style="display: none;" link-text="View instructions" link-type="button" id ="crowd-instr" >
+      <br>
     <short-summary>
-        <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the quality of the image <b>just begins to show visible distortion</b>.</p>
+        
+        <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the <b>quality of the image just begins to change</b>.</p>
 
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
     </short-summary>
 
   <detailed-instructions>
-      <p>The slider bar under each image controls the compression level of the image. The highest quality value is 50 and the lowest quality value is 0. Moving the slider to the right will lessen the quaity of the image.</p>
-      <p>Adjust the slider to try to find the point at which the image <b>just begins to show visible distortion</b>. In essence, how far left can you move the slider before the image starts to lose its quality?</p>
-      <p><b>Note:</b> the images may start off with different qualities. Base your answer relatively on how the image looks to begin with. With some images, you may need to move the slider to the right a lot, and other images you may not need to move the slider much at all in order to notice a quality difference.</p> 
+   
+      <p>The slider bar under each image controls the compression level of the image. The highest quality value is 
+      50 and the lowest quality value is 0. Moving the slider to the left will lessen the quaity of the image.</p>
+      <p>Adjust the slider to try to find the point at which the <b>quality of the image just begins to change</b>. 
+      In essence, how far left can you move the slider before the image starts to lose its quality? Your task is 
+      not to rate the aesthetic appeal of the image. Rather, it is to indicate how much an image can be compressed
+      without decreasing its original quality.</p>
+      <p><b>Note:</b> The images may start off with different initial qualities. Base your answer relative to 
+      the pristine uncompressed image, when the slider bar is all the way to the right (at 50). With some 
+      images, you may be able to move the slider a lot without affecting the quality of the image, while with
+      other images, you may not need to move the slider before noticing a drop in quality.</p> 
       <p>Perform this task for all of the images.</p>  
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif"> 
     </detailed-instructions>
 
-    <positive-example>
+<br>
+      
+        <!-- <div class = "row">
+            <div class = "col"> -->
+    <positive-example> 
+       
       <p><b>This is a good example of performing the task.</b></p>
-      <p>The image is compressed at a level where image quality is not changed yet, but moving it more will cause it to change..</p>
+      <p>The image is compressed at a level where image quality is not changed yet, but moving it more will cause it to change.</p>
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
-    </positive-example>
+    
+</positive-example>
 
+<!-- </div>
+<div class = "col"> -->
+    
     <negative-example>
+       
       <p><b>This is a bad example of performing the task.</b></p> 
       <p>The image is too compressed and too distorted. Distortion is visible at a much earlier point.</p>
       <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif">
-    </negative-example>
+
+ </negative-example>
+ <!-- </div>
+</div> -->
+
+
+
   </crowd-instructions>
+  <br>
 
   <div class="begin_class">
-      <h2>Instructions:</h2>
-      <p>The slider bar under each image controls the compression level for that image. The highest quality value is 50 and the lowest quality value is 0. Moving the slider to the right will lessen the quality of the image.</p>
-      <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
-      <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the quality of the image <b>just begins to show visible distortion</b>. In essence, how far left can you move the slider before the image starts to lose its quality?</p>
-      <p><b>Note:</b> the images may start off with different qualities. Base your answer relatively on how the image looks to begin with. With some images, you may need to move the slider to the right a lot, and other images you may not need to move the slider much at all in order to notice a quality difference.</p> 
-      <p><b> This is a good example of how to perform the task.</b></p>
-      <p>The image is compressed at a level where image quality is not changed yet, but moving it more will cause it to change..</p>
-      <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif">
-      <p><b>This is a bad example of performing the task.</b></p>
-      <p>The image is too compressed and too distorted. Distortion is visible at a much earlier point.</p>
-      <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif">
+        <h2>Introduction:</h2>
+        <p>We are Electrical and Computer Engineering students at the University of Texas as Austin. We are conducting this study for our senior design project to find 
+            the optimal compression rate for an image. Your participation will provide valuable data for our project, and 
+            we appreciate you taking the time to complete our study.</p>
+      <br>
+            <h2>Instructions:</h2>
+      <p>The slider bar under each image controls the compression level for that image. The highest quality value 
+      is 50 and the lowest quality value is 0. Moving the slider to the left will compress the image, causing the
+      quality of the image to decrease.</p>
+      <img style="text-indent: 25px;" src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
+      <p><b>Your task:</b> Adjust the slider to compress the image and try to find the point at which the 
+      <b>quality of the image just begins to change</b>. In essence, how far left can you move the slider 
+      before the image starts to lose its quality? Your task is <b>not</b> to rate the aesthetic appeal of the image.
+      Rather, it is to indicate how much an image can be compressed without decreasing its original quality.</p>
+      <p><b>Note:</b> The images may start off with different initial qualities. Base your answer relative to 
+      the pristine uncompressed image, when the slider bar is all the way to the right (at 50). With some 
+      images, you may be able to move the slider a lot without affecting the quality of the image, while with
+      other images, you may not need to move the slider before noticing a drop in quality.</p> 
+      <br>
+      <div class = "row">
+          <div class = "col">
+        <p><b> This is a <font color="green">GOOD</font> example of how to perform the task.</b></p>
+        <p>The image is compressed at a level where image quality is not changed yet, but moving it more will cause it to change.</p>
+        <!-- <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif"> -->
+        <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif"> 
+    </div>
+        <div class = "col">
+        <p><b>This is a <font color="red">BAD</font> example of performing the task.</b></p>
+        <p>The image is too compressed and too distorted. <b>Distortion is visible at a much earlier point.</b></p>
+        <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif">
+    </div>
+    </div>
+    <br>
       <p>Perform this task for all of the images.</p>    
       <p>Press 'View instructions' to refer back to these instructions anytime during the study.</p>  
-      
-      <!--<form action="https://snako.s3.us-east-2.amazonaws.com/" method="post" enctype="multipart/form-data">-->
-      <!--  Key to upload: <input type="input" name="key" value="user/eric/" /><br />-->
-      <!--  <input type="hidden" name="acl" value="public-read" />-->
-        <!--<input type="hidden" name="success_action_redirect" value="https://snako.s3.us-east-2.amazonaws.com/1_hit_number.txt" />-->
-      <!--  Content-Type: <input type="hidden" name="Content-Type" value="text/plain" /><br />-->
-      <!--  <input type="hidden" name="x-amz-meta-uuid" value="14365123651274" />-->
-      <!--  Tags for File: <input type="hidden" name="x-amz-meta-tag" value="" /><br />-->
-      <!--  <input type="hidden" name="AWSAccessKeyId" value="AKIAIOSFODNN7EXAMPLE" />-->
-      <!--  <input type="hidden" name="Policy" value="POLICY" />-->
-      <!--  <input type="hidden" name="Signature" value="SIGNATURE" />-->
-      <!--  File: <input type="file" name="file" /> <br />-->
-      <!--   The elements after this will be ignored -->
-      <!--  <input type="submit" name="submit" value="Upload to Amazon S3" style="display: none;"/>-->
-      <!--</form>-->
+      <!--<p><b>Disclaimer: </b>In order to collect the best results possible, we have quality checks in place to verify the seriousness of your answers, and you will be asked to <b>return the HIT if you fail too many of them. </b></p>  -->
+      <p>This task page is supported on Google Chrome, Mozilla Firefox, Microsoft Edge, and Opera. Please use one of these browsers to complete our task.</p>
+    
       
   </div>
   
@@ -535,34 +574,47 @@
     <p id="task_complete">Task complete! Please click "Submit".</p>
   </div>
 
-  <br>
-  <div id="progressbar" style="height: 20px"></div>
-  <br>
+<!-- <div  class="progress" id = "progress_class" > -->
+<div id ="progress_bar_items" style="display: none;">
 
-  <div class="tutorial_text_class">
+    <div id="progressbar" style="height: 20px;display: inline-block;"></div>   
+    <br>
+</div>
+
+<!-- </div> -->
+  <div class="tutorial_text_class" style="text-align: center;">
       <p>Tutorial image:</p>
   </div>
-  
+  <div class = "row justify-content-center">
+      <div class = "col-6">
+          <!-- <br> -->
   <div class="image_class">
+      
     <img id="source_image"  style="display: none;" crossOrigin="anonymous"> 
-    <img id="result_image" style="display: block;" crossOrigin="anonymous">
-
+    <img id="result_image" style="display: inline-block;" crossOrigin="anonymous">
 </div>
+</div>
+  
 <div class="slider_class">
-    <p>
-      <label id="text_compression_ratio" for="jpeg_encode_quality">Compression Ratio:</label>
+    <p style="text-align: center;display: inline;">
+      <label  id="text_compression_ratio" fodisr="jpeg_encode_quality">Compression Ratio:</label>
       <input type="text" id="jpeg_encode_quality" readonly style="border:0; color:#f6931f; font-weight:bold;">
     </p>
     <div id="slider" class = slider></div>
 </div>
+</div>
 
 <div>
-    <p><input type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary"></input></p>
+        <br>
+    <!-- <button type="button" class = "btn btn-primary btn-lg" onclick="setImageb(1)" id='Next_button' value="Next">Next</button>-->
+    <p><input type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary"></input></p> 
     <crowd-input id='set_number' name='set_number' value='initial' type='hidden' style='display: none;'></crowd-input>
     <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
     <input type="submit" id="submitButton" type='hidden' style='display: none;'>
 </div>
 
 </crowd-form>
+
+</div>
 </body>
 </html>
