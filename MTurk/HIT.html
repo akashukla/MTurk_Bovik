@@ -69,7 +69,7 @@ var flag = false;
     var hit_sets;
     var hit_number;
     var slider_vals = '';
-    var phase = 'beginning';
+    var phase = 'quiz';
     var tutorial_names = ['AVA__809598.jpg', 'EMOTIC__COCO_train2014_000000154329.jpg', 'EMOTIC__COCO_train2014_000000128826.jpg'] // 'EMOTIC__COCO_train2014_000000104079.jpg', 
     var golden_names = ['AVA__20278.jpg', 'EMOTIC__4wl5mafxcb0nacmnzr.jpg', 'EMOTIC__COCO_train2014_000000571644.jpg', 
                         'EMOTIC__COCO_val2014_000000031983.jpg', 'EMOTIC__COCO_val2014_000000045685.jpg', 
@@ -108,6 +108,7 @@ var flag = false;
         hideClass('slider_class');
         hideClass('tutorial_complete_class');
         hideClass('tutorial_text_class');
+        hideClass('quiz_class');
     }
     window.onload = init;
     
@@ -135,15 +136,16 @@ var flag = false;
     function setImageb(button){
 
         if(phase == 'quiz'){
-         
-         showClass('quiz')
+
+            showClass('quiz_class');
+            hideClass('begin_class');
+            phase = 'beginning';
 
 
          }
 
-
         // if showing tutorial
-        if(phase === 'beginning'){
+        else if(phase === 'beginning'){
             // if tutorial complete
             if(tutorial_nexts === tutorial_names.length-1){
                 
@@ -165,6 +167,7 @@ var flag = false;
                     showClass('slider_class');
                     showClass('image_class');
                     hideClass('begin_class');
+                    hideClass('quiz_class'); 
                 }
                 // showing the next image (uncompressed)
                 var url = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
@@ -591,6 +594,29 @@ var flag = false;
   <div class='tutorial_complete_class'>
       <p>Tutorial complete! When ready, click "Next" to proceed to the full study.</p>
   </div>
+
+<div class="quiz_class">
+  <div>
+    <p>Did u understand the task?</p>
+    <crowd-input name="question1" placeholder="example: pink" required></crowd-input>
+  </div>
+
+  <div>
+    <p>Check this box if you a cuck</p>
+    <crowd-checkbox name="question2" checked="true" required></crowd-checkbox>
+  </div>
+
+  <div>
+    <p>On a scale of 1-10, how sure r u fam?</p>
+    <crowd-slider name="question3" min="1" max="10" step="1" pin="true" required></crowd-slider>
+  </div>
+
+  <div>
+    <p>Write a short essay describing your boobies</p>
+    <crowd-text-area name="question4" rows="4" placeholder="Lorem ipsum..." required></crowd-text-area>
+  </div>
+    
+</div>
 
   <div class="end_class">
     <p id="task_complete">Task complete! Please click "Submit".</p>
