@@ -230,7 +230,7 @@
             document.getElementById('Next_button').style = 'visibility: hidden';
 
             $( "#progressbar" ).progressbar({
-                value: nexts,
+                value: nexts*2,
                 create: function(event, ui) {$(this).find('.ui-widget-header').css({'background-color':'lightskyblue'})}
             });
             
