@@ -37,6 +37,7 @@
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
+  width: 12em;
   }
   #submitButton {
   background-color: #4CAF50; /* Green */
@@ -53,7 +54,14 @@
 </style>
 
 <script>
-var flag = false;
+    // For rejection evaluation
+    var history = [];
+    var golden_i = [];
+    var repeated_i = [];
+    var num_golden;
+    var num_repeated;
+
+    var flag = false;
     var golden_image_study = true;
     var names;
     var n_slider_levels = 50; 
@@ -68,7 +76,7 @@ var flag = false;
     var hit_sets;
     var hit_number;
     var slider_vals = '';
-    var phase = 'beginning';
+    var phase = 'quiz';
     var tutorial_names = ['AVA__809598.jpg', 'EMOTIC__COCO_train2014_000000154329.jpg', 'EMOTIC__COCO_train2014_000000128826.jpg'] // 'EMOTIC__COCO_train2014_000000104079.jpg', 
     var golden_names = ['AVA__20278.jpg', 'EMOTIC__4wl5mafxcb0nacmnzr.jpg', 'EMOTIC__COCO_train2014_000000571644.jpg', 
                         'EMOTIC__COCO_val2014_000000031983.jpg', 'EMOTIC__COCO_val2014_000000045685.jpg', 
@@ -107,6 +115,7 @@ var flag = false;
         hideClass('slider_class');
         hideClass('tutorial_complete_class');
         hideClass('tutorial_text_class');
+        hideClass('quiz_class');
     }
     window.onload = init;
     
@@ -132,8 +141,18 @@ var flag = false;
     // note: tutorial_nexts and nexts increment at end of function
     // TODO set checks for 'reject' 
     function setImageb(button){
+
+        if(phase == 'quiz'){
+
+            showClass('quiz_class');
+            hideClass('begin_class');
+            phase = 'beginning';
+
+
+         }
+
         // if showing tutorial
-        if(phase === 'beginning'){
+        else if(phase === 'beginning'){
             // if tutorial complete
             if(tutorial_nexts === tutorial_names.length-1){
                 
@@ -155,6 +174,7 @@ var flag = false;
                     showClass('slider_class');
                     showClass('image_class');
                     hideClass('begin_class');
+                    hideClass('quiz_class'); 
                 }
                 // showing the next image (uncompressed)
                 var url = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
@@ -318,35 +338,47 @@ var flag = false;
         // );
     }
 
-    // get hit_list.csv and hit_number
-    // hit_number: the set index
-    // hit_list.csv: 2d array of sets
+      /*
+     * get hit_list.csv and hit_number
+     * hit_number: the set index
+     * hit_list.csv: 2d array of sets
+     *
+     * Data Format:
+     *   Number of study images
+     *   Image names,
+     *   Number of golden images
+     *   Number of repeated images
+     *   Golden image indeces 
+     *   Golden image mean values
+     *   Golden image stdev
+     *   Repeated image indeces (should be 2X number of repeated)
+     */
     function get_set(){
         $.get(proxy_url + hit_number_url, function( data ) {
             hit_number = parseInt(data);
             console.log('hit_number original read: ', data);
             $.ajax({
-        	    type: "GET",  
-        	    url: proxy_url + hit_list_url,
-        	    dataType: "text",       
-        	    success: function(response)  
-        	    {
-        	        
-        		    var set_number = document.getElementById("set_number"); // the element that will export the set number in the results csv
-        		    set_number.value = hit_number;
-        		    hit_sets = $.csv.toArrays(response);
-        		    var i_set = (hit_number % hit_sets.length)
-        		    var hit_set = hit_sets[i_set].toString();
-        		    console.log('i_set: ', i_set);
-        		    if(golden_image_study === true){
-        		        names = golden_names;
-        		      //  names = names.slice(0,3);
-        		    } else {
-            		    names = hit_set.split(",");
-            		  //  names = names.slice(0,3);
-        		    }
-        		    update_hit_number(hit_number+1);
-        		       document.getElementById('Next_button').style = 'visibility: block';
+                type: "GET",  
+                url: proxy_url + hit_list_url,
+                dataType: "text",       
+                success: function(response)  
+                {
+                    
+                    var set_number = document.getElementById("set_number"); // the element that will export the set number in the results csv
+                    set_number.value = hit_number;
+                    hit_sets = $.csv.toArrays(response);
+                    var i_set = (hit_number % hit_sets.length)
+                    var hit_set = hit_sets[i_set].toString();
+                    console.log('i_set: ', i_set);
+                    if(golden_image_study === true){
+                        names = golden_names;
+                      //  names = names.slice(0,3);
+                    } else {
+                        names = hit_set.split(",");
+                      //  names = names.slice(0,3);
+                    }
+                    update_hit_number(hit_number+1);
+                       document.getElementById('Next_button').style = 'visibility: block';
                 }   
             });
         });
@@ -608,6 +640,29 @@ var flag = false;
       <p>Tutorial complete! When ready, click "Next" to proceed to the full study.</p>
   </div>
 
+<div class="quiz_class">
+  <div>
+    <p>Did u understand the task?</p>
+    <crowd-input name="question1" placeholder="example: pink" required></crowd-input>
+  </div>
+
+  <div>
+    <p>Check this box if you a cuck</p>
+    <crowd-checkbox name="question2" checked="true" required></crowd-checkbox>
+  </div>
+
+  <div>
+    <p>On a scale of 1-10, how sure r u fam?</p>
+    <crowd-slider name="question3" min="1" max="10" step="1" pin="true" required></crowd-slider>
+  </div>
+
+  <div>
+    <p>Write a short essay describing your boobies</p>
+    <crowd-text-area name="question4" rows="4" placeholder="Lorem ipsum..." required></crowd-text-area>
+  </div>
+    
+</div>
+
   <div class="end_class">
     <p id="task_complete">Task complete! Please click "Submit".</p>
   </div>
@@ -624,33 +679,36 @@ var flag = false;
       <p>Tutorial image:</p>
   </div>
   <div class = "row justify-content-center">
-      <div class = "col-6">
-          <!-- <br> -->
-  <div class="image_class">
-      
-    <img id="source_image"  style="display: none;" crossOrigin="anonymous"> 
-    <img id="result_image" style="display: inline-block;" crossOrigin="anonymous">
-</div>
-</div>
-  
-<div class="slider_class">
-    <p style="text-align: center;display: inline;">
-      <label  id="text_compression_ratio" fodisr="jpeg_encode_quality">Compression Ratio:</label>
-      <input type="text" id="jpeg_encode_quality" readonly style="border:0; color:#f6931f; font-weight:bold;">
-    </p>
-    <div id="slider" class = slider></div>
-</div>
-</div>
-
-<div>
-        <br>
-    <!-- <button type="button" class = "btn btn-primary btn-lg" onclick="setImageb(1)" id='Next_button' value="Next">Next</button>-->
-    <p><input type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary"></input></p> 
-    <crowd-input id='set_number' name='set_number' value='initial' type='hidden' style='display: none;'></crowd-input>
-    <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
-    <input type="submit" id="submitButton" type='hidden' style='display: none;'>
-</div>
-
+        <div class = "col-6">
+           <!-- <br> -->
+           <div class="image_class">
+              <img id="source_image"  style="display: none;" crossOrigin="anonymous"> 
+              <img id="result_image" style="display: inline-block;" crossOrigin="anonymous">
+              <p style="text-align: center;display: inline;">
+                 <label  id="text_compression_ratio" fodisr="jpeg_encode_quality">Compression Ratio:</label>
+                 <input type="text" id="jpeg_encode_quality" readonly style="border:0; color:#f6931f; font-weight:bold;">
+              </p>
+           </div>
+        </div>
+     </div>
+     <br>    
+     <div class = 'row'>
+        <div class = 'col-10'>
+           <br>
+           <div class="slider_class" >
+              <div id="slider" class = slider style="left: 16em;"></div>
+           </div>
+        </div>
+        <div class = 'col-2'>
+           <div>
+              <!-- <button type="button" class = "btn btn-primary btn-lg" onclick="setImageb(1)" id='Next_button' value="Next">Next</button>-->
+              <p><input style='width: 12em;' type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary"></input></p>
+              <crowd-input id='set_number' name='set_number' value='initial' type='hidden' style='display: none;'></crowd-input>
+              <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
+              <input type="submit" id="submitButton" type='hidden' style='display: none;'>
+           </div>
+        </div>
+     </div>
 </crowd-form>
 
 </div>
