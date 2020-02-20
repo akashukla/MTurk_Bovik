@@ -21,6 +21,9 @@
   #slider{
     width: 600px;
   }
+  #slider2{
+    width: 600px;
+  }
   #slider.ui-slider-range { background: #f6931f; }
   #slider.ui-slider-handle{ border-color: #729fcf;}
 
@@ -57,6 +60,7 @@
 </style>
 
 <script>
+    var second_slider = false;
 var flag = false;
     var golden_image_study = true;
     var names;
@@ -118,6 +122,7 @@ var flag = false;
     function showClass(class_name){
         var x = document.getElementsByClassName(class_name); 
         for (var i = 0; i < x.length; i++) { 
+            //console.log(x[i])
             if(x[i].id != 'source_image'){
                 x[i].style.display = "block"; 
             }
@@ -169,6 +174,38 @@ var flag = false;
                     showClass('image_class');
                     hideClass('begin_class');
                 }
+
+                if(second_slider == true){
+                    $("#slider").slider({
+                    orientation: "horizontal",
+                    range: "max",
+                    value: $("#slider").slider('value'),//n_slider_levels,
+                    min: 0,
+                    max: n_slider_levels,
+                    disabled:true,
+                });
+                document.getElementById('slider').style.background='#4CAF50';
+                   
+                    //Slider init
+                    $("#slider2").slider({
+                    orientation: "horizontal",
+                    range: "max",
+                    step:1/5,
+                    value: $("#slider").slider('value'),
+                    min: 0,
+                    max: $("#slider").slider('value'),
+                    disabled:false,
+                   
+                });
+                document.getElementById('slider2').style.background='#4CAF50';
+                $("#jpeg_encode_quality").val($("#slider2").slider("value"));
+                console.log(document.getElementById('slider2'));//.setAttribute("disabled", "disabled");
+                tutorial_nexts = tutorial_nexts+1;
+                    second_slider = false;
+                }
+            else{
+
+
                 // showing the next image (uncompressed)
                 var url = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
                 result_image.src = url;
@@ -183,20 +220,46 @@ var flag = false;
                     value: n_slider_levels,
                     min: 0,
                     max: n_slider_levels,
+                    disabled:false,
                 });
                 document.getElementById('slider').style.background='#4CAF50';
                 $("#jpeg_encode_quality").val($("#slider").slider("value"));
-                
-                tutorial_nexts = tutorial_nexts+1;
+                    //Slider init
+                    $("#slider2").slider({
+                    orientation: "horizontal",
+                    range: "max",
+                    value: n_slider_levels,
+                    min: 0,
+                    max: n_slider_levels,
+                    disabled: true,
+                });
+                document.getElementById('slider2').style.background='#4CAF50';
+                // $("#jpeg_encode_quality").val($("#slider2").slider("value"));
+                // console.log(document.getElementById('slider2'));//.setAttribute("disabled", "disabled");
+                // tutorial_nexts = tutorial_nexts+1;
+                second_slider = true;
             }
+        }
             //setTimeout(1000);
         }
         
+
+
+
+
+
+
+
+
+
+
         // if showing non-tutorial images
         else if(phase === 'study'){
+            
             // normal operation 
             if (first_image === false){
                 slider_vals = slider_vals + $("#slider").slider("value").toString() + ',';
+                //slider_vals = slider_vals + $("#slider2").slider("value").toString() + ',';
             // only runs when transitioning from 'end of tutorial' screen to 'actual study' screen    
             } else { 
                 first_image = false;
@@ -205,6 +268,43 @@ var flag = false;
                 showClass('slider_class');
             }
             
+            if(second_slider == true){
+                $("#slider").slider({
+                orientation: "horizontal",
+                range: "max",
+                value:  $("#slider").slider('value'),
+                min: 0,
+                max: n_slider_levels,
+                disabled:true,
+
+            });
+            $("#jpeg_encode_quality").val($("#slider").slider("value"));
+                   $("#slider2").slider({
+                    orientation: "horizontal",
+                    range: "max",
+                    step:1/5,
+                    value: $("#slider").slider('value'),
+                    min: 0,
+                    max: $("#slider").slider('value'),
+                    disabled:false,
+                   
+                });
+             $("#jpeg_encode_quality").val($("#slider2").slider("value"));
+
+                if(nexts === names.length){ 
+                slider_values.value = slider_vals;
+                hideClass('image_class');
+                hideClass('slider_class');
+                showClass('end_class');
+                document.getElementById('submitButton').style = 'display: block;';
+                document.getElementById('Next_button').style = 'display: none;';
+            }
+            
+                  nexts = nexts+1;
+                second_slider = false;
+            }
+            else{
+                second_slider = true;
             // updating image
             document.getElementById('result_image').crossOrigin = 'anonymous';
             document.getElementById('source_image').crossOrigin = 'anonymous';
@@ -212,12 +312,9 @@ var flag = false;
             var image_src = proxy_url + bucket_url + names[nexts];
             source_image.src = image_src;
             result_image.src = image_src;
-
             document.getElementById('Next_button').style = 'visibility: hidden';
-            
-
             $( "#progressbar" ).progressbar({
-                value: (nexts* (100/65)),
+                value: (nexts* (100/names.length)),
                 create: function(event, ui) {$(this).find('.ui-widget-header').css({'background-color':'lightskyblue'})}
             });
             document.getElementById('progress_bar_items').style.textAlign = 'center';
@@ -228,22 +325,41 @@ var flag = false;
                 range: "max",
                 value: n_slider_levels,
                 min: 0,
-                max: n_slider_levels
+                max: n_slider_levels,
+                disabled:false,
+
             });
             $("#jpeg_encode_quality").val($("#slider").slider("value"));
+            $("#slider2").slider({
+                orientation: "horizontal",
+                range: "max",
+                value: n_slider_levels,
+                min: 0,
+                max: n_slider_levels,
+                disabled:true,
+            });
+            // $("#jpeg_encode_quality").val($("#slider2").slider("value"));
 
             // end screen
-            if(nexts === names.length){ 
-                slider_values.value = slider_vals;
-                hideClass('image_class');
-                hideClass('slider_class');
-                showClass('end_class');
-                document.getElementById('submitButton').style = 'display: block;';
-                document.getElementById('Next_button').style = 'display: none;';
-            }
+            // if(nexts === names.length){ 
+            //     slider_values.value = slider_vals;
+            //     hideClass('image_class');
+            //     hideClass('slider_class');
+            //     showClass('end_class');
+            //     document.getElementById('submitButton').style = 'display: block;';
+            //     document.getElementById('Next_button').style = 'display: none;';
+            // }
             
-            nexts = nexts+1;
-        } else if (phase =='reject') {
+            // nexts = nexts+1;
+            }
+        } 
+        
+
+        
+        
+        
+        
+        else if (phase =='reject') {
             //TODO
         
         } else { 
@@ -408,8 +524,45 @@ var flag = false;
                 $("#jpeg_encode_quality").val(ui.value);
             }
         });
+
+  //Slider init
+  $("#slider2").slider({
+            orientation: "horizontal",
+            range: "max",
+            value: 40,
+            min: 0,
+            max: 40,
+
+            slide: function(event, ui) {
+                $("#jpeg_encode_quality").val(ui.value);
+            }
+        });
+
+
         $("#jpeg_encode_quality").val($("#slider").slider("value"));
         $( "#slider" ).on("slide", function( event, ui ) {
+                document.getElementById('result_image').style.display = 'inline-block';
+              document.getElementById('source_image').style.display = 'none';
+           
+            var encodeQuality = document.getElementById('jpeg_encode_quality');
+            var source_image = document.getElementById('source_image');
+            var result_image = document.getElementById('result_image');
+            if (source_image.src == "") {
+                alert("You must load an image first!");
+                return false;
+            }
+            var quality = parseInt(encodeQuality.value);        
+            result_image.src = compress(source_image,quality,output_format).src;  
+            
+            document.getElementById('Next_button').style = 'visibility: visible';
+
+        });
+
+
+
+
+        $("#jpeg_encode_quality").val($("#slider2").slider("value"));
+        $( "#slider2" ).on("slide", function( event, ui ) {
                 document.getElementById('result_image').style.display = 'inline-block';
               document.getElementById('source_image').style.display = 'none';
            
@@ -503,7 +656,7 @@ var flag = false;
       <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
     </short-summary>
 
-  <detailed-instructions>
+  <detailed-instructions >
    
       <p>The slider bar under each image controls the compression level of the image. The highest quality value is 
       50 and the lowest quality value is 0. Moving the slider to the left will lessen the quaity of the image.</p>
@@ -626,9 +779,11 @@ var flag = false;
      <br>    
      <div class = 'row'>
         <div class = 'col-10'>
-           <br>
+           
            <div class="slider_class" >
               <div id="slider" class = slider style="left: 16em;"></div>
+              <br>
+              <div id="slider2" class = slider style="left: 16em;"></div>
            </div>
         </div>
         <div class = 'col-2'>
@@ -637,6 +792,7 @@ var flag = false;
               <p><input style='width: 12em;' type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary"></input></p>
               <crowd-input id='set_number' name='set_number' value='initial' type='hidden' style='display: none;'></crowd-input>
               <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
+              <crowd-input id='slider_values2' name='slider_values2' value='initial' type='hidden' style='display: none;'></crowd-input>
               <input type="submit" id="submitButton" type='hidden' style='display: none;'>
            </div>
         </div>
