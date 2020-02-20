@@ -21,6 +21,12 @@
   #slider.ui-slider-range { background: #f6931f; }
   #slider.ui-slider-handle{ border-color: #729fcf;}
 
+  #tutorial_slider{
+    width: 600px;
+  }
+  #tutorial_slider.ui-slider-range { background: #f6931f; }
+  #tutorial_slider.ui-slider-handle{ border-color: #729fcf;}
+
   #progressbar{
     width: 600px;
    
@@ -76,7 +82,7 @@
     var hit_sets;
     var hit_number;
     var slider_vals = '';
-    var phase = 'quiz';
+    var phase = 'begin2_class';
     var tutorial_names = ['AVA__809598.jpg', 'EMOTIC__COCO_train2014_000000154329.jpg', 'EMOTIC__COCO_train2014_000000128826.jpg'] // 'EMOTIC__COCO_train2014_000000104079.jpg', 
     var golden_names = ['AVA__20278.jpg', 'EMOTIC__4wl5mafxcb0nacmnzr.jpg', 'EMOTIC__COCO_train2014_000000571644.jpg', 
                         'EMOTIC__COCO_val2014_000000031983.jpg', 'EMOTIC__COCO_val2014_000000045685.jpg', 
@@ -116,6 +122,8 @@
         hideClass('tutorial_complete_class');
         hideClass('tutorial_text_class');
         hideClass('quiz_class');
+        hideClass('begin2_class');
+        hideClass('tutorial_slider_class');
     }
     window.onload = init;
     
@@ -142,13 +150,16 @@
     // TODO set checks for 'reject' 
     function setImageb(button){
 
-        if(phase == 'quiz'){
-
-            showClass('quiz_class');
+        if(phase === 'begin2_class'){
             hideClass('begin_class');
+            showClass('begin2_class');
+            phase = 'quiz';
+
+        }else if(phase === 'quiz'){
+
+            hideClass('begin2_class');
+            showClass('quiz_class');
             phase = 'beginning';
-
-
          }
 
         // if showing tutorial
@@ -159,6 +170,7 @@
                 document.getElementById('Next_button').style = 'visibility: hidden';
                 showClass('tutorial_complete_class');
                 hideClass('slider_class');
+                hideClass('tutorial_slider_class');
                 hideClass('image_class');
                 hideClass('tutorial_text_class');
                 phase = 'study';
@@ -171,7 +183,8 @@
                 document.getElementById("crowd-instr").style.display = "block";
                 if(tutorial_nexts === -1){
                     showClass('tutorial_text_class');
-                    showClass('slider_class');
+                    showClass('tutorial_slider_class');
+                    hideClass('slider_class');
                     showClass('image_class');
                     hideClass('begin_class');
                     hideClass('quiz_class'); 
@@ -180,19 +193,13 @@
                 var url = proxy_url + bucket_url + tutorial_names[tutorial_nexts+1];
                 result_image.src = url;
                 source_image.src = url;
-                
+                document.getElementById('notify').innerHTML = "";
                 document.getElementById('Next_button').style = 'visibility: hidden';
                 
                 //Slider init
-                $("#slider").slider({
-                    orientation: "horizontal",
-                    range: "max",
-                    value: n_slider_levels,
-                    min: 0,
-                    max: n_slider_levels,
-                });
-                document.getElementById('slider').style.background='#4CAF50';
-                $("#jpeg_encode_quality").val($("#slider").slider("value"));
+                $("#tutorial_slider").slider('value', n_slider_levels);
+                $("#jpeg_encode_quality").val($("#tutorial_slider").slider("value"));
+                document.getElementById('tutorial_slider').style.background='#4CAF50';
                 
                 tutorial_nexts = tutorial_nexts+1;
             }
@@ -229,16 +236,13 @@
             });
             document.getElementById('progress_bar_items').style.textAlign = 'center';
             document.getElementById("progress_bar_items").style.display = "block";
+            
             //Slider init
-            $("#slider").slider({
-                orientation: "horizontal",
-                range: "max",
-                value: n_slider_levels,
-                min: 0,
-                max: n_slider_levels
-            });
+            $("#slider").slider('value', n_slider_levels);
             $("#jpeg_encode_quality").val($("#slider").slider("value"));
+            document.getElementById('slider').style.background='#4CAF50';
 
+            
             // end screen
             if(nexts === names.length){ 
                 slider_values.value = slider_vals;
@@ -407,9 +411,9 @@
         $("#slider").slider({
             orientation: "horizontal",
             range: "max",
-            value: 40,
+            value: n_slider_levels,
             min: 0,
-            max: 40,
+            max: n_slider_levels,
 
             slide: function(event, ui) {
                 $("#jpeg_encode_quality").val(ui.value);
@@ -417,7 +421,47 @@
         });
         $("#jpeg_encode_quality").val($("#slider").slider("value"));
         $( "#slider" ).on("slide", function( event, ui ) {
-                document.getElementById('result_image').style.display = 'inline-block';
+              document.getElementById('result_image').style.display = 'inline-block';
+              document.getElementById('source_image').style.display = 'none';
+           
+            var encodeQuality = document.getElementById('jpeg_encode_quality');
+            var source_image = document.getElementById('source_image');
+            var result_image = document.getElementById('result_image');
+            if (source_image.src == "") {
+                alert("You must load an image first!");
+                return false;
+            }
+            var quality = parseInt(encodeQuality.value);        
+            result_image.src = compress(source_image,quality,output_format).src;  
+            
+            document.getElementById('Next_button').style = 'visibility: visible';
+
+        });
+
+
+        $("#tutorial_slider").slider({
+            orientation: "horizontal",
+            range: "max",
+            value: n_slider_levels,
+            min: 0,
+            max: n_slider_levels,
+
+            slide: function(event, ui) {
+                $("#jpeg_encode_quality").val(ui.value);
+                var current = ui.value;
+                if(current > n_slider_levels-5){
+                    $('#notify').text("The image is not compressed enough");
+                }else if(current < 5){
+                    $('#notify').text("The image is too compressed");
+                }else{
+                    $('#notify').text("");
+                }
+
+            }
+        });
+        $("#jpeg_encode_quality").val($("#tutorial_slider").slider("value"));
+        $( "#tutorial_slider" ).on("slide", function( event, ui ) {
+              document.getElementById('result_image').style.display = 'inline-block';
               document.getElementById('source_image').style.display = 'none';
            
             var encodeQuality = document.getElementById('jpeg_encode_quality');
@@ -607,8 +651,11 @@
           quality of images. With others, you may not need to move the slider too much before noticing a 
           drop in quality.
         </p>
-      <div class = "row">
-          <div class = "col">
+  </div>
+
+  <div class="begin2_class">
+    <div class = "row">
+        <div class = "col">
         <p><b> This is a <font color="green">GOOD</font> example of how to perform the task.</b></p>
         <p>The slider is at a level where the image's quality is <b>mostly preserved</b>, but moving it more will compromise image quality.</p>
         <!-- <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif"> -->
@@ -626,7 +673,6 @@
       <!--<p><b>Disclaimer: </b>In order to collect the best results possible, we have quality checks in place to verify the seriousness of your answers, and you will be asked to <b>return the HIT if you fail too many of them. </b></p>  -->
       <p>This task page is supported on Google Chrome, Mozilla Firefox, Microsoft Edge, and Opera. Please use one of these browsers to complete our task.</p>
     
-      
   </div>
   
   <div class='tutorial_complete_class'>
@@ -685,11 +731,16 @@
         </div>
      </div>
      <br>    
+
      <div class = 'row'>
         <div class = 'col-10'>
            <br>
            <div class="slider_class" >
               <div id="slider" class = slider style="left: 16em;"></div>
+           </div>
+           <div class="tutorial_slider_class">
+               <div id="tutorial_slider" class="slider" style="left: 16em;"></div>
+               <p id="notify" style="text-align: center;"></p>
            </div>
         </div>
         <div class = 'col-2'>
@@ -701,6 +752,7 @@
               <input type="submit" id="submitButton" type='hidden' style='display: none;'>
            </div>
         </div>
+        <br>
      </div>
 </crowd-form>
 
