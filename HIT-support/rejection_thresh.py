@@ -51,11 +51,14 @@ norm_rangeII = np.max(diffII, axis=1) - np.min(diffII, axis=1)
 # ONLY using Golden Image Study 2 from here on out
 mu = muII
 ordered_means_i, ordered_means = np.argsort(mu), np.sort(mu)
-#ordered_means = np.sort(mu)
 
 
 # Access golden image access methods
 from goldenlib import *
+
+
+
+
 
 #
 # Write final values to file
@@ -76,6 +79,6 @@ from goldenlib import *
 #       (first occurances, second occurances)
 
 #
-#np.savetxt('./gen/repeated_thresh.csv',avg_stdevII/2,delimiter=',',fmt='%s')
+#np.savetxt('./gen/hit_data.csv',final_data,delimiter=',',fmt='%s')
 
 
