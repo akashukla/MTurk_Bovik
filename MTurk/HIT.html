@@ -10,6 +10,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bowser@2.5.3/es5.js"></script>
+	<script src="2-bowser.js"></script>
     <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" media="all" rel="stylesheet" type="text/css">
     <link href="https://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" media="all" rel="stylesheet" type="text/css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -120,21 +122,46 @@
         var tutorial_nexts = -1; // index for which tutorial image to display
         var first_image = true;
         var slight_change;
-
+		var allowed_browsers = ['Chrome', 'Firefox', 'Microsoft Edge', 'Opera'];
+		var supported = true
+		
         // runs when the window loads
         // shows tutorial, hides everything else
         function init() {
-            showClass('begin_class');
-            hideClass('image_class');
-            hideClass('end_class');
-            hideClass('slider_class');
-            hideClass('tutorial_complete_class');
-            hideClass('tutorial_text_class');
+			var result = bowser.getParser(navigator.userAgent).getResult();
+			
+			// TODO: make alerts telling people they're using the wrong browser/on mobile
+			if(allowed_browsers.includes(result.browser.name) == false){
+				alert('The browser you are using is not supported. Please use Google Chrome, Mozilla Firefox, Microsoft Edge, or Opera.');
+				supported = false;
+			} else if(result.platform.type !== 'desktop') {
+				alert('This task is not supported on mobile devices. Please use a desktop or laptop to complete our task.');
+				supported = false;
+			};
+			hideClass('image_class');
+			hideClass('end_class');
+			hideClass('slider_class');
+			hideClass('tutorial_complete_class');
+			hideClass('tutorial_text_class');
 
-            hideClass('quiz_class');
-            hideClass('begin2_class');
+			hideClass('quiz_class');
+			hideClass('begin2_class');
+			if(supported == true){
+				showClass('begin_class');
+				hideClass('not_supported_class');
+			} else {
+				hideClass('begin_class');
+				showClass('not_supported_class');
+				document.getElementById('Next_button').style.display = 'none';
+			}
+			
         }
         window.onload = init;
+		
+		// Parse user agent and get browser/mobile info
+		window.addEventListener("load", function() {
+		    
+		});
 
         // shows all HTML elements in the specified class (except source_image)
         function showClass(class_name) {
@@ -880,6 +907,11 @@
                 </div>
 
             </div>
+			
+			<div class="not_supported_class">
+				<p> Browser or device not supported. Please use Google Chrome, Mozilla Firefox, Microsoft Edge, or Opera on a desktop or laptop. </p>
+			</div>
+			
             <div class="end_class">
                 <p id="task_complete">Task complete! Please click "Submit".</p>
             </div>
