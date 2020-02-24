@@ -15,7 +15,9 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+#
 # Import golden image data
+#
 golden_resI = pd.read_csv('./dat/golden_results_old.csv')
 golden_resII = pd.read_csv('./dat/golden_results_new.csv')
 
@@ -24,8 +26,11 @@ datI = np.asarray([golden_resI.loc[:,'Answer.slider_values'][i].split(',')
 datII = np.asarray([golden_resII.loc[:,'Answer.slider_values'][i].split(',') 
     for i in range(len(golden_resII.loc[:,'Answer.slider_values']))])[:,:-1].astype(int)
 
-# Access golden image access methods
-from goldenlib import *
+
+
+#
+# Calculate thresholds
+#
 
 # Averages and stdevs of all images
 muI = np.mean(datI, axis=0)
@@ -38,9 +43,39 @@ avg_stdevII = (1/len(datII))*np.sum(np.std(datII, axis=0))
 diffI = [np.subtract(datI[i],muI) for i in range(len(datI))]
 diffII = [np.subtract(datII[i],muII) for i in range(len(datII))]
 
-norm_rangeI = np.max(abs_diffI, axis=1) - np.min(abs_diffI, axis=1)
-norm_rangeII = np.max(abs_diffII, axis=1) - np.min(abs_diffII, axis=1)
+norm_rangeI = np.max(diffI, axis=1) - np.min(diffI, axis=1)
+norm_rangeII = np.max(diffII, axis=1) - np.min(diffII, axis=1)
+
+# Use Spearman's correlation on Golden Image Study
+# participants to test 
+# ONLY using Golden Image Study 2 from here on out
+mu = muII
+ordered_means_i, ordered_means = np.argsort(mu), np.sort(mu)
+#ordered_means = np.sort(mu)
 
 
+# Access golden image access methods
+from goldenlib import *
+
+#
+# Write final values to file
+#
+
+# Data Format
+#   Number of images per HIT (set size)
+#   Number of total sets
+#   Image names 
+#   Number of golden images
+#   Number of repeated images
+#   Repeated threshold
+#   Spearman threshold
+#   Golden image indeces
+#   Golden image mean values
+#   Golden image stdev
+#   Repeated image indeces (2X number of repeated)
+#       (first occurances, second occurances)
+
+#
+#np.savetxt('./gen/repeated_thresh.csv',avg_stdevII/2,delimiter=',',fmt='%s')
 
 

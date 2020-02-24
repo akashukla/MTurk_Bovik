@@ -14,29 +14,37 @@ N = 43
 num_golden = 7
 num_repeat = 5
 count=np.r_[0,0]
+
+# For actual HIT has 8K images
 names=np.genfromtxt('8k_image_names.csv','str', delimiter=',')
 names=names[:,0]
 
 gr=pd.read_csv('golden_results.csv')
 gs=gr.values[:,29]
 #gs=gr.values
+# gsi has all data 18x50 array of scores
 gsi=np.array([np.fromstring(gs[i],dtype='int',sep=',') for i in range(18)])
+# array of means
 gsm=np.mean(gsi, axis=0)
 gss=np.std(gsi, axis=0)
 ind=np.argsort(gss)
 gsm=gsm[ind]
 gss=gss[ind]
+# Sorted golden
 golden_used = golden_names[ind]#[:30]
 #gsm=gsm#[:30]
 #gss=gss#[:30]
 
+# Remove golden images from big array of names
 gind=[np.argwhere(names==golden_used[i])[0,0] for i in range(len(golden_used))]
-
 names_ind = np.delete(np.arange((names.shape[0])),gind)
 names=names[names_ind]
 
+# Around 8K
 num_images=names.shape[0]
 #hit_names=np.zeros((3200,N),dtype='str')
+
+# Init stuff for selection
 hit_names=[]
 hit_list_ids=[]
 ids=np.arange(num_images)
@@ -45,56 +53,84 @@ np.savetxt('./gen/counts.csv',np.r_[count], '%d')
 #loop, run each hit
 print('initial ids: ',ids)
 #for count in range(3200):
+
+# Each iteration generates one HIT
 while(count[0]<3200):
     #if(count*N<num_images+1):
         count=np.genfromtxt('./gen/counts.csv','int')*1
+        # Overall counter since we need to see all 8K images 20x each
         count[0]+=1
+        # Resets at 8K
         count[1]+=1
+
+        # Choose 5 random golden images 
         gic = np.random.choice(golden_used,num_golden,replace=False)
+        # Places to inset the golden images
         gic_ind = np.random.choice(np.arange(10),num_golden,replace=False)
+        # Forces last couple to the end
         gic_ind[5:]+=25
+        # Ind of initial occurances (params to arange are the windows)
         rep_ind_b=np.random.choice(np.delete(np.arange(10,20),gic_ind[:5]), num_repeat,replace=False)
+        # Where second occurances will be 
         rep_ind_e=np.random.choice(np.delete(np.arange(35,50,1),gic_ind[5:]), num_repeat,replace=False)
+        # Sorted
         gic_ind = np.sort(gic_ind)
         rep_ind_b=np.sort(rep_ind_b)
         rep_ind_e=np.sort(rep_ind_e)
         print('gic_ind', gic_ind)
         print('rep_ind_b', rep_ind_b)
         print('rep_ind_e', rep_ind_e)
+        # Grabs corresponding golden means and stdevs 
         gsm_c= np.array([gsm[golden_used==gic[i]][0] for i in range(len(gic))])
         gss_c= np.array([gss[golden_used==gic[i]][0] for i in range(len(gic))])
-
+       
+        # N is number of images per HIT
+        # If we have gone through all 8K images 
         if count[1]*N+N > num_images:
             print('got to end, count*N is %d shuffling:'%count[1])
             count[1]=0
+            # shuffle ids of the 8K bc we select 8K by ID
             shuffle(ids)
             print(ids)
+        # HIT ids for next set
         hit_ids=ids[(count[1]*N)%num_images:(count[1]*N)%num_images+N]
+        # now obsolete
         hit_list_ids.append(hit_ids)
 
+        # Local names for this set loop
         names_c=names[hit_ids]
+        # Insets golden images
         for i in range(len(gic)):
             names_c=np.insert(names_c,gic_ind[i],gic[i])
+        # Inserts second instance of repeats
         for i in range(len(rep_ind_b)):
+            # rep_ind_b = first ind of repeated
             toinsert=names_c[rep_ind_b[i]]
             #names_c=np.insert(names_c,rep_ind_b[i],toinsert)
             names_c=np.insert(names_c,rep_ind_e[i],toinsert)
         #hit_names.append(names[hit_ids])
         #hit_names.append(np.r_[ gic[0:3], names[hit_ids],golden_used[3:]])
         #hit_names.append(np.r_[names_c,gic_ind,(gsm_c-gss_c).round().astype('int'), (gsm_c+gss_c).round().astype('int')])
+        # Here is what creates the csv file
         hit_names.append(np.r_[N+num_golden+num_repeat, names_c,gic_ind,gsm_c.round().astype('int'), gss_c.round().astype('int'), rep_ind_b,rep_ind_e])
-
         np.savetxt('./gen/counts.csv',count, '%d')
     #else:
         #break
 hit_names=np.array(hit_names)
 hit_list_ids=np.array(hit_list_ids)
 np.savetxt('./gen/hit_list.csv',hit_names,delimiter=',',fmt='%s')
+
+
+
+
 #urls = np.zeros(names.shape,dtype='str')
 #for i in range(len(urls)):
 #    
 #    print(urls[i])
 #    utils.download('https://snako.s3.us-east-2.amazonaws.com/'+names[i], path='8k_images/'+names[i])
+
+
+
 
 def simulate():
     gic = np.random.choice(golden_used,6,replace=False)

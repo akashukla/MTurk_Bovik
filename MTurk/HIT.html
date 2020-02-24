@@ -69,9 +69,18 @@
         var study_second_slider_checker = false;
         var history = [];
         var golden_i = [];
+        var golden_mu = [];
+        var golden_std = [];
         var repeated_i = [];
+        var all_images = [];
+        var set_size;
+        var num_total_sets;
         var num_golden;
         var num_repeated;
+        var repeated_thresh;
+        var srcc_thresh;
+        var rep_ind_first = []
+        var rep_ind_second = []
         
         var second_slider = false;
         var flag = false;
@@ -81,6 +90,7 @@
         var nexts = 0;
         var bucket_url = "https://snako.s3.us-east-2.amazonaws.com/";
         var hit_list_url = "https://snako.s3.us-east-2.amazonaws.com/1_hit_list.csv"
+        var hit_data_url = "https://snako.s3.us-east-2.amazonaws.com/1_hit_data.csv"
         var key = "1_hit_number0.txt";
         var hit_number_url = bucket_url + key;
         var proxy_url = "https://cors-anywhere.herokuapp.com/";
@@ -535,20 +545,67 @@
         }
 
         /*
-         * get hit_list.csv and hit_number
-         * hit_number: the set index
-         * hit_list.csv: 2d array of sets
-         *
          * Data Format:
-         *   Number of study images
-         *   Image names,
+         *   Number of study images per HIT (set size)
+         *   Number of total sets
+         *   Image names
          *   Number of golden images
          *   Number of repeated images
+         *   Repeated threshold
+         *   Spearman threshold
          *   Golden image indeces 
          *   Golden image mean values
          *   Golden image stdev
          *   Repeated image indeces (should be 2X number of repeated)
+         *      (first occurance ind. second occurance ind)
+         *
+         * This method will aim to read in the "hit_data.csv" and
+         * initialize the constrants of the study. 
+         * See above for data format.
          */
+        function init_study() {
+            $.ajax({
+               type: "GET",
+               url: proxy_url + hit_data_url,
+               dataType: "text",
+               success: function(response) {
+                    var data = $.csv.toArrays(response);
+                    
+                    // For HIT
+                    set_size = data.shift();
+                    num_total_sets = data.shift();
+                    for (i = 0; i < set_size*num_total_sets; i++) {
+                        all_images.push(data.shift());
+                    }
+                   
+                    // For quality checks
+                    num_golden = data.shift();
+                    num_repeated = data.shift();
+                    repeated_thresh = data.shift();
+                    srcc_thresh = data.shift();
+
+                    // Golden
+                    for (i = 0; i < num_golden; i++) {
+                        golden_i.push(data.shift());
+                    }
+                    for (i = 0; i < num_golden; i++) {
+                        golden_mu.push(data.shift());
+                    }
+                    for (i = 0; i < num_golden; i++) {
+                        golden_std.push(data.shift());
+                    }
+                        
+                    // Repeats         
+                    for (i = 0; i < num_repeated/2; i++) {
+                        rep_ind_first.push(data.shift());
+                    }
+                    for (i = 0; i < num_repeated/2; i++) {
+                        rep_ind_second.push(data.shift());
+                    }
+
+            } // end handler 
+        } // end init
+
         function get_set() {
             $.get(proxy_url + hit_number_url, function(data) {
                 hit_number = parseInt(data);
@@ -568,9 +625,10 @@
                         if (golden_image_study === true) {
                             names = golden_names;
                             //  names = names.slice(0,3);
+
+                        // The final HIT
                         } else {
                             names = hit_set.split(",");
-                            //  names = names.slice(0,3);
                         }
                         update_hit_number(hit_number + 1);
                         document.getElementById('Next_button').style = 'visibility: block';
