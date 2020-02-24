@@ -16,13 +16,13 @@ num_repeat = 5
 count=np.r_[0,0]
 
 # For actual HIT has 8K images
-names=np.genfromtxt('8k_image_names.csv','str', delimiter=',')
+names=np.genfromtxt('./dat/8k_image_names.csv','str', delimiter=',')
 names=names[:,0]
 
 gr=pd.read_csv('golden_results.csv')
 gs=gr.values[:,29]
 #gs=gr.values
-# gsi has all data 18x50 array of scores
+# gsi has all data 18xg50 array of scores
 gsi=np.array([np.fromstring(gs[i],dtype='int',sep=',') for i in range(18)])
 # array of means
 gsm=np.mean(gsi, axis=0)
@@ -34,7 +34,7 @@ gss=gss[ind]
 golden_used = golden_names[ind]#[:30]
 #gsm=gsm#[:30]
 #gss=gss#[:30]
-
+g
 # Remove golden images from big array of names
 gind=[np.argwhere(names==golden_used[i])[0,0] for i in range(len(golden_used))]
 names_ind = np.delete(np.arange((names.shape[0])),gind)
@@ -114,6 +114,7 @@ while(count[0]<3200):
         # Here is what creates the csv file
         hit_names.append(np.r_[N+num_golden+num_repeat, names_c,gic_ind,gsm_c.round().astype('int'), gss_c.round().astype('int'), rep_ind_b,rep_ind_e])
         np.savetxt('./gen/counts.csv',count, '%d')
+
     #else:
         #break
 hit_names=np.array(hit_names)

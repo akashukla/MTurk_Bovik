@@ -49,9 +49,17 @@ norm_rangeII = np.max(diffII, axis=1) - np.min(diffII, axis=1)
 # Use Spearman's correlation on Golden Image Study
 # participants to test 
 # ONLY using Golden Image Study 2 from here on out
+import scipy as sp
 mu = muII
-ordered_means_i, ordered_means = np.argsort(mu), np.sort(mu)
+dat = datII
+ordered_means_i = np.argsort(mu)
+ordered_means = np.sort(mu)
+avg_corr = (1/len(dat))*np.sum([sp.stats.spearmanr(ordered_means,dat[i,:])[0] for i in range(len(dat))]) 
 
+# Select most contrasted mean values
+contra_mu_i = [0,8,49,64]
+contra_mu = ordered_means[contra_mu_i]
+avg_contra_corr = (1/len(dat))*np.sum([sp.stats.spearmanr(contra_mu,dat[i,contra_mu_i])[0] for i in range(len(dat))]) 
 
 # Access golden image access methods
 from goldenlib import *
