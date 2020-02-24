@@ -201,13 +201,13 @@
                 hideClass('begin_class');
                 showClass('begin2_class');
                 phase = 'begin2_class';
-
+                window.scrollTo(0,0);
             }   else if (phase === 'begin2_class') {
                 hideClass('begin2_class');
                 //showClass('begin2_class');
                 showClass('quiz_class')
                 phase = 'quiz';
-
+                window.scrollTo(0,0);
             } else if (phase === 'quiz') {
                 
                 hideClass('begin2_class');
@@ -217,7 +217,7 @@
 
 
             // if showing tutorial
-            if (phase === 'beginning') {
+            else if (phase === 'beginning') {
                 // if tutorial complete
                 if (tutorial_nexts === tutorial_names.length - 1) {
 
