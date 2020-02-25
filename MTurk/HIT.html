@@ -882,7 +882,7 @@
                 <h2>Introduction:</h2>
                 <p> 
                     We are Electrical and Computer Engineering students at the University of Texas at Austin. We are
-                    conducting this study for our senior design project to find the optimal compression ratios for images.
+                    conducting this study for our capstone project to find the optimal compression ratios for images.
                     Your participation will provide valuable data for our project, and we appreciate you taking the time to 
                     complete our study.
                 </p>
@@ -944,26 +944,35 @@
             <div class='tutorial_complete_class'>
                 <p>Tutorial complete! When ready, click "Next" to proceed to the full study.</p>
             </div>
-            <div class="quiz_class">
+            <div class="quiz_class" style="text-align: left;">
                 <div>
-                    <p>Did u understand the task?</p>
-                    <crowd-input name="question1" placeholder="example: pink" required></crowd-input>
+                    <p>For the first slider bar, you will need to move it left to the point at which </p>
+                    <crowd-checkbox name="q11" required> the image becomes pixelated and blurry</crowd-checkbox><br>
+                    <crowd-checkbox name="q12" required> the first signs of distortion becomes noticeable</crowd-checkbox><br>
+                    <crowd-checkbox name="q13" required> the image becomes noticeablly bad</crowd-checkbox><br>
+                </div>
+                <br>
+                <div>
+                    <p>For the second slider bar, you will need to move it left to the point at which </p>
+                    <crowd-checkbox name="q21" required> you can't stand the image</crowd-checkbox><br>
+                    <crowd-checkbox name="q22" required> the i</crowd-checkbox><br>
+                    <crowd-checkbox name="q23" required> the compression just begins to compromise the quality of the image</crowd-checkbox><br>
+                </div>
+                <br>
+                <div>
+                    <p>You are evaluating the images based on their</p>
+                    <crowd-checkbox name="q21" required> quality</crowd-checkbox><br>
+                    <crowd-checkbox name="q22" required> aesthetic</crowd-checkbox><br>
+                    <crowd-checkbox name="q23" required> content</crowd-checkbox><br>
+                </div>
+                <br>
+                <div>
+                    <p>If you can move</p>
+                    <crowd-checkbox name="q21" required> quality</crowd-checkbox><br>
+                    <crowd-checkbox name="q22" required> aesthetic</crowd-checkbox><br>
+                    <crowd-checkbox name="q23" required> content</crowd-checkbox><br>
                 </div>
 
-                <div>
-                    <p>Check this box if you a cuck</p>
-                    <crowd-checkbox name="question2" checked="true" required></crowd-checkbox>
-                </div>
-
-                <div>
-                    <p>On a scale of 1-10, how sure r u fam?</p>
-                    <crowd-slider name="question3" min="1" max="10" step="1" pin="true" required></crowd-slider>
-                </div>
-
-                <div>
-                    <p>Write a short essay describing your boobies</p>
-                    <crowd-text-area name="question4" rows="4" placeholder="Lorem ipsum..." required></crowd-text-area>
-                </div>
 
             </div>
 			
