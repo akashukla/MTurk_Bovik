@@ -7,7 +7,6 @@ import numpy as np
 
 base_url = 'http://snako.s3.us-east-2.amazonaws.com/' 
 def get_im(imlink):
-    url = 
     resp = urllib.request.urlopen(base_url + imlink)
     image = np.asarray(bytearray(resp.read()), dtype='uint8')
     image = cv2.imdecode(image, cv2.IMREAD_COLOR)
@@ -18,9 +17,9 @@ def get_im(imlink):
 #cv2.waitKey(0)
 
 
+golden_names = np.array(['AVA__20278.jpg', 'EMOTIC__4wl5mafxcb0nacmnzr.jpg', 'EMOTIC__COCO_train2014_000000571644.jpg', 'EMOTIC__COCO_val2014_000000031983.jpg', 'EMOTIC__COCO_val2014_000000045685.jpg', 'EMOTIC__COCO_val2014_000000147471.jpg', 'EMOTIC__COCO_val2014_000000464134.jpg', 'EMOTIC__COCO_val2014_000000534041.jpg', 'JPEGImages__2007_003137.jpg', 'JPEGImages__2008_002845.jpg', 'JPEGImages__2008_003688.jpg', 'JPEGImages__2008_003701.jpg', 'JPEGImages__2008_004077.jpg', 'JPEGImages__2008_005266.jpg', 'JPEGImages__2008_006076.jpg', 'JPEGImages__2008_006461.jpg', 'JPEGImages__2008_006554.jpg', 'JPEGImages__2008_006946.jpg', 'JPEGImages__2008_007218.jpg', 'JPEGImages__2008_008544.jpg', 'JPEGImages__2009_000015.jpg', 'JPEGImages__2009_001078.jpg', 'JPEGImages__2009_002872.jpg', 'JPEGImages__2009_002893.jpg', 'JPEGImages__2009_004426.jpg', 'JPEGImages__2010_000088.jpg', 'JPEGImages__2010_002618.jpg', 'JPEGImages__2010_003648.jpg', 'JPEGImages__2010_004257.jpg', 'JPEGImages__2011_000180.jpg', 'JPEGImages__2011_002511.jpg', 'JPEGImages__2011_004079.jpg', 'JPEGImages__2011_006006.jpg', 'JPEGImages__2011_007016.jpg', 'JPEGImages__2011_007090.jpg', 'JPEGImages__2012_000805.jpg', 'JPEGImages__2012_003188.jpg', 'JPEGImages__2012_003896.jpg', 'JPEGImages__2012_004289.jpg', 'VOC2012__2008_001175.jpg', 'VOC2012__2008_001855.jpg', 'VOC2012__2008_002589.jpg', 'VOC2012__2008_003036.jpg', 'VOC2012__2008_004536.jpg', 'VOC2012__2008_008339.jpg', 'VOC2012__2008_008503.jpg', 'VOC2012__2009_000151.jpg', 'VOC2012__2009_000659.jpg', 'VOC2012__2009_000802.jpg', 'VOC2012__2009_001550.jpg', 'VOC2012__2009_002175.jpg', 'VOC2012__2009_002794.jpg', 'VOC2012__2009_003177.jpg', 'VOC2012__2009_003324.jpg', 'VOC2012__2009_004324.jpg', 'VOC2012__2010_000853.jpg', 'VOC2012__2010_005622.jpg', 'VOC2012__2011_002173.jpg', 'VOC2012__2011_002215.jpg', 'VOC2012__2011_002960.jpg', 'VOC2012__2011_003123.jpg', 'VOC2012__2011_003969.jpg', 'VOC2012__2011_005123.jpg', 'VOC2012__2012_001367.jpg', 'VOC2012__2012_003683.jpg'])
 
-
-golden_names = np.asarray(['EMOTIC__COCO_train2014_000000208055.jpg',
+golden_names_old = np.asarray(['EMOTIC__COCO_train2014_000000208055.jpg',
                          'EMOTIC__COCO_train2014_000000211272.jpg',
                          'EMOTIC__COCO_train2014_000000211486.jpg', 
                          'EMOTIC__COCO_train2014_000000212083.jpg',
