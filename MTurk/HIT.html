@@ -855,6 +855,13 @@
 
         }
 
+        // Spearman support function
+        function getAVG(a) {
+            sum = 0;
+            for (let i = 0; i < a.length; i++) { sum+= a[i]; }
+            return sum/a.length;
+        }
+
 
         // Compression function
         function compress(source_img_obj, quality, output_format) {
