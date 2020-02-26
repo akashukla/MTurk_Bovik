@@ -172,7 +172,7 @@
 			hideClass('slider_class');
 			hideClass('tutorial_complete_class');
 			hideClass('tutorial_text_class');
-
+            document.getElementById('Back_button').style.display = "none";
 			hideClass('quiz_class');
 			hideClass('begin2_class');
 			hideClass('begin3_class');
@@ -238,6 +238,7 @@
         // note: tutorial_nexts and nexts increment at end of function
         function setImageb(button) {
             if (phase === 'begin_class') {
+                document.getElementById('Back_button').style.display = "";
                 hideClass('begin_class');
                 showClass('begin2_class');
                 phase = 'begin2_class';
