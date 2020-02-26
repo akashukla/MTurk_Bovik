@@ -100,8 +100,10 @@
         var srcc_thresh;
         var rep_ind_first = []
         var rep_ind_second = []
-        var first_rep_scores = [];       
-        var golden_scores = [];
+        var first_rep_scores = new Array(num_repeated);       
+        first_rep_scores.fill(-1);
+        var golden_scores = new Array(num_golden);
+        golden_scores.fill(-1);
 
         var second_slider = false;
         var flag = false;
