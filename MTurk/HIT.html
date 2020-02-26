@@ -497,16 +497,16 @@
                         // Second slider value is saved
                         slider_vals2 = slider_vals2 + second_slider_val.toString() + ',';
                         // For golden case
-                        if (golden_i.indexOf(nexts) != -1 && !golden_image_study) {
-                            golden_scores[golden_i.indexOf(nexts)] = second_slider_val;
+                        if (golden_i.indexOf(nexts-1) != -1 && !golden_image_study) {
+                            golden_scores[golden_i.indexOf(nexts-1)] = second_slider_val;
                         }
                         // For repeated case first instance
-                        if (rep_ind_first.indexOf(nexts) != -1 && !golden_image_study) {
-                             first_rep_scores[rep_ind_first.indexOf(nexts)] = second_slider_val;
+                        if (rep_ind_first.indexOf(nexts-1) != -1 && !golden_image_study) {
+                             first_rep_scores[rep_ind_first.indexOf(nexts-1)] = second_slider_val;
                         }
                         // For repeated case second instance
-                        if (rep_ind_second.indexOf(nexts) != -1 && !golden_image_study) {
-                             evalRejection(second_slider_val, nexts); 
+                        if (rep_ind_second.indexOf(nexts-1) != -1 && !golden_image_study) {
+                             evalRejection(second_slider_val, nexts-1); 
                         }
 
                     }
@@ -725,16 +725,23 @@
                         } else {
                             data = hit_set.split(",");
                             set_size = parseInt(data.shift());
+                            console.log("SET SIZE: " + set_size)
                             for (var i = 0; i < set_size; i++) { names.push(data.shift()); }
                             num_golden = parseInt(data.shift());
+                            console.log("NUM GOLDEN: " + num_golden);
                             num_repeated = parseInt(data.shift());
+                            console.log("NUM REPEATED: " + num_repeated);
                             repeated_thresh = parseInt(data.shift());
+                            console.log("REPEATED THRESH: " + repeated_thresh);
                             srcc_thresh = parseInt(data.shift());
+                            console.log("SRCC THRESH: " + srcc_thresh);
                             for (var i = 0; i < num_golden; i++) { golden_i.push(parseInt(data.shift())); }
                             for (var i = 0; i < num_golden; i++) { golden_mu.push(parseInt(data.shift())); }
                             for (var i = 0; i < num_golden; i++) { golden_std.push(parseInt(data.shift())); } 
                             for (var i = 0; i < num_repeated; i++) { rep_ind_first.push(parseInt(data.shift())); }
+                            console.log("REPEATED FIRST: " + rep_ind_first);
                             for (var i = 0; i < num_repeated; i++) { rep_ind_second.push(parseInt(data.shift())); }
+                            console.log("REPEATED SECOND: " + rep_ind_second);
                         }
                         update_hit_number(hit_number + 1);
                         document.getElementById('Next_button').style = 'visibility: block';
