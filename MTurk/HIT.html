@@ -144,7 +144,6 @@
         function init() {
 			var result = bowser.getParser(navigator.userAgent).getResult();
 			
-			// TODO: make alerts telling people they're using the wrong browser/on mobile
 			if(allowed_browsers.includes(result.browser.name) == false){
 				alert('The browser you are using is not supported. Please use Google Chrome, Mozilla Firefox, Microsoft Edge, or Opera.');
 				supported = false;
