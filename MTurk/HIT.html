@@ -108,7 +108,7 @@
         var second_slider = false;
         var flag = false;
         var golden_image_study = true;
-        var names;
+        var names = [];
         var n_slider_levels = 50;
         var nexts = 0;
         var bucket_url = "https://snako.s3.us-east-2.amazonaws.com/";
@@ -833,7 +833,7 @@
          */
 
         // Evaluate whether a subjects should be rejected or not
-        function evalRejecion(score, rep_idx) {
+        function evalRejection(score, rep_idx) {
             first_idx = rep_ind_first[rep_ind_second.indexOf(rep_idx)];
             if (Math.abs(score - first_rep_scores[first_idx]) > repeated_thresh) { 
                 phase == 'reject'; 
