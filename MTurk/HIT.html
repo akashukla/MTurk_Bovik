@@ -857,10 +857,71 @@
 
         // Spearman support function
         function getAVG(a) {
-            sum = 0;
-            for (let i = 0; i < a.length; i++) { sum+= a[i]; }
+            var sum = 0;
+            for (var i = 0; i < a.length; i++) { sum += a[i]; }
             return sum/a.length;
         }
+
+        // Spearman support function - column avg
+        function colAVG(a, idx) {
+            var sum = 0;
+            for (var i = 0; i < a.length; i++) { sum += a[i][idx]; }
+            return sum/a.length;
+        }
+    
+        // Spearman support function
+        function dup_order(x) {
+            var a = x.slice();
+            a.sort(function(i,j){return i[1]-j[1]});
+            for(var i = 0; i < a.length; i++) { a[i][2] = i; }
+
+            var dup_num = false;
+            var dup_int = [];
+            var dup_list = [];
+            for(var i = 0; i < a.length; i++) {
+                if(i == a.length-1) {
+                    if(dup_int.length != 0){
+                        dup_list.push(dup_int);
+                    break;
+                }
+                if(dup_num == false) {
+                    if(a[i][1] == a[i+1][1]){
+                        dup_num = true;
+                        dup_int.push(a[i][2]);
+                        dup_int.push(a[i+1][2]);
+                    }
+                }
+                else {
+                    if(a[i][1] == a[i+1][1]) {
+                        dup_int.push(a[i+1][2]);
+                    }
+                    else {
+                        dup_list.push(dup_int);
+                        dup_int = [];
+                        dup_num = false;
+                    }
+                }
+            }
+            a.sort(function(i,j){return i[1]-j[1]});
+            var a_i = Array.from({ length: a.length}, (_,k) => k);
+            for(var i = 0; i < dup_list.length; i++) {
+                dup_avg = getAVG(dup_list[i]);
+                for (var j = 0; j < dup_list[i].length; j++) {
+                    a_i[dup_list[i][j]] = dup_avg;
+                }
+            }
+
+            for(var i = 0; i < a.length; i++) {
+                a[i][2] = a_i[i];
+            }
+
+            a.sort(function(i,j){return i[0]-j[0]});
+            return a;
+ 
+        }
+
+
+
 
 
         // Compression function
