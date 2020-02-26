@@ -102,7 +102,6 @@
         var rep_ind_second = []
         var first_rep_scores = [];       
         var golden_scores = [];
-        var flag_subject = false;
 
         var second_slider = false;
         var flag = false;
@@ -561,7 +560,7 @@
 
                 // end screen
                 if (nexts === names.length) {
-                    evalFlag();
+                    srcc_flag.value = evalFlag();
                     slider_values.value = slider_vals;
                     slider_values2.value = slider_vals2.slice(1,slider_vals2.length);
                       
@@ -871,7 +870,8 @@
             var srcc_val = spearman(eval.gscores_ordered.splice(num_golden,num_golden), 
                                     eval.gmeans_ordered.splice(num_golden,num_golden)
                                     );
-            if (srcc_val < srcc_thresh) { flag_subject = true; }
+            if (srcc_val < srcc_thresh) { return true; }
+            else { return false; }
         }
 
 
