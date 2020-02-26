@@ -19,11 +19,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <style>
         #slider {
-            width: 600px;
+            width: 38em;
+			
         }
         
         #slider2 {
-            width: 600px;
+            width: 38em;
         }
         
         #slider.ui-slider-range {
@@ -52,6 +53,20 @@
             cursor: pointer;
             width: 12em;
         }
+        #Back_button {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            width: 12em;
+        }
         
         #submitButton {
             background-color: #4CAF50;
@@ -66,6 +81,9 @@
             margin: 4px 2px;
             cursor: pointer;
         }
+		img {
+		border:1px solid black;
+		}
     </style>
     <script>
         var study_second_slider_checker = false;
@@ -140,7 +158,6 @@
         function init() {
 			var result = bowser.getParser(navigator.userAgent).getResult();
 			
-			// TODO: make alerts telling people they're using the wrong browser/on mobile
 			if(allowed_browsers.includes(result.browser.name) == false){
 				alert('The browser you are using is not supported. Please use Google Chrome, Mozilla Firefox, Microsoft Edge, or Opera.');
 				supported = false;
@@ -156,6 +173,8 @@
 
 			hideClass('quiz_class');
 			hideClass('begin2_class');
+			hideClass('begin3_class');
+			hideClass('begin4_class');
 			if(supported == true){
 				showClass('begin_class');
 				hideClass('not_supported_class');
@@ -191,12 +210,32 @@
                 x[i].style.display = "none";
             }
         }
+        function goBack(){
+            if(phase == "begin2_class"){
+                hideClass('begin2_class');
+                showClass('begin_class');
+                phase = 'begin_class';
+                window.scrollTo(0,0);
+            }
+            else if(phase == "begin3_class"){
+                hideClass('begin3_class');
+                showClass('begin2_class');
+                phase = 'begin2_class';
+                window.scrollTo(0,0);
+            }
+            else if(phase == "begin4_class"){
+                hideClass('begin4_class');
+                showClass('begin3_class');
+                phase = 'begin3_class';
+                window.scrollTo(0,0);
+            }
+        }
+
 
         // runs when "Next" button is pressed
         // note: tutorial_nexts and nexts increment at end of function
         // TODO set checks for 'reject' 
         function setImageb(button) {
-
             if (phase === 'begin_class') {
                 hideClass('begin_class');
                 showClass('begin2_class');
@@ -205,15 +244,26 @@
             }   else if (phase === 'begin2_class') {
                 hideClass('begin2_class');
                 //showClass('begin2_class');
-                showClass('quiz_class')
-                phase = 'quiz';
+                showClass('begin3_class')
+                phase = 'begin3_class';
                 window.scrollTo(0,0);
-            } else if (phase === 'quiz') {
-                
-                hideClass('begin2_class');
-                showClass('beginning');
+            } else if (phase === 'begin3_class') {
+				hideClass('begin3_class');
+                //showClass('begin2_class');
+                showClass('begin4_class');
+                phase = 'begin4_class';
+                window.scrollTo(0,0);
+			} else if (phase === 'begin4_class'){
+				hideClass('begin4_class');
+				showClass('quiz_class');
+                document.getElementById('Back_button').style.display = "none";
+				phase = 'beginning'; // change to 'quiz' when ready for quiz logic
+				window.scrollTo(0,0);
+			} else if (phase === 'quiz') {
+                hideClass('quiz_class');
                 phase = 'beginning';
-            }
+				window.scrollTo(0,0);
+            } 
 
 
             // if showing tutorial
@@ -479,10 +529,12 @@
                 }
 
             } else if (phase == 'reject') {
-                //TODO
+                hideClass('image_class');
+                hideClass('slider_class');
+                showClass('reject');
 
             } else {
-                console.log('Not supposed to be here');
+                console.log('Phase not recognized: ', phase);
             }
         }
 
@@ -574,8 +626,7 @@
         /*
          * Data Format:
          *   Number of study images per HIT (set size)
-         *   Number of total sets
-         *   Image names
+         *   Image names in the set
          *   Number of golden images
          *   Number of repeated images
          *   Repeated threshold
@@ -877,100 +928,245 @@
 </div> -->
 
             </crowd-instructions>
-            <br>
-            <div class="begin_class">
-                <h2>Introduction:</h2>
-                <p> 
-                    We are Electrical and Computer Engineering students at the University of Texas at Austin. We are
-                    conducting this study for our senior design project to find the optimal compression ratios for images.
-                    Your participation will provide valuable data for our project, and we appreciate you taking the time to 
-                    complete our study.
-                </p>
-              <br>
-              <h2>Instructions:</h2>
-            <p>
-                The two slider bars under each image controls the quality of the image by way of compression. The highest
-                quality value is 50, and the lowest quality value is 0. Moving the sliders to the left will decrease 
-                the quality of the image. The first slider will be the only one active until the "next" button is pressed.
-                After the "next" button is pressed, the first slider will be disabled, and the second slider will jump to
-                the position of the first slider. 
-            </p>  
-            <img style="text-indent: 25px;" src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
-            <p>
-                <b>Your task:</b> For the first slider bar, adjust the slider and try to find the point at which <b>any distortion 
-                is noticeable</b>. If the original image already has noticeable distortion, then leave the slider at 50 and click
-                next.<br/>
-                As for the second slider, adjust the slider and try to find the point at which sliding the bar <b>just begins 
-                to compromise the quality of the image</b>. For example, if the slider is at a certain point 
-                <!-- KAN TODO: GIF OF IMAGE AT POINT PLEASE--> 
-                and the resulting image's quality is similar to the original's quality even after moving the slider 
-                a bit more to the left, 
-                <!-- KAN TODO: GIF OF SLIDER MOVING FROM POINT PLEASE--> 
-                then you can still move the slider to the left. If the slider is at a certain point and the resulting 
-                image's quality is substantially worse than the original's quality,
-                <!-- KAN TODO: GIF OF IMAGE AT POINT PLEASE--> 
-                then you have moved the slider too far to the left and must move the slider to the right. Your task 
-                is <b>not</b> to rate the aesthetic appeal of the image.
-            </p>
-            <p>
-                <b>Note:</b> The images may start off with different initial qualities. Because of this, base your 
-                answer <b>relative to the original, pristine image</b> (i.e when the slider bar is all the way to the 
-                right at 50). With some images, you may need to move the sliders a lot without affecting the 
-                quality of images. With others, you may not need to move the sliders too much before noticing a 
-                drop in quality.
-            </p>
-          </div>
-            <div class="begin2_class">
-                <div class="row">
-                    <div class="col">
-                        <p><b> This is a <font color="green">GOOD</font> example of how to perform the task.</b></p>
-                        <p>The slider is at a level where the image's quality is <b>mostly preserved</b>, but moving it more will compromise image quality.</p>
-                        <!-- <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif"> -->
-                        <img src="https://media.giphy.com/media/J684vIRmGIDRLUskiJ/giphy.gif">
-                    </div>
-                    <div class="col">
-                        <p><b>This is a <font color="red">BAD</font> example of performing the task.</b></p>
-                        <p>The image is too compressed. <b>Most of the image's quality is lost</b>, so image quality is compromised.</p>
-                        <img src="https://media.giphy.com/media/Zcp7ZBJOC7iI5mRjhr/giphy.gif">
-                    </div>
+            
+			
+			
+			
+			
+			<br>
+            <div class="begin_class" style="display: none;">
+
+				<h2>Introduction:</h2>
+				<p> 
+					We are Electrical and Computer Engineering students at the University of Texas at Austin. We are
+					conducting this study for our senior design project to find the optimal compression ratios for images.
+					Your participation will provide valuable data for our project, and we appreciate you taking the time to 
+					complete our study.
+				</p>
+				<br>
+			
+                <h2>Instructions:</h2>
+				<p>
+					In our task, you will be shown a series of images with two slider bars underneath each
+					image. Each slider bar controls the quality of the image by way of compression. For each
+					image, please use the first slider bar to indicate the point furthest to the left where
+					the resulting compressed image looks identical to the original image. Then, please use 
+					the second slider to indicate the point right before the resulting image becomes 
+					different enough from the original image to cause a slight drop in image quality.
+					<br>
+					<br>
+					The highest quality value is 50, and the lowest quality value is 0. Moving the sliders to the left will decrease 
+					the quality of the image. Each slider should be moved to its particular point, which will 
+					be explained in more detail in later pages in the instructions. 
+					The first slider will be the only one active until a value is selected and the "next" button is pressed. 
+					Then, the first slider will be disabled and the second slider will be activated.
+					After a value is chosen for the second slider, click "next" to proceed to the next image. 
+					<br>
+					<br>
+					Please read the instructions on the next few pages carefully! There will be a short quiz 
+					at the end of the instructions to make sure you understand how to complete our task. Once you
+					have passed the quiz and started the task, the instructions will always be available to you.
+					<br>
+					<br>
+					<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/complete.gif"> 
+					<!-- gif of both sliders in action -->
+				</p> 
+            </div>
+
+            <div class="begin2_class" style="display: none;">
+                <p>
+					<h3>First Slider</h3>
+					For the first slider bar, adjust the slider and try to find the point <b>furthest to the left where the
+					image still looks identical to the original image</b>. In other words, try to find the point right before 
+					any distortion, or change between the resulting and original image, becomes noticeable. Below 
+					are one good example and two bad examples. 
+					<br>
+					<br>
+					<h5>Good Example</h5>
+					In the good example shown below, the slider is moved as far to the left as possible without causing any noticeable changes
+					in the image. Moving the slider any more to the left will cause a distortion in the resulting image, while moving the slider
+					to any point to the right of the current position will result in an image that looks the same as the original.
+					In particular, moving the slider any more to the left causes changes that can be seen in the 
+					cat's fur and in the blanket.
+					<br>
+					<br>
+					<!-- gif of good first slider, gif of first slider moving to point of first distortion and then pressing next -->
+					<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/good1_full.gif"> 
+					<br>	
+					<br>
+					<br>
+					<h5>Bad Example 1</h5>
+					In this first bad example, the slider is not moved enough to the left. 
+					<br>
+					<br>
+					<!-- first slider at 50,  then compressed a little--> 
+					<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/too_high_1.gif"> 
+					<br>
+					<br>
+					The resulting image looks identical to the original image, even after moving the slider 
+					a bit more to the left. This means that you should move the slider more to the left, since
+					the first slider should be moved as far to the left as possible while the resulting compressed
+					image still looks identical to the original image. 
+					<br>
+					<br>
+					<!-- continuing from prev gif, first slider moves from "compressed a little" point to point of first distortion--> 
+				    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/too_high_2.gif"> 
+					<br>
+					<br>
+					<h5>Bad Example 2</h5>
+					In the second bad example, the slider is moved too far to the left. The resulting image already 
+					looks different than the original image before reaching this compression (slider) value.
+					<br>
+					<br>
+					<!-- gif of first slider moving from 50 to point where image heavily distorted--> 
+					<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/too_low_1.gif"> 
+					<br>
+					<br>
+					The slider is too far to the left and should be moved to the right to a higher quality, where the resulting compressed 
+					image looks exactly like the original image.
+					<br>
+					<br>
+					<!-- continuing from prev gif, first slider moves from "compressed too much" to point of first distortion-->  
+					<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/too_low_2.gif"> 
+				
+            </div>
+			
+			<div class="begin3_class"style="display: none;">
+				<p>
+					<!-- SECOND SLIDER INSTRUCTIONS -->
+					<h3>Second Slider</h3>
+					For the second slider, adjust the slider and try to find the point right before where the slider
+					<b>just begins to compromise the quality of the image</b>. The difference between the first and 
+					second sliders is that the resulting image and the original image can look different while having 
+					the same quality. The first slider asks you to find the point where the resulting and original images
+					look different but have the same quality, and the second slider asks you to find the location right 
+					before the point where the difference is large enough so that the quality of the resulting image is 
+					now slightly worse than the original quality. 
+					However, do <b>not</b> move the slider so much that the quality becomes bad. The compressed
+					image should have a quality that is only slightly worse than the original quality. Below are one 
+					good example and two bad examples.
+					<br>
+					<br>
+					<h5>Good Example</h5>
+					In the good example shown below, the slider is moved as far to the left as possible without causing a change in image
+					quality. Moving the slider slightly to the left will cause the resulting image's quality to drop, while moving the slider
+					to any point to the right will result in an image that may look different but has the same quality. Notice that differences
+					between the resulting image and the original image are noticeable but are not significant enough to cause a change in quality
+					from the original image to the resulting image.
+					<br>
+					<br>
+					<!-- gif of good example of slider -->
+					<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_good.gif"> 
+					<br>
+					<br>
+					<br>
+					<h5>Bad Example 1</h5>
+					In the first bad example, the slider value is too high, since the image can be compressed further
+					(the slider can move more to the left) without changing the quality of the image. 
+					<br>
+					<br>
+					<!-- gif of second slider at starting point,  then compressed a little--> 
+					<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_bad_1_ver2.gif"> 
+					<br>
+					<br>
+					The resulting image's quality is similar to the original image's quality even after moving the slider 
+					a bit more to the left, as shown below. This means that you should keep moving the slider further to 
+					the left, since 26 is too high. 
+					<br>
+					<br>
+					<!-- continuing from prev gif, slider moves from "compressed a little" point to left and both images look same/have same quality--> 
+					<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_bad_2.gif"> 
+					<br>
+					<br>
+					<h5>Bad Example 2</h5>
+					In the second bad example, the slider is moved too far to the left, since there is a large drop in quality
+					in the resulting image when compared to the original. 
+					<br>
+					<br>
+					<!-- gif of second slider at starting point, then compressing too much--> 
+					<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_toolow_1.gif"> 
+					<br>
+					<br>
+					In this case, the slider is too far to the left and should be moved back to the right. 
+					<br>
+					<br>
+					<!-- continuing from prev gif, slider moves from "compressed too much" to proper spot -->
+					<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_toolow_2_rev2.gif"> 
+					<br>
+					<br>
+					<b>Note:</b> The images may start off with different initial qualities. Because of this, base your 
+					answer <b>relative to the original image</b> (i.e. when the slider bar is all the way to the 
+					right at 50). With some images, you may need to move the sliders a lot before seeing changes in the 
+					images. With others, you may not need to move the sliders too much before noticing a 
+					change. Your task is <b>not</b> to rate the aesthetic appeal of the content of the image. 
+				</p>
+			</div>
+			<div class='begin4_class'style="display: none;">
+				<h3>Recap:</h3>
+				<p>
+					Moving a slider to the left lowers the quality of an image by compressing it, while moving a 
+					slider to the right results in a less compressed image with higher quality. The first slider 
+					should be moved as far to the left as possible while the compressed image still looks identical 
+					to the original image. The second slider should be moved to the point right before the quality 
+					of the resulting compressed image becomes slightly worse than the quality of the original image.
+					
+					<br>
+					<br>
+					Your judgement of image distortion and image quality may be different from what is shown in 
+					the tutorial clips, and that is OK! There is no exact right answer, and we are looking for 
+                    your opinions of these images.
+                    
+                    <br>
+                    <br>
+                    During the study, once you click the next button, you will <b>NOT</b> be able to go back to the previous image. However, the instuctions will be availiable during the study for refrence.
+				
+				</p>
+			</div>
+			
+			
+            <div class='tutorial_complete_class'>
+                <p>Tutorial complete! The "Next" button will appear when everything is loaded. When you are ready, click "Next" to proceed to the full study.</p>
+            </div>
+            <div class="quiz_class" style="text-align: left;">
+                <div>
+                    <p>For the first slider bar, you will need to move it left to the point at which </p>
+                    <crowd-checkbox name="q11" required> the image becomes pixelated and blurry</crowd-checkbox><br>
+                    <crowd-checkbox name="q12" required> the first signs of distortion becomes noticeable</crowd-checkbox><br>
+                    <crowd-checkbox name="q13" required> the image becomes noticeablly bad</crowd-checkbox><br>
                 </div>
                 <br>
-                <p>Perform this task for all of the images.</p>
-                <p>Press 'View instructions' to refer back to these instructions anytime during the study.</p>
-                <!--<p><b>Disclaimer: </b>In order to collect the best results possible, we have quality checks in place to verify the seriousness of your answers, and you will be asked to <b>return the HIT if you fail too many of them. </b></p>  -->
-                <p>This task page is supported on Google Chrome, Mozilla Firefox, Microsoft Edge, and Opera. Please use one of these browsers to complete our task.</p>
-
-            </div>
-            <div class='tutorial_complete_class'>
-                <p>Tutorial complete! When ready, click "Next" to proceed to the full study.</p>
-            </div>
-            <div class="quiz_class">
                 <div>
-                    <p>Did u understand the task?</p>
-                    <crowd-input name="question1" placeholder="example: pink" required></crowd-input>
+                    <p>For the second slider bar, you will need to move it left to the point at which </p>
+                    <crowd-checkbox name="q21" required> you can't stand the image</crowd-checkbox><br>
+                    <crowd-checkbox name="q22" required> the i</crowd-checkbox><br>
+                    <crowd-checkbox name="q23" required> the compression just begins to compromise the quality of the image</crowd-checkbox><br>
+                </div>
+                <br>
+                <div>
+                    <p>You are evaluating the images based on their</p>
+                    <crowd-checkbox name="q21" required> quality</crowd-checkbox><br>
+                    <crowd-checkbox name="q22" required> aesthetic</crowd-checkbox><br>
+                    <crowd-checkbox name="q23" required> content</crowd-checkbox><br>
+                </div>
+                <br>
+                <div>
+                    <p>If you can move</p>
+                    <crowd-checkbox name="q21" required> quality</crowd-checkbox><br>
+                    <crowd-checkbox name="q22" required> aesthetic</crowd-checkbox><br>
+                    <crowd-checkbox name="q23" required> content</crowd-checkbox><br>
                 </div>
 
-                <div>
-                    <p>Check this box if you a cuck</p>
-                    <crowd-checkbox name="question2" checked="true" required></crowd-checkbox>
-                </div>
-
-                <div>
-                    <p>On a scale of 1-10, how sure r u fam?</p>
-                    <crowd-slider name="question3" min="1" max="10" step="1" pin="true" required></crowd-slider>
-                </div>
-
-                <div>
-                    <p>Write a short essay describing your boobies</p>
-                    <crowd-text-area name="question4" rows="4" placeholder="Lorem ipsum..." required></crowd-text-area>
-                </div>
 
             </div>
 			
 			<div class="not_supported_class">
 				<p> Browser or device not supported. Please use Google Chrome, Mozilla Firefox, Microsoft Edge, or Opera on a desktop or laptop. </p>
 			</div>
-			
+
+            <div class="reject" style="display: none;">
+                <p id="reject_subject">Sorry, we are unable to collect your data because of failure to pass our quality checks! Please click "Return". </p>
+            </div>
+
             <div class="end_class">
                 <p id="task_complete">Task complete! Please click "Submit".</p>
             </div>
@@ -998,18 +1194,21 @@
             </div>
             <br>
             <div class='row'>
-                <div class='col-10'>
-                    <div class="slider_class">
-                        <div id="slider" class=s lider style="left: 16em;"></div>
+                <div class='col-9 ' >
+                    <div class="slider_class float-right" >
+                        <div id="slider"></div>
                         <br>
-                        <div id="slider2" class=s lider style="left: 16em;"></div>
+                        <div id="slider2"></div>
                     </div>
                 </div>
-                <div class='col-2'>
+                <div class='col-3'>
                     <div>
                         <!-- <button type="button" class = "btn btn-primary btn-lg" onclick="setImageb(1)" id='Next_button' value="Next">Next</button>-->
                         <p>
                             <input style='width: 12em;' type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary"></input>
+                        </p>
+                        <p>
+                            <input style='width: 12em;' type="button" onclick="goBack()" id='Back_button' value="Back" class="btn btn-primary"></input>
                         </p>
                         <crowd-input id='set_number' name='set_number' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
