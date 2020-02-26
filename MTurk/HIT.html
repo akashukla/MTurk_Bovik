@@ -87,7 +87,6 @@
     </style>
     <script>
         var study_second_slider_checker = false;
-        var history = [];
         var golden_i = [];
         var golden_mu = [];
         var golden_std = [];
@@ -101,7 +100,10 @@
         var srcc_thresh;
         var rep_ind_first = []
         var rep_ind_second = []
-        
+        var first_rep_scores = [];       
+        var golden_scores = [];
+        var flag_subject = false;
+
         var second_slider = false;
         var flag = false;
         var golden_image_study = true;
@@ -234,7 +236,6 @@
 
         // runs when "Next" button is pressed
         // note: tutorial_nexts and nexts increment at end of function
-        // TODO set checks for 'reject' 
         function setImageb(button) {
             if (phase === 'begin_class') {
                 hideClass('begin_class');
@@ -532,6 +533,7 @@
                 hideClass('image_class');
                 hideClass('slider_class');
                 showClass('reject');
+                document.getElementById('Next_button').style = 'display: none;';
 
             } else {
                 console.log('Phase not recognized: ', phase);
@@ -652,7 +654,7 @@
                     // For HIT
                     set_size = data.shift();
                     num_total_sets = data.shift();
-                    for (i = 0; i < set_size*num_total_sets; i++) {
+                    for (var i = 0; i < set_size*num_total_sets; i++) {
                         all_images.push(data.shift());
                     }
                    
@@ -663,21 +665,21 @@
                     srcc_thresh = data.shift();
 
                     // Golden
-                    for (i = 0; i < num_golden; i++) {
+                    for (var i = 0; i < num_golden; i++) {
                         golden_i.push(data.shift());
                     }
-                    for (i = 0; i < num_golden; i++) {
+                    for (var i = 0; i < num_golden; i++) {
                         golden_mu.push(data.shift());
                     }
-                    for (i = 0; i < num_golden; i++) {
+                    for (var i = 0; i < num_golden; i++) {
                         golden_std.push(data.shift());
                     }
                         
                     // Repeats         
-                    for (i = 0; i < num_repeated/2; i++) {
+                    for (var i = 0; i < num_repeated/2; i++) {
                         rep_ind_first.push(data.shift());
                     }
-                    for (i = 0; i < num_repeated/2; i++) {
+                    for (var i = 0; i < num_repeated/2; i++) {
                         rep_ind_second.push(data.shift());
                     }
 
@@ -805,12 +807,56 @@
          *
          */
 
-        // SKETCH OF REJECTION METHODS: TODO
+        // Evaluate whether a subjects should be rejected or not
+        function evalRejecion(score, rep_idx) {
+            first_idx = rep_ind_first[rep_ind_second.indexOf(rep_idx)];
+            if (Math.abs(score - first_rep_scores[first_idx]) > repeated_thresh) { 
+                phase == 'reject'; 
+            }
+        }
 
-        // Data structure: stored answers from study
-        // function evalRejection()
-        // sets phase = 'reject'
+        // Evaluates whether a participant is to be flagged for 
+        // not meeting srcc thresholds
+        //function evalFlag() {
+        //    var eval = orderedGScores();
+        //    var srcc_val = spearman(eval.gscores_ordered, eval.gmeans_ordered);
+        //}
 
+        //Array.min = function(array){
+        //    return Math.min.apply(Math, array);
+        //};
+
+        //// Ordered golden scores to calculate spearman
+        //function orderGScores() {
+        //    var gmeans_ordered = JSON.parse(JSON.stringify(golden_mu));
+        //    var gscores_ordered = JSON.parse(JSON.stringify(golden_scores));
+        //    var gmeans_i = [];
+        //    var gmeans_sort = [];
+
+        //    for (var i in golden_mu) {
+        //        gmeans_sort.push([golden_mu[i], i]);
+        //    }
+        //    gmeans_sort.sort(function(left, right) {
+        //        return left[0] < right[0] ? -1 : 1;
+        //    });
+        //    for (var j in gmeans_sort) {
+        //        gmeans_ordered.push(gmeans_sort[j][0]);
+        //        gmeans_i.push(gmeans_sort[j][1]);
+        //    }
+
+        //    for (var k = 0; k < golden_mu.length; k++) {
+        //        gscores_ordered.push(golden_scores[gmeans_i[k]]);                
+        //    }
+
+        //    return {
+        //        gmeans_ordered: gmeans_ordered,
+        //        gscores_ordered: gscores_ordered
+        //    };
+
+        //}
+
+
+        // Compression function
         function compress(source_img_obj, quality, output_format) {
             var mime_type;
             if (output_format === "png") {
