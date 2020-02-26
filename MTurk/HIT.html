@@ -177,6 +177,7 @@
 			hideClass('begin2_class');
 			hideClass('begin3_class');
 			hideClass('begin4_class');
+            hideClass('failed_quiz');
 			if(supported == true){
 				showClass('begin_class');
 				hideClass('not_supported_class');
@@ -279,9 +280,14 @@
                 if(checkQuiz() == true)
                     phase = 'beginning'
                 else
-                    phase = 'reject'
+                    phase = 'failed'
+                document.getElementById('Next_button').click();
 				window.scrollTo(0,0);
-            } 
+            } else if(phase == 'start'){
+                hideClass('failed_quiz');
+                showClass('begin_class');
+                phase = 'begin_class';
+            }
 
 
             // if showing tutorial
@@ -546,7 +552,13 @@
                     document.getElementById('Next_button').style = 'display: none;';
                 }
 
-            } else if (phase == 'reject') {
+            }else if (phase == 'failed') {
+                hideClass('image_class');
+                hideClass('slider_class');
+                showClass('failed_quiz');
+                phase = 'start';
+
+            }else if (phase == 'reject') {
                 hideClass('image_class');
                 hideClass('slider_class');
                 showClass('reject');
@@ -1264,6 +1276,10 @@
             <div class="reject" style="display: none;">
                 <p id="reject_subject">Sorry, we are unable to collect your data because of failure to pass our quality checks! Please click "Return". </p>
             </div>
+            <div class="failed_quiz" style="display: none;">
+                <p id="failed_subject">Pay more attention! Please read the instructions again. </p>
+            </div>
+
 
             <div class="end_class">
                 <p id="task_complete">Task complete! Please click "Submit".</p>
