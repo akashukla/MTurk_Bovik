@@ -1,3 +1,4 @@
 TODO in the HIT:
 
-- add flag value when writing the final HIT data
+
+- Right now we quality check the second slider -- do we need to eval repeats for first slider?? Q for Bovik

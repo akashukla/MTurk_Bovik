@@ -489,15 +489,15 @@
                         // Second slider value is saved
                         slider_vals2 = slider_vals2 + second_slider_val.toString() + ',';
                         // For golden case
-                        if (golden_i.indexOf(nexts) != -1) {
+                        if (golden_i.indexOf(nexts) != -1 && !golden_image_study) {
                             golden_scores[golden_i.indexOf(nexts)] = second_slider_val;
                         }
                         // For repeated case first instance
-                        if (rep_ind_first.indexOf(nexts) != -1) {
+                        if (rep_ind_first.indexOf(nexts) != -1 && !golden_image_study) {
                              first_rep_scores[rep_ind_first.indexOf(nexts)] = second_slider_val;
                         }
                         // For repeated case second instance
-                        if (rep_ind_second.indexOf(nexts) != -1) {
+                        if (rep_ind_second.indexOf(nexts) != -1 && !golden_image_study) {
                              evalRejection(second_slider_val, nexts); 
                         }
 
@@ -560,7 +560,7 @@
 
                 // end screen
                 if (nexts === names.length) {
-                    srcc_flag.value = evalFlag();
+                    if (!golden_image_study) { srcc_flag.value = evalFlag(); }
                     slider_values.value = slider_vals;
                     slider_values2.value = slider_vals2.slice(1,slider_vals2.length);
                       
