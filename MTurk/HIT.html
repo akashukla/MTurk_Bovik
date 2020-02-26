@@ -925,6 +925,27 @@
             return Array.from({ length: a.length}, (_,k) => [k,a[k],-1])
         }
 
+        // Spearman Correlation Function
+        function spearman(a,b) {
+            var a_ord = dup_order(tuple(a));
+            var b_ord = dup_order(tuple(b));
+
+            var a_bar = colAVG(a_ord,2);
+            var b_bar = colAVG(b_ord,2);
+            
+            var sum_a = 0;
+            var sum_b = 0;
+            var sum_c = 0;
+            for(var i = 0; i < a_ord.length; i++) {
+                var a_diff = a_ord[i][2]-a_bar;
+                var b_diff = b_ord[i][2]-b_bar;
+                sum_a += a_diff * b_diff;
+                sum_b += a_diff * a_diff;
+                sum_c += b_diff * b_diff; 
+            }
+            return ((sum_a)/Math.sqrt(sum_b*sum_c));
+        }       
+
 
         // Compression function
         function compress(source_img_obj, quality, output_format) {
