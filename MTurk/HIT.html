@@ -231,6 +231,18 @@
             }
         }
 
+        
+        function checkQuiz() {
+            let q1_ans = $('input[name="opt1"]:checked').val();
+            let q2_ans = $('input[name="opt2"]:checked').val();
+            let q3_ans = $('input[name="opt3"]:checked').val();
+            let q4_ans = $('input[name="opt4"]:checked').val();
+            if(q1_ans == 'right' && q2_ans == 'right'&& 
+                q3_ans == 'right' && q4_ans =='right') 
+                return true
+            else
+                return false
+        }
 
         // runs when "Next" button is pressed
         // note: tutorial_nexts and nexts increment at end of function
@@ -257,11 +269,15 @@
 				hideClass('begin4_class');
 				showClass('quiz_class');
                 document.getElementById('Back_button').style.display = "none";
-				phase = 'beginning'; // change to 'quiz' when ready for quiz logic
+				phase = 'quiz'; // change to 'quiz' when ready for quiz logic
 				window.scrollTo(0,0);
 			} else if (phase === 'quiz') {
                 hideClass('quiz_class');
                 phase = 'beginning';
+                if(checkQuiz() == true)
+                    phase = 'beginning'
+                else
+                    phase = 'reject'
 				window.scrollTo(0,0);
             } 
 
@@ -1130,12 +1146,12 @@
             <div class="quiz_class" style="text-align: left;">
                 <div>
                     <p>For the first slider bar, you will need to move it left to the point at which </p>
-                    <crowd-radio-group id='q1'>
-                        <crowd-radio-button name="opt1" value="wrong">the image through compression becomes blurry</crowd-radio-button>
+                    <crowd-radio-group id='q1' class = 'q1'>
+                        <input type="radio" name="opt1" value="wrong"> the image through compression becomes blurry
                         <br>
-                        <crowd-radio-button name="opt2" value="right">the image shows first signs of distortion becomes noticeable</crowd-radio-button>
+                        <input type="radio" name="opt1" value="right">the image shows first signs of distortion becomes noticeable
                         <br>
-                        <crowd-radio-button name="opt3" value="wrong">the image becomes unacceptable to the eye</crowd-radio-button>
+                        <input type="radio" name="opt1" value="wrong">the image becomes unacceptable to the eye
                     </crowd-radio-group>
                     <!-- <crowd-checkbox name="q11" required> the image through compression becomes blurry</crowd-checkbox><br>
                     <crowd-checkbox name="q12" required> the image shows first signs of distortion becomes noticeable</crowd-checkbox><br>
@@ -1145,11 +1161,11 @@
                 <div>
                     <p>For the second slider bar, you will need to move it left to the point at which </p>
                     <crowd-radio-group id='q2'>
-                        <crowd-radio-button name="opt1" value="wrong">the image through the algorithm becomes pixelated</crowd-radio-button>
+                        <input type="radio" name="opt2" value="wrong"> the image through compression becomes blurry
                         <br>
-                        <crowd-radio-button name="opt2" value="right">the image is still acceptable to the participant</crowd-radio-button>
+                        <input type="radio" name="opt2" value="wrong"> the image is still acceptable to the participant
                         <br>
-                        <crowd-radio-button name="opt3" value="wrong">the image quality just begins to be compromised by compression</crowd-radio-button>
+                        <input type="radio" name="opt2" value="right">the image quality just begins to be compromised by compression
                     </crowd-radio-group>
                     <!-- <crowd-checkbox name="q21" required> the image through the algorithm becomes pixelated</crowd-checkbox><br>
                     <crowd-checkbox name="q22" required> the image is still acceptable to the participant</crowd-checkbox><br>
@@ -1159,11 +1175,11 @@
                 <div>
                     <p>You are evaluating the images based on their</p>
                     <crowd-radio-group id='q3'>
-                        <crowd-radio-button name='opt1' value='right'>quality</crowd-radio-button>
+                        <input type="radio" name="opt3" value="right"> quality 
                         <br>
-                        <crowd-radio-button name='opt2' value='wrong'>aesthetic</crowd-radio-button>
+                        <input type="radio" name="opt3" value="wrong"> aesthetic 
                         <br>
-                        <crowd-radio-button name='opt3' value='wrong'>content</crowd-radio-button>
+                        <input type="radio" name="opt3" value="wrong"> content
                     </crowd-radio-group>
                     <!-- <crowd-checkbox name="q31" required> quality</crowd-checkbox><br>
                     <crowd-checkbox name="q32" required> aesthetic</crowd-checkbox><br>
@@ -1173,11 +1189,11 @@
                 <div>
                     <p>Will there be quality checks throughout the survey?</p>
                     <crowd-radio-group id='q4'>
-                        <crowd-radio-button name='opt1' value='right'>Yes</crowd-radio-button>
+                        <input type="radio" name="opt4" value="right"> Yes
                         <br>
-                        <crowd-radio-button name='opt2' value='wrong'>No</crowd-radio-button>
+                        <input type="radio" name="opt4" value="wrong"> No 
                         <br>
-                        <crowd-radio-button name='opt3' value='wrong'>I do not know</crowd-radio-button>
+                        <input type="radio" name="opt4" value="wrong"> I do not know
                     </crowd-radio-group>
                     <!-- <crowd-checkbox name="q41" required> Yes</crowd-checkbox><br>
                     <crowd-checkbox name="q42" required> No</crowd-checkbox><br>
