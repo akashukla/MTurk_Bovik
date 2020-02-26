@@ -1,8 +1,4 @@
 TODO in the HIT:
 
-- incorporate spearman calculations
 - add flag value when writing the final HIT data
-- change init function to take in correct values
-- call init somewhere
-- Update the system design report with the way we calculate the srcc thresholds
-
+- verify if TODOs are correct

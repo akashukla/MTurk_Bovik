@@ -91,17 +91,18 @@
         var golden_mu = [];
         var golden_std = [];
         var repeated_i = [];
-        var all_images = [];
         var set_size;
         var num_total_sets;
         var num_golden;
         var num_repeated;
         var repeated_thresh;
         var srcc_thresh;
-        var rep_ind_first = []
-        var rep_ind_second = []
+        var rep_ind_first = [];
+        var rep_ind_second = [];
         var first_rep_scores = [];       
-        var golden_scores = [];
+        first_rep_scores.fill(-1);
+        var golden_scores = new Array(num_golden);
+        golden_scores.fill(-1);
         var flag_subject = false;
 
         var second_slider = false;
@@ -386,6 +387,21 @@
 
             // if showing non-tutorial images
             else if (phase === 'study') {
+                // TODO: Place in correct location!!!!!
+                // // For golden case
+                // if (golden_i.indexOf(nexts) != -1) {
+                //     golden_scores[golden_i.indexOf(nexts)] = slider_val;
+                // }
+                // // For repeated case first instance
+                // if (rep_ind_first.indexOf(nexts) != -1) {
+                //      first_rep_scores[rep_ind_first.indexOf(nexts)] = slider_val;
+                // }
+                // // For repeated case second instance
+                // if (rep_ind_second.indexOf(nexts) != -1) {
+                //      evalRejection(slider_val, nexts); 
+                // }
+                
+
 
                 // normal operation 
                 if (first_image === false) {
@@ -520,6 +536,8 @@
 
                 // end screen
                 if (nexts === names.length) {
+                    //TODO: Verify if checking for flag here is okay
+                    // evalFlag();
                     slider_values.value = slider_vals;
                     slider_values2.value = slider_vals2.slice(1,slider_vals2.length);
                     hideClass('image_class');
@@ -625,68 +643,7 @@
             // );
         }
 
-        /*
-         * Data Format:
-         *   Number of study images per HIT (set size)
-         *   Image names in the set
-         *   Number of golden images
-         *   Number of repeated images
-         *   Repeated threshold
-         *   Spearman threshold
-         *   Golden image indeces 
-         *   Golden image mean values
-         *   Golden image stdev
-         *   Repeated image indeces (should be 2X number of repeated)
-         *      (first occurance ind. second occurance ind)
-         *
-         * This method will aim to read in the "hit_data.csv" and
-         * initialize the constrants of the study. 
-         * See above for data format.
-         */
-        function init_study() {
-            $.ajax({
-               type: "GET",
-               url: proxy_url + hit_data_url,
-               dataType: "text",
-               success: function(response) {
-                    var data = $.csv.toArrays(response);
-                    
-                    // For HIT
-                    set_size = data.shift();
-                    num_total_sets = data.shift();
-                    for (var i = 0; i < set_size*num_total_sets; i++) {
-                        all_images.push(data.shift());
-                    }
-                   
-                    // For quality checks
-                    num_golden = data.shift();
-                    num_repeated = data.shift();
-                    repeated_thresh = data.shift();
-                    srcc_thresh = data.shift();
-
-                    // Golden
-                    for (var i = 0; i < num_golden; i++) {
-                        golden_i.push(data.shift());
-                    }
-                    for (var i = 0; i < num_golden; i++) {
-                        golden_mu.push(data.shift());
-                    }
-                    for (var i = 0; i < num_golden; i++) {
-                        golden_std.push(data.shift());
-                    }
-                        
-                    // Repeats         
-                    for (var i = 0; i < num_repeated/2; i++) {
-                        rep_ind_first.push(data.shift());
-                    }
-                    for (var i = 0; i < num_repeated/2; i++) {
-                        rep_ind_second.push(data.shift());
-                    }
-
-                } // end handler 
-            }) // end init
-        }
-
+       
         function get_set() {
             $.get(proxy_url + hit_number_url, function(data) {
                 hit_number = parseInt(data);
@@ -703,13 +660,44 @@
                         var i_set = (hit_number % hit_sets.length)
                         var hit_set = hit_sets[i_set].toString();
                         console.log('i_set: ', i_set);
+                        
+                        // Logic for how initial values and images are set 
                         if (golden_image_study === true) {
                             names = golden_names;
                             //  names = names.slice(0,3);
 
-                        // The final HIT
+                        // THE FINAL HIT LOGIC
+                        /*
+                         * Data Format:
+                         *   Number of study images per HIT (set size)
+                         *   Image names in the set
+                         *   Number of golden images
+                         *   Number of repeated images
+                         *   Repeated threshold
+                         *   Spearman threshold
+                         *   Golden image indeces 
+                         *   Golden image mean values
+                         *   Golden image stdev
+                         *   Repeated image indeces (should be 2X number of repeated)
+                         *      (first occurance ind. second occurance ind)
+                         *
+                         * This method will aim to read in the "hit_data.csv" and
+                         * initialize the constrants of the study. 
+                         * See above for data format.
+                         */
                         } else {
-                            names = hit_set.split(",");
+                            data = hit_set.split(",");
+                            set_size = data.shift();
+                            for (var i = 0; i < set_size; i++) { names.push(data.shift()); }
+                            num_golden = data.shift();
+                            num_repeated = data.shift();
+                            repeated_thresh = data.shift();
+                            srcc_thresh = data.shift();
+                            for (var i = 0; i < num_golden; i++) { golden_i.push(data.shift()); }
+                            for (var i = 0; i < num_golden; i++) { golden_mu.push(data.shift()); }
+                            for (var i = 0; i < num_golden; i++) { golden_std.push(data.shift()); }
+                            for (var i = 0; i < num_repeated; i++) { rep_ind_first.push(data.shift()); }
+                            for (var i = 0; i < num_repeated; i++) { rep_ind_second.push(data.shift()); }
                         }
                         update_hit_number(hit_number + 1);
                         document.getElementById('Next_button').style = 'visibility: block';
