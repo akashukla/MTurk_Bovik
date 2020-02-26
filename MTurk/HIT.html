@@ -280,6 +280,12 @@
                     phase = 'beginning'
                 else
                     phase = 'failed'
+
+                var allRadios = document.getElementsByClassName('rads');
+                for(var i = 0; i<allRadios.length; i++){
+                    allRadios[i].checked = false;
+                }
+
                 document.getElementById('Next_button').click();
                 window.scrollTo(0,0);
             } else if(phase == 'start'){
@@ -1233,11 +1239,11 @@
                 <div>
                     <p>For the first slider bar, you will need to move it left to the point at which </p>
                     <crowd-radio-group id='q1' class = 'q1'>
-                        <input type="radio" name="opt1" value="wrong"> the image through compression becomes blurry
+                        <input class="rads" type="radio" name="opt1" value="wrong"> the image through compression becomes blurry
                         <br>
-                        <input type="radio" name="opt1" value="right">the image shows first signs of distortion becomes noticeable
+                        <input class="rads" type="radio" name="opt1" value="right">the image shows first signs of distortion becomes noticeable
                         <br>
-                        <input type="radio" name="opt1" value="wrong">the image becomes unacceptable to the eye
+                        <input class="rads" type="radio" name="opt1" value="wrong">the image becomes unacceptable to the eye
                     </crowd-radio-group>
                     <!-- <crowd-checkbox name="q11" required> the image through compression becomes blurry</crowd-checkbox><br>
                     <crowd-checkbox name="q12" required> the image shows first signs of distortion becomes noticeable</crowd-checkbox><br>
@@ -1247,11 +1253,11 @@
                 <div>
                     <p>For the second slider bar, you will need to move it left to the point at which </p>
                     <crowd-radio-group id='q2'>
-                        <input type="radio" name="opt2" value="wrong"> the image through compression becomes blurry
+                        <input class="rads" type="radio" name="opt2" value="wrong"> the image through compression becomes blurry
                         <br>
-                        <input type="radio" name="opt2" value="wrong"> the image is still acceptable to the participant
+                        <input class="rads" type="radio" name="opt2" value="wrong"> the image is still acceptable to the participant
                         <br>
-                        <input type="radio" name="opt2" value="right">the image quality just begins to be compromised by compression
+                        <input class="rads" type="radio" name="opt2" value="right">the image quality just begins to be compromised by compression
                     </crowd-radio-group>
                     <!-- <crowd-checkbox name="q21" required> the image through the algorithm becomes pixelated</crowd-checkbox><br>
                     <crowd-checkbox name="q22" required> the image is still acceptable to the participant</crowd-checkbox><br>
@@ -1261,11 +1267,11 @@
                 <div>
                     <p>You are evaluating the images based on their</p>
                     <crowd-radio-group id='q3'>
-                        <input type="radio" name="opt3" value="right"> quality 
+                        <input class="rads" type="radio" name="opt3" value="right"> quality 
                         <br>
-                        <input type="radio" name="opt3" value="wrong"> aesthetic 
+                        <input class="rads" type="radio" name="opt3" value="wrong"> aesthetic 
                         <br>
-                        <input type="radio" name="opt3" value="wrong"> content
+                        <input class="rads" type="radio" name="opt3" value="wrong"> content
                     </crowd-radio-group>
                     <!-- <crowd-checkbox name="q31" required> quality</crowd-checkbox><br>
                     <crowd-checkbox name="q32" required> aesthetic</crowd-checkbox><br>
@@ -1275,11 +1281,11 @@
                 <div>
                     <p>Will there be quality checks throughout the survey?</p>
                     <crowd-radio-group id='q4'>
-                        <input type="radio" name="opt4" value="right"> Yes
+                        <input class="rads" type="radio" name="opt4" value="right"> Yes
                         <br>
-                        <input type="radio" name="opt4" value="wrong"> No 
+                        <input class="rads" type="radio" name="opt4" value="wrong"> No 
                         <br>
-                        <input type="radio" name="opt4" value="wrong"> I do not know
+                        <input class="rads" type="radio" name="opt4" value="wrong"> I do not know
                     </crowd-radio-group>
                     <!-- <crowd-checkbox name="q41" required> Yes</crowd-checkbox><br>
                     <crowd-checkbox name="q42" required> No</crowd-checkbox><br>
