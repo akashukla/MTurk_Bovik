@@ -724,17 +724,17 @@
 
                         } else {
                             data = hit_set.split(",");
-                            set_size = data.shift();
+                            set_size = parseInt(data.shift());
                             for (var i = 0; i < set_size; i++) { names.push(data.shift()); }
-                            num_golden = data.shift();
-                            num_repeated = data.shift();
-                            repeated_thresh = data.shift();
-                            srcc_thresh = data.shift();
-                            for (var i = 0; i < num_golden; i++) { golden_i.push(data.shift()); }
-                            for (var i = 0; i < num_golden; i++) { golden_mu.push(data.shift()); }
-                            for (var i = 0; i < num_golden; i++) { golden_std.push(data.shift()); }
-                            for (var i = 0; i < num_repeated; i++) { rep_ind_first.push(data.shift()); }
-                            for (var i = 0; i < num_repeated; i++) { rep_ind_second.push(data.shift()); }
+                            num_golden = parseInt(data.shift());
+                            num_repeated = parseInt(data.shift());
+                            repeated_thresh = parseInt(data.shift());
+                            srcc_thresh = parseInt(data.shift());
+                            for (var i = 0; i < num_golden; i++) { golden_i.push(parseInt(data.shift())); }
+                            for (var i = 0; i < num_golden; i++) { golden_mu.push(parseInt(data.shift())); }
+                            for (var i = 0; i < num_golden; i++) { golden_std.push(parseInt(data.shift())); 
+                            for (var i = 0; i < num_repeated; i++) { rep_ind_first.push(parseInt(data.shift())); }
+                            for (var i = 0; i < num_repeated; i++) { rep_ind_second.push(parseInt(data.shift())); }
                         }
                         update_hit_number(hit_number + 1);
                         document.getElementById('Next_button').style = 'visibility: block';
