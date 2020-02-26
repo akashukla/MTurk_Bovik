@@ -53,6 +53,20 @@
             cursor: pointer;
             width: 12em;
         }
+        #Back_button {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            width: 12em;
+        }
         
         #submitButton {
             background-color: #4CAF50;
@@ -196,6 +210,27 @@
                 x[i].style.display = "none";
             }
         }
+        function goBack(){
+            if(phase == "begin2_class"){
+                hideClass('begin2_class');
+                showClass('begin_class');
+                phase = 'begin_class';
+                window.scrollTo(0,0);
+            }
+            else if(phase == "begin3_class"){
+                hideClass('begin3_class');
+                showClass('begin2_class');
+                phase = 'begin2_class';
+                window.scrollTo(0,0);
+            }
+            else if(phase == "begin4_class"){
+                hideClass('begin4_class');
+                showClass('begin3_class');
+                phase = 'begin3_class';
+                window.scrollTo(0,0);
+            }
+        }
+
 
         // runs when "Next" button is pressed
         // note: tutorial_nexts and nexts increment at end of function
@@ -221,6 +256,7 @@
 			} else if (phase === 'begin4_class'){
 				hideClass('begin4_class');
 				showClass('quiz_class');
+                document.getElementById('Back_button').style.display = "none";
 				phase = 'beginning'; // change to 'quiz' when ready for quiz logic
 				window.scrollTo(0,0);
 			} else if (phase === 'quiz') {
@@ -1171,6 +1207,9 @@
                         <!-- <button type="button" class = "btn btn-primary btn-lg" onclick="setImageb(1)" id='Next_button' value="Next">Next</button>-->
                         <p>
                             <input style='width: 12em;' type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary"></input>
+                        </p>
+                        <p>
+                            <input style='width: 12em;' type="button" onclick="goBack()" id='Back_button' value="Back" class="btn btn-primary"></input>
                         </p>
                         <crowd-input id='set_number' name='set_number' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
