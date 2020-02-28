@@ -148,7 +148,30 @@
             'VOC2012__2011_002173.jpg', 'VOC2012__2011_002215.jpg', 'VOC2012__2011_002960.jpg',
             'VOC2012__2011_003123.jpg', 'VOC2012__2011_003969.jpg', 'VOC2012__2011_005123.jpg',
             'VOC2012__2012_001367.jpg', 'VOC2012__2012_003683.jpg'
-        ]
+        ];
+
+        var first = [
+            ['the image through compression becomes blurry', 'wrong'],
+            ['the image shows first signs of distortion becomes noticeable', 'right'],
+            ['the image becomes unacceptable to the eye', 'wrong']
+        ];
+        
+        var second = [
+            ['the image through compression becomes blurry', 'wrong'],
+            ['the image is still acceptable to the participant', 'wrong'],
+            ['the image quality just begins to be compromised by compression', 'right']
+        ];
+        var third = [
+            ['quality', 'right'],
+            ['aesthetic', 'wrong'],
+            ['content', 'wrong']
+        ];
+        var fourth = [
+            ['Yes', 'right'],
+            ['No', 'wrong'],
+            ["I don't know", 'wrong']
+        ];
+
 
         var tutorial_nexts = -1; // index for which tutorial image to display
         var first_image = true;
@@ -195,6 +218,45 @@
         window.addEventListener("load", function() {
             
         });
+
+        //shuffling an array
+        function shuffle(array) {
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+        //shuffling questions array
+        
+        function shuffleArrays(){
+            shuffle(first);
+            shuffle(second);
+            shuffle(third);
+            shuffle(fourth);
+        }
+
+        //load questions
+        function loadArray(){    
+
+            var firstArr = document.getElementsByName('opt1');
+            var secondArr = document.getElementsByName('opt2');
+            var thirdArr = document.getElementsByName('opt3');
+            var fourthArr = document.getElementsByName('opt4');
+                    
+            for(var i = 0; i< 3; i++){
+                firstArr[i].nextSibling.innerHTML = first[i][0];
+                firstArr[i].value = first[i][1];
+                secondArr[i].nextSibling.innerHTML = second[i][0];
+                secondArr[i].value = second[i][1];
+                thirdArr[i].nextSibling.innerHTML = third[i][0];
+                thirdArr[i].value = third[i][1];
+                fourthArr[i].nextSibling.innerHTML = fourth[i][0];
+                fourthArr[i].value = fourth[i][1];
+            }
+            
+        }
 
         // shows all HTML elements in the specified class (except source_image)
         function showClass(class_name) {
