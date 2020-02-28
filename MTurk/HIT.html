@@ -488,7 +488,7 @@
                     //     document.getElementById('Next_button').style = 'display: none;';
                     // }
 
-
+                    console.log("NEXT: "+ next)';
                     nexts = nexts + 1;
                     second_slider = false;
                 } else {
@@ -502,10 +502,12 @@
                         }
                         // For repeated case first instance
                         if (rep_ind_first.indexOf(nexts-1) != -1 && !golden_image_study) {
+                             console.log("FOUND FIRST REP");
                              first_rep_scores[rep_ind_first.indexOf(nexts-1)] = second_slider_val;
                         }
                         // For repeated case second instance
                         if (rep_ind_second.indexOf(nexts-1) != -1 && !golden_image_study) {
+                             console.log("FOUND SECOND REP");
                              evalRejection(second_slider_val, nexts-1); 
                         }
 
@@ -842,6 +844,8 @@
         // Evaluate whether a subjects should be rejected or not
         function evalRejection(score, rep_idx) {
             //first_idx = rep_ind_first[rep_ind_second.indexOf(rep_idx)];
+            console.log("THIS IS CURRENT SCORE "+score);
+            console.log("THIS IS OLD SCORE: "+first_rep_scores[rep_ind_second.indexOf(rep_idx)]);
             if (Math.abs(score - first_rep_scores[rep_ind_second.indexOf(rep_idx)]) > repeated_thresh/2) { 
                 phase == 'reject'; 
             }
