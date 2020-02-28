@@ -844,7 +844,7 @@
         // Evaluate whether a subjects should be rejected or not
         function evalRejection(score, rep_idx) {
             //first_idx = rep_ind_first[rep_ind_second.indexOf(rep_idx)];
-            if (Math.abs(score - first_rep_scores[rep_ind_second.indexOf(rep_idx)]) > repeated_thresh) { 
+            if (Math.abs(score - first_rep_scores[rep_ind_second.indexOf(rep_idx)]) > repeated_thresh)) { 
                 phase == 'reject'; 
             }
         }
