@@ -148,7 +148,29 @@
             'VOC2012__2011_002173.jpg', 'VOC2012__2011_002215.jpg', 'VOC2012__2011_002960.jpg',
             'VOC2012__2011_003123.jpg', 'VOC2012__2011_003969.jpg', 'VOC2012__2011_005123.jpg',
             'VOC2012__2012_001367.jpg', 'VOC2012__2012_003683.jpg'
-        ]
+        ];
+
+        var first = [
+            ['the image through compression becomes blurry', 'wrong'],
+            ['the image shows first signs of distortion becomes noticeable', 'right'],
+            ['the image becomes unacceptable to the eye', 'wrong']
+        ];
+        
+        var second = [
+            ['the image through compression becomes blurry', 'wrong'],
+            ['the image is still acceptable to the participant', 'wrong'],
+            ['the image quality just begins to be compromised by compression', 'right']
+        ];
+        var third = [
+            ['quality', 'right'],
+            ['aesthetic', 'wrong'],
+            ['content', 'wrong']
+        ];
+        var fourth = [
+            ['Yes', 'right'],
+            ['No', 'wrong'],
+            ["I don't know", 'wrong']
+        ];
 
         var tutorial_nexts = -1; // index for which tutorial image to display
         var first_image = true;
@@ -196,6 +218,46 @@
             
         });
 
+        //shuffling an array
+
+        function shuffle(array) {
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+        //shuffling questions array
+        
+        function shuffleArrays(){
+            shuffle(first);
+            shuffle(second);
+            shuffle(third);
+            shuffle(fourth);
+        }
+
+        //load questions
+        function loadArray(){    
+
+            var firstArr = document.getElementsByName('opt1');
+            var secondArr = document.getElementsByName('opt2');
+            var thirdArr = document.getElementsByName('opt3');
+            var fourthArr = document.getElementsByName('opt4');
+                    
+            for(var i = 0; i< 3; i++){
+                firstArr[i].nextSibling.innerHTML = first[i][0];
+                firstArr[i].value = first[i][1];
+                secondArr[i].nextSibling.innerHTML = second[i][0];
+                secondArr[i].value = second[i][1];
+                thirdArr[i].nextSibling.innerHTML = third[i][0];
+                thirdArr[i].value = third[i][1];
+                fourthArr[i].nextSibling.innerHTML = fourth[i][0];
+                fourthArr[i].value = fourth[i][1];
+            }
+            
+        }
+
         // shows all HTML elements in the specified class (except source_image)
         function showClass(class_name) {
             var x = document.getElementsByClassName(class_name);
@@ -206,7 +268,6 @@
                 }
             }
         }
-
         // hides all HTML elements in the specified class
         function hideClass(class_name) {
             var x = document.getElementsByClassName(class_name);
@@ -271,6 +332,7 @@
                 window.scrollTo(0,0);
             } else if (phase === 'begin4_class'){
                 hideClass('begin4_class');
+                loadArray();
                 showClass('quiz_class');
                 document.getElementById('Back_button').style.display = "none";
                 phase = 'quiz'; // change to 'quiz' when ready for quiz logic
@@ -278,16 +340,16 @@
             } else if (phase === 'quiz') {
                 hideClass('quiz_class');
                 phase = 'beginning';
-                if(checkQuiz() == true)
+                if(checkQuiz() == true){
                     phase = 'beginning'
-                else
+                }else{
                     phase = 'failed'
-
-                var allRadios = document.getElementsByClassName('rads');
-                for(var i = 0; i<allRadios.length; i++){
-                    allRadios[i].checked = false;
+                    var allRadios = document.getElementsByClassName('rads');
+                    for(var i = 0; i<allRadios.length; i++){
+                        allRadios[i].checked = false;
+                    }
+                    shuffleArrays();
                 }
-
                 document.getElementById('Next_button').click();
                 window.scrollTo(0,0);
             } else if(phase == 'start'){
@@ -1214,63 +1276,43 @@
                 <p>Tutorial complete! The "Next" button will appear when everything is loaded. When you are ready, click "Next" to proceed to the full study.</p>
             </div>
             <div class="quiz_class" style="text-align: left;">
+                
                 <div>
                     <p>For the first slider bar, you will need to move it left to the point at which </p>
-                    <crowd-radio-group id='q1' class = 'q1'>
-                        <input class="rads" type="radio" name="opt1" value="wrong"> the image through compression becomes blurry
+                        <input class="rads" type="radio" name="opt1"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt1" value="right">the image shows first signs of distortion becomes noticeable
+                        <input class="rads" type="radio" name="opt1"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt1" value="wrong">the image becomes unacceptable to the eye
-                    </crowd-radio-group>
-                    <!-- <crowd-checkbox name="q11" required> the image through compression becomes blurry</crowd-checkbox><br>
-                    <crowd-checkbox name="q12" required> the image shows first signs of distortion becomes noticeable</crowd-checkbox><br>
-                    <crowd-checkbox name="q13" required> the image becomes unacceptable to the eye</crowd-checkbox><br> -->
+                        <input class="rads" type="radio" name="opt1"><label></label>
                 </div>
                 <br>
                 <div>
                     <p>For the second slider bar, you will need to move it left to the point at which </p>
-                    <crowd-radio-group id='q2'>
-                        <input class="rads" type="radio" name="opt2" value="wrong"> the image through compression becomes blurry
+                        <input class="rads" type="radio" name="opt2"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt2" value="wrong"> the image is still acceptable to the participant
+                        <input class="rads" type="radio" name="opt2"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt2" value="right">the image quality just begins to be compromised by compression
-                    </crowd-radio-group>
-                    <!-- <crowd-checkbox name="q21" required> the image through the algorithm becomes pixelated</crowd-checkbox><br>
-                    <crowd-checkbox name="q22" required> the image is still acceptable to the participant</crowd-checkbox><br>
-                    <crowd-checkbox name="q23" required> the image quality just begins to be compromised by compression</crowd-checkbox><br> -->
+                        <input class="rads" type="radio" name="opt2"><label></label>
                 </div>
                 <br>
                 <div>
                     <p>You are evaluating the images based on their</p>
-                    <crowd-radio-group id='q3'>
-                        <input class="rads" type="radio" name="opt3" value="right"> quality 
+                        <input class="rads" type="radio" name="opt3"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt3" value="wrong"> aesthetic 
+                        <input class="rads" type="radio" name="opt3"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt3" value="wrong"> content
-                    </crowd-radio-group>
-                    <!-- <crowd-checkbox name="q31" required> quality</crowd-checkbox><br>
-                    <crowd-checkbox name="q32" required> aesthetic</crowd-checkbox><br>
-                    <crowd-checkbox name="q33" required> content</crowd-checkbox><br> -->
+                        <input class="rads" type="radio" name="opt3"><label></label>
                 </div>
                 <br>
                 <div>
                     <p>Will there be quality checks throughout the survey?</p>
-                    <crowd-radio-group id='q4'>
-                        <input class="rads" type="radio" name="opt4" value="right"> Yes
+                        <input class="rads" type="radio" name="opt4"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt4" value="wrong"> No 
+                        <input class="rads" type="radio" name="opt4"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt4" value="wrong"> I do not know
-                    </crowd-radio-group>
-                    <!-- <crowd-checkbox name="q41" required> Yes</crowd-checkbox><br>
-                    <crowd-checkbox name="q42" required> No</crowd-checkbox><br>
-                    <crowd-checkbox name="q43" required> I do not know</crowd-checkbox><br> -->
+                        <input class="rads" type="radio" name="opt4"><label></label>
                 </div>
-
-
+            
             </div>
             
             <div class="not_supported_class">
@@ -1321,9 +1363,8 @@
                 </div>
                 <div class='col-3'>
                     <div>
-                        <!-- <button type="button" class = "btn btn-primary btn-lg" onclick="setImageb(1)" id='Next_button' value="Next">Next</button>-->
                         <p>
-                            <input style='width: 12em;' type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary"></input>
+                            <input style='width: 12em;' type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary" disabled="false"></input>
                         </p>
                         <p>
                             <input style='width: 12em;' type="button" onclick="goBack()" id='Back_button' value="Back" class="btn btn-primary"></input>
