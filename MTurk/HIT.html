@@ -333,6 +333,7 @@
                 window.scrollTo(0,0);
             } else if (phase === 'begin4_class'){
                 hideClass('begin4_class');
+                loadArray();
                 showClass('quiz_class');
                 document.getElementById('Back_button').style.display = "none";
                 phase = 'quiz'; // change to 'quiz' when ready for quiz logic
@@ -340,16 +341,16 @@
             } else if (phase === 'quiz') {
                 hideClass('quiz_class');
                 phase = 'beginning';
-                if(checkQuiz() == true)
+                if(checkQuiz() == true){
                     phase = 'beginning'
-                else
+                }else{
                     phase = 'failed'
-
-                var allRadios = document.getElementsByClassName('rads');
-                for(var i = 0; i<allRadios.length; i++){
-                    allRadios[i].checked = false;
+                    var allRadios = document.getElementsByClassName('rads');
+                    for(var i = 0; i<allRadios.length; i++){
+                        allRadios[i].checked = false;
+                    }
+                    shuffleArrays();
                 }
-
                 document.getElementById('Next_button').click();
                 window.scrollTo(0,0);
             } else if(phase == 'start'){
@@ -1355,61 +1356,39 @@
             <div class="quiz_class" style="text-align: left;">
                 <div>
                     <p>For the first slider bar, you will need to move it left to the point at which </p>
-                    <crowd-radio-group id='q1' class = 'q1'>
-                        <input class="rads" type="radio" name="opt1" value="wrong"> the image through compression becomes blurry
+                        <input class="rads" type="radio" name="opt1"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt1" value="right">the image shows first signs of distortion becomes noticeable
+                        <input class="rads" type="radio" name="opt1"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt1" value="wrong">the image becomes unacceptable to the eye
-                    </crowd-radio-group>
-                    <!-- <crowd-checkbox name="q11" required> the image through compression becomes blurry</crowd-checkbox><br>
-                    <crowd-checkbox name="q12" required> the image shows first signs of distortion becomes noticeable</crowd-checkbox><br>
-                    <crowd-checkbox name="q13" required> the image becomes unacceptable to the eye</crowd-checkbox><br> -->
+                        <input class="rads" type="radio" name="opt1"><label></label>
                 </div>
                 <br>
                 <div>
                     <p>For the second slider bar, you will need to move it left to the point at which </p>
-                    <crowd-radio-group id='q2'>
-                        <input class="rads" type="radio" name="opt2" value="wrong"> the image through compression becomes blurry
+                        <input class="rads" type="radio" name="opt2"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt2" value="wrong"> the image is still acceptable to the participant
+                        <input class="rads" type="radio" name="opt2"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt2" value="right">the image quality just begins to be compromised by compression
-                    </crowd-radio-group>
-                    <!-- <crowd-checkbox name="q21" required> the image through the algorithm becomes pixelated</crowd-checkbox><br>
-                    <crowd-checkbox name="q22" required> the image is still acceptable to the participant</crowd-checkbox><br>
-                    <crowd-checkbox name="q23" required> the image quality just begins to be compromised by compression</crowd-checkbox><br> -->
+                        <input class="rads" type="radio" name="opt2"><label></label>
                 </div>
                 <br>
                 <div>
                     <p>You are evaluating the images based on their</p>
-                    <crowd-radio-group id='q3'>
-                        <input class="rads" type="radio" name="opt3" value="right"> quality 
+                        <input class="rads" type="radio" name="opt3"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt3" value="wrong"> aesthetic 
+                        <input class="rads" type="radio" name="opt3"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt3" value="wrong"> content
-                    </crowd-radio-group>
-                    <!-- <crowd-checkbox name="q31" required> quality</crowd-checkbox><br>
-                    <crowd-checkbox name="q32" required> aesthetic</crowd-checkbox><br>
-                    <crowd-checkbox name="q33" required> content</crowd-checkbox><br> -->
+                        <input class="rads" type="radio" name="opt3"><label></label>
                 </div>
                 <br>
                 <div>
                     <p>Will there be quality checks throughout the survey?</p>
-                    <crowd-radio-group id='q4'>
-                        <input class="rads" type="radio" name="opt4" value="right"> Yes
+                        <input class="rads" type="radio" name="opt4"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt4" value="wrong"> No 
+                        <input class="rads" type="radio" name="opt4"><label></label>
                         <br>
-                        <input class="rads" type="radio" name="opt4" value="wrong"> I do not know
-                    </crowd-radio-group>
-                    <!-- <crowd-checkbox name="q41" required> Yes</crowd-checkbox><br>
-                    <crowd-checkbox name="q42" required> No</crowd-checkbox><br>
-                    <crowd-checkbox name="q43" required> I do not know</crowd-checkbox><br> -->
+                        <input class="rads" type="radio" name="opt4"><label></label>
                 </div>
-
-
             </div>
             
             <div class="not_supported_class">
