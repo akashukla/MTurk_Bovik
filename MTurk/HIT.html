@@ -107,7 +107,7 @@
 
         var second_slider = false;
         var flag = false;
-        var golden_image_study = true;
+        var golden_image_study = false;
         var names = [];
         var n_slider_levels = 50;
         var nexts = 0;
@@ -171,6 +171,7 @@
             ['No', 'wrong'],
             ["I don't know", 'wrong']
         ];
+
 
         var tutorial_nexts = -1; // index for which tutorial image to display
         var first_image = true;
@@ -553,7 +554,6 @@
                     //     document.getElementById('Next_button').style = 'display: none;';
                     // }
 
-
                     nexts = nexts + 1;
                     second_slider = false;
                 } else {
@@ -660,6 +660,7 @@
                 console.log('Phase not recognized: ', phase);
             }
         }
+
 
         // overwrites the set index file in bucket with new index
         function update_hit_number(num) {
@@ -790,23 +791,16 @@
                         } else {
                             data = hit_set.split(",");
                             set_size = parseInt(data.shift());
-                            console.log("SET SIZE: " + set_size)
                             for (var i = 0; i < set_size; i++) { names.push(data.shift()); }
                             num_golden = parseInt(data.shift());
-                            console.log("NUM GOLDEN: " + num_golden);
                             num_repeated = parseInt(data.shift());
-                            console.log("NUM REPEATED: " + num_repeated);
                             repeated_thresh = parseInt(data.shift());
-                            console.log("REPEATED THRESH: " + repeated_thresh);
                             srcc_thresh = parseInt(data.shift());
-                            console.log("SRCC THRESH: " + srcc_thresh);
                             for (var i = 0; i < num_golden; i++) { golden_i.push(parseInt(data.shift())); }
                             for (var i = 0; i < num_golden; i++) { golden_mu.push(parseInt(data.shift())); }
                             for (var i = 0; i < num_golden; i++) { golden_std.push(parseInt(data.shift())); } 
                             for (var i = 0; i < num_repeated; i++) { rep_ind_first.push(parseInt(data.shift())); }
-                            console.log("REPEATED FIRST: " + rep_ind_first);
                             for (var i = 0; i < num_repeated; i++) { rep_ind_second.push(parseInt(data.shift())); }
-                            console.log("REPEATED SECOND: " + rep_ind_second);
                         }
                         update_hit_number(hit_number + 1);
                         document.getElementById('Next_button').style = 'visibility: block';
@@ -906,16 +900,15 @@
 
         // Evaluate whether a subjects should be rejected or not
         function evalRejection(score, rep_idx) {
-            first_idx = rep_ind_first[rep_ind_second.indexOf(rep_idx)];
-            if (Math.abs(score - first_rep_scores[first_idx]) > repeated_thresh) { 
-                phase == 'reject'; 
+                if (Math.abs(score - first_rep_scores[rep_ind_second.indexOf(rep_idx)]) > repeated_thresh) {
+                phase = 'reject'; 
             }
         }
 
         // Evaluates whether a participant is to be flagged for 
         // not meeting srcc thresholds
         function evalFlag() {
-            var eval = orderedGScores();
+            var eval = orderGScores();
             var srcc_val = spearman(eval.gscores_ordered.splice(num_golden,num_golden), 
                                     eval.gmeans_ordered.splice(num_golden,num_golden)
                                     );
@@ -958,6 +951,91 @@
             sum = 0;
             for (let i = 0; i < a.length; i++) { sum+= a[i]; }
             return sum/a.length;
+        }
+        // gets average of one column of a 2D array
+        function colAVG(a,idx) {
+            sum = 0;
+            for(var i = 0; i < a.length; i++) {
+                sum += a[i][idx]
+            }
+            return sum/a.length
+        }
+        
+        
+        // takes care of duplicates within dataset and reorders it by ranking
+        function dup_order(x) {
+            var a = x.slice();
+            a.sort(function(i,j){return i[1]-j[1]});
+            for(var i = 0; i < a.length; i++) { a[i][2] = i; }
+        
+            var dup_num = false;
+            var dup_int = [];
+            var dup_list = [];
+            for(var i = 0; i < a.length; i++) {
+                if(i == a.length-1) {
+                    if(dup_int.length != 0)
+                        dup_list.push(dup_int);
+                    break;
+                }
+                if(dup_num == false) {
+                    if(a[i][1] == a[i+1][1]){
+                        dup_num = true;
+                        dup_int.push(a[i][2]);
+                        dup_int.push(a[i+1][2]);
+                    }
+                }
+                else {
+                    if(a[i][1] == a[i+1][1]) {
+                        dup_int.push(a[i+1][2]);
+                    }
+                    else {
+                        dup_list.push(dup_int);
+                        dup_int = [];
+                        dup_num = false;
+                    }
+                }
+            }
+            a.sort(function(i,j){return i[1]-j[1]});
+            var a_i = Array.from({ length: a.length}, (_,k) => k);
+            for(var i = 0; i < dup_list.length; i++) {
+                dup_avg = getAVG(dup_list[i]);
+                for (var j = 0; j < dup_list[i].length; j++) {
+                    a_i[dup_list[i][j]] = dup_avg;
+                }
+            }
+        
+            for(var i = 0; i < a.length; i++) {
+                a[i][2] = a_i[i]
+            }
+        
+            a.sort(function(i,j){return i[0]-j[0]})
+            return a
+            
+        }
+        //
+        // creates data type that keeps track of [image ID, rating, ranking]
+        function tuple(a) {
+            return Array.from({ length: a.length}, (_,k) => [k,a[k],-1])
+        }
+        // a and b must be arrays of the same length
+        function spearman(a,b) {
+            var a_ord = dup_order(tuple(a))
+            var b_ord = dup_order(tuple(b))
+        
+            var a_bar = colAVG(a_ord,2)
+            var b_bar = colAVG(b_ord,2)
+            
+            var sum_a = 0
+            var sum_b = 0
+            var sum_c = 0
+            for(var i = 0; i < a_ord.length; i++) {
+                var a_diff = a_ord[i][2]-a_bar
+                var b_diff = b_ord[i][2]-b_bar
+                sum_a += a_diff * b_diff
+                sum_b += a_diff * a_diff
+                sum_c += b_diff * b_diff 
+            }
+            return ((sum_a)/Math.sqrt(sum_b*sum_c))
         }
 
 
@@ -1315,7 +1393,7 @@
                         <br>
                         <input class="rads" type="radio" name="opt4"><label></label>
                 </div>
-            
+
             </div>
             
             <div class="not_supported_class">
