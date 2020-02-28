@@ -839,7 +839,7 @@
         // Evaluates whether a participant is to be flagged for 
         // not meeting srcc thresholds
         function evalFlag() {
-            var eval = orderedGScores();
+            var eval = orderGScores();
             var srcc_val = spearman(eval.gscores_ordered.splice(num_golden,num_golden), 
                                     eval.gmeans_ordered.splice(num_golden,num_golden)
                                     );
