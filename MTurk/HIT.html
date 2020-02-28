@@ -844,9 +844,7 @@
         // Evaluate whether a subjects should be rejected or not
         function evalRejection(score, rep_idx) {
             //first_idx = rep_ind_first[rep_ind_second.indexOf(rep_idx)];
-            console.log("THIS IS CURRENT SCORE "+score);
-            console.log("THIS IS OLD SCORE: "+first_rep_scores[rep_ind_second.indexOf(rep_idx)]);
-            if (Math.abs(score - first_rep_scores[rep_ind_second.indexOf(rep_idx)]) > repeated_thresh/2) { 
+            if (Math.abs(score - first_rep_scores[rep_ind_second.indexOf(rep_idx)]) > repeated_thresh) { 
                 phase == 'reject'; 
             }
         }
