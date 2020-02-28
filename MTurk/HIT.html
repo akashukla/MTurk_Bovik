@@ -104,7 +104,7 @@
         first_rep_scores.fill(-1);
         var golden_scores = new Array(num_golden);
         golden_scores.fill(-1);
-
+        var wait_time = 3000;
         var second_slider = false;
         var flag = false;
         var golden_image_study = false;
@@ -202,6 +202,7 @@
             hideClass('begin3_class');
             hideClass('begin4_class');
             hideClass('failed_quiz');
+            disableNext();
             if(supported == true){
                 showClass('begin_class');
                 hideClass('not_supported_class');
@@ -310,8 +311,12 @@
                 return false
         }
         function disableNext(){
-            
-        }
+            $("#Next_button").prop('disabled', true);
+            setTimeout(function(){ 
+                $("#Next_button").prop('disabled', false);
+
+            }, wait_time);
+        };
 
         // runs when "Next" button is pressed
         // note: tutorial_nexts and nexts increment at end of function
@@ -320,19 +325,21 @@
                 document.getElementById('Back_button').style.display = "";
                 hideClass('begin_class');
                 showClass('begin2_class');
+                disableNext();
                 phase = 'begin2_class';
+                
                 window.scrollTo(0,0);
             }   else if (phase === 'begin2_class') {
                 hideClass('begin2_class');
-                //showClass('begin2_class');
                 showClass('begin3_class')
                 phase = 'begin3_class';
+                disableNext();
                 window.scrollTo(0,0);
             } else if (phase === 'begin3_class') {
                 hideClass('begin3_class');
-                //showClass('begin2_class');
                 showClass('begin4_class');
                 phase = 'begin4_class';
+                disableNext();
                 window.scrollTo(0,0);
             } else if (phase === 'begin4_class'){
                 hideClass('begin4_class');
@@ -340,6 +347,7 @@
                 showClass('quiz_class');
                 document.getElementById('Back_button').style.display = "none";
                 phase = 'quiz'; // change to 'quiz' when ready for quiz logic
+                disableNext();
                 window.scrollTo(0,0);
             } else if (phase === 'quiz') {
                 hideClass('quiz_class');
@@ -353,12 +361,14 @@
                         allRadios[i].checked = false;
                     }
                     shuffleArrays();
+                    wait_time *= 2;
                 }
                 document.getElementById('Next_button').click();
                 window.scrollTo(0,0);
             } else if(phase == 'start'){
                 hideClass('failed_quiz');
                 showClass('begin_class');
+                disableNext();
                 phase = 'begin_class';
             }
 
@@ -1445,7 +1455,7 @@
                 <div class='col-3'>
                     <div>
                         <p>
-                            <input style='width: 12em;' type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary" disabled="false"></input>
+                            <input style='width: 12em;' type="button" onclick="setImageb(1)" id='Next_button' value="Next" class="btn btn-primary"></input>
                         </p>
                         <p>
                             <input style='width: 12em;' type="button" onclick="goBack()" id='Back_button' value="Back" class="btn btn-primary"></input>
