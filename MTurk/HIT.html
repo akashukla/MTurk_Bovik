@@ -583,6 +583,20 @@
                         if (rep_ind_second.indexOf(nexts-1) != -1 && !golden_image_study) {
                              evalRejection(second_slider_val, nexts-1); 
                         }
+						
+						if(nexts === names.length){
+							if (!golden_image_study) { srcc_flag.value = evalFlag(); }
+							slider_values.value = slider_vals;
+							slider_values2.value = slider_vals2.substring(slider_vals2.indexOf(',')+1, slider_vals2.length);
+							
+							  
+							hideClass('image_class');
+							hideClass('slider_class');
+							showClass('end_class');
+							document.getElementById('submitButton').style = 'display: block;';
+							document.getElementById('Next_button').style = 'display: none;';
+							return
+						}
 
                     }
                     second_slider = true;
@@ -595,7 +609,7 @@
                     result_image.src = image_src;
                     document.getElementById('Next_button').style = 'visibility: hidden';
                     $("#progressbar").progressbar({
-                        value: (nexts * (100 / names.length)),
+                        value: (nexts * (100 / (names.length - 1))),
                         create: function(event, ui) {
                             $(this).find('.ui-widget-header').css({
                                 'background-color': 'lightskyblue'
@@ -639,20 +653,6 @@
                     // nexts = nexts+1;
                 }
 
-                
-
-                // end screen
-                if (nexts === names.length+1) {
-                    if (!golden_image_study) { srcc_flag.value = evalFlag(); }
-                    slider_values.value = slider_vals;
-                    slider_values2.value = slider_vals2.slice(1,slider_vals2.length);
-                      
-                    hideClass('image_class');
-                    hideClass('slider_class');
-                    showClass('end_class');
-                    document.getElementById('submitButton').style = 'display: block;';
-                    document.getElementById('Next_button').style = 'display: none;';
-                }
 
             }else if (phase == 'failed') {
                 hideClass('image_class');
@@ -922,8 +922,8 @@
             var srcc_val = spearman(eval.gscores_ordered.splice(num_golden,num_golden), 
                                     eval.gmeans_ordered.splice(num_golden,num_golden)
                                     );
-            if (srcc_val < srcc_thresh) { return true; }
-            else { return false; }
+            if (srcc_val < srcc_thresh) { return '1'; }
+            else { return '0'; }
         }
 
 
