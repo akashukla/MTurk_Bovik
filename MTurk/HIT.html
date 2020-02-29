@@ -563,8 +563,15 @@
                     //     document.getElementById('submitButton').style = 'display: block;';
                     //     document.getElementById('Next_button').style = 'display: none;';
                     // }
-
-                    nexts = nexts + 1;
+                    // $("#progressbar").progressbar({
+                    //     value: (nexts * (100 / names.length)),
+                    //     create: function(event, ui) {
+                    //         $(this).find('.ui-widget-header').css({
+                    //             'background-color': 'lightskyblue'
+                    //         })
+                    //     }
+                    // });
+                    // nexts = nexts + 1;
                     second_slider = false;
                 } else {
                     if(first_image !=true){
@@ -608,6 +615,7 @@
                     source_image.src = image_src;
                     result_image.src = image_src;
                     document.getElementById('Next_button').style = 'visibility: hidden';
+
                     $("#progressbar").progressbar({
                         value: (nexts * (100 / (names.length - 1))),
                         create: function(event, ui) {
@@ -616,6 +624,7 @@
                             })
                         }
                     });
+
                     document.getElementById('progress_bar_items').style.textAlign = 'center';
                     document.getElementById("progress_bar_items").style.display = "block";
                     //Slider init
@@ -652,7 +661,6 @@
 
                     // nexts = nexts+1;
                 }
-
 
             }else if (phase == 'failed') {
                 hideClass('image_class');
@@ -801,6 +809,7 @@
                         } else {
                             data = hit_set.split(",");
                             set_size = parseInt(data.shift());
+                            //set_size=3;
                             for (var i = 0; i < set_size; i++) { names.push(data.shift()); }
                             num_golden = parseInt(data.shift());
                             num_repeated = parseInt(data.shift());
