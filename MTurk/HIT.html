@@ -592,7 +592,7 @@
                         }
 						
 						if(nexts === names.length){
-							if (!golden_image_study) { srcc_flag.value = evalFlag(); }
+							if (!golden_image_study) { srcc_fail.value = evalFlag(); }
 							slider_values.value = slider_vals;
 							slider_values2.value = slider_vals2.substring(slider_vals2.indexOf(',')+1, slider_vals2.length);
 							
@@ -1471,7 +1471,7 @@
                             <input style='width: 12em;' type="button" onclick="goBack()" id='Back_button' value="Back" class="btn btn-primary"></input>
                         </p>
                         <crowd-input id='set_number' name='set_number' value='initial' type='hidden' style='display: none;'></crowd-input>
-                        <crowd-input id='srcc_flag' name='srcc_flag' value='initial' type='hidden' style='display: none;'></crowd-input>
+                        <crowd-input id='srcc_fail' name='srcc_fail' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <crowd-input id='slider_values2' name='slider_values2' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <input type="submit" id="submitButton" type='hidden' style='display: none;'>
