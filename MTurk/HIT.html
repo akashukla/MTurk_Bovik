@@ -919,7 +919,7 @@
 
         // Evaluate whether a subjects should be rejected or not
         function evalRejection(score, rep_idx) {
-                if (Math.abs(score - first_rep_scores[rep_ind_second.indexOf(rep_idx)]) > repeated_thresh) {
+                if (Math.abs(score - first_rep_scores[rep_ind_second.indexOf(rep_idx)]) > repeated_thresh/2) {
                 phase = 'reject'; 
             }
         }
@@ -931,7 +931,7 @@
             var srcc_val = spearman(eval.gscores_ordered.splice(num_golden,num_golden), 
                                     eval.gmeans_ordered.splice(num_golden,num_golden)
                                     );
-            if (srcc_val < srcc_thresh) { return '1'; }
+            if (srcc_val < srcc_thresh/2) { return '1'; }
             else { return '0'; }
         }
 
