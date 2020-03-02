@@ -814,7 +814,7 @@
                             num_golden = parseInt(data.shift());
                             num_repeated = parseInt(data.shift());
                             repeated_thresh = parseInt(data.shift());
-                            srcc_thresh = parseInt(data.shift());
+                            srcc_thresh = parseFloat(data.shift());
                             for (var i = 0; i < num_golden; i++) { golden_i.push(parseInt(data.shift())); }
                             for (var i = 0; i < num_golden; i++) { golden_mu.push(parseInt(data.shift())); }
                             for (var i = 0; i < num_golden; i++) { golden_std.push(parseInt(data.shift())); } 
@@ -931,6 +931,7 @@
             var srcc_val = spearman(eval.gscores_ordered.splice(num_golden,num_golden), 
                                     eval.gmeans_ordered.splice(num_golden,num_golden)
                                     );
+            if (Number.isFinite(srcc_val) == false) { return 'fail'; }
             if (srcc_val < srcc_thresh) { return 'fail'; }
             else { return 'pass'; }
         }
