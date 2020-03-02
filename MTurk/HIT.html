@@ -100,8 +100,10 @@
         var srcc_thresh;
         var rep_ind_first = []
         var rep_ind_second = []
-        var first_rep_scores = new Array(num_repeated);       
+        var first_rep_scores = new Array(num_repeated); 
         first_rep_scores.fill(-1);
+		var first_rep_scores1 = new Array(num_repeated);
+		first_rep_scores1.fill(-1);
         var golden_scores = new Array(num_golden);
         golden_scores.fill(-1);
         var wait_time = 3500;
@@ -151,18 +153,18 @@
         ];
 
         var first = [
-            ['\xa0\xa0 the image begins to be enhanced', '69'],
-            ['\xa0\xa0 the image begins to shows first signs of distortion', '420'],
+            ['\xa0\xa0 the image begins to become enhanced', '69'],
+            ['\xa0\xa0 the image begins to show signs of distortion', '420'],
             ['\xa0\xa0 the image begins to become recognizable', '42069']
         ];
         
         var second = [
-            ['\xa0\xa0 the image cannot be enhanced no more', '69'],
+            ['\xa0\xa0 the image can not become enhanced any longer', '69'],
             ['\xa0\xa0 the image has become recognizable', '42069'],
             ['\xa0\xa0 the image quality just begins to be compromised ', '420']
         ];
         var third = [
-            ['\xa0\xa0 quality (i.e how much detail is still preserved in the image)', '42069'],
+            ['\xa0\xa0 quality (i.e how much detail is still preserved)', '42069'],
             ['\xa0\xa0 aesthetics (i.e how good the framing of the image is)', '69'],
             ['\xa0\xa0 content (i.e what is in the image)', '420']
         ];
@@ -575,6 +577,7 @@
                     second_slider = false;
                 } else {
                     if(first_image !=true){
+						var first_slider_val = $("#slider1").slider("value");
                         var second_slider_val = $("#slider2").slider("value");
                         // Second slider value is saved
                         slider_vals2 = slider_vals2 + second_slider_val.toString() + ',';
@@ -585,10 +588,12 @@
                         // For repeated case first instance
                         if (rep_ind_first.indexOf(nexts-1) != -1 && !golden_image_study) {
                              first_rep_scores[rep_ind_first.indexOf(nexts-1)] = second_slider_val;
+							 first_rep_scores1[rep_ind_first.indexOf(nexts-1)] = first_slider_val;
                         }
                         // For repeated case second instance
                         if (rep_ind_second.indexOf(nexts-1) != -1 && !golden_image_study) {
-                             evalRejection(second_slider_val, nexts-1); 
+                             evalRejection(second_slider_val, nexts-1, slider=2); 
+							 evalRejection(first_slider_val, nexts-1, slider=1);
                         }
 						
 						if(nexts === names.length){
@@ -599,7 +604,9 @@
 							  
 							hideClass('image_class');
 							hideClass('slider_class');
+							document.getElementById('progress_bar_items').style.display = 'none';
 							showClass('end_class');
+							
 							document.getElementById('submitButton').style = 'display: block;';
 							document.getElementById('Next_button').style = 'display: none;';
 							return
@@ -666,11 +673,13 @@
                 hideClass('image_class');
                 hideClass('slider_class');
                 showClass('failed_quiz');
+				document.getElementById('progress_bar_items').style.display = 'none';
                 phase = 'start';
 
             }else if (phase == 'reject') {
                 hideClass('image_class');
                 hideClass('slider_class');
+				document.getElementById('progress_bar_items').style.display = 'none';
                 showClass('reject');
                 document.getElementById('Next_button').style = 'display: none;';
 
@@ -918,10 +927,18 @@
          */
 
         // Evaluate whether a subjects should be rejected or not
-        function evalRejection(score, rep_idx) {
+        function evalRejection(score, rep_idx, slider) {
+			if (slider == 2) {
                 if (Math.abs(score - first_rep_scores[rep_ind_second.indexOf(rep_idx)]) > repeated_thresh/2) {
-                phase = 'reject'; 
-            }
+					phase = 'reject'; 
+				}
+			} else if (slider == 1) {
+				if (Math.abs(score - first_rep_scores1[rep_ind_second.indexOf(rep_idx)]) > repeated_thresh/2) {
+					phase = 'reject'; 
+				}
+			} else {
+				console.log('Error in evalRejection, did not recognize "slider" param');
+			}
         }
 
         // Evaluates whether a participant is to be flagged for 
@@ -1517,7 +1534,8 @@
             </div>
 
             <div class="reject" style="display: none;">
-                <p id="reject_subject">Sorry, we are unable to collect your data because of failure to pass our quality checks! Please click "Return". </p>
+                <p id="reject_subject">Sorry, we are unable to collect your data because you failed to pass our 
+				quality checks! Please click "Return" at the top or bottom right of the page to return this HIT. </p>
             </div>
             <div class="failed_quiz" style="display: none;">
                 <p id="failed_subject">Pay more attention! Please read the instructions again. </p>
@@ -1525,10 +1543,10 @@
 
 
             <div class="end_class">
-                <p id="task_complete">Task complete! Please click "Submit".</p>
+                <p id="task_complete">Thank you for completing our task! Please click "Submit".</p>
             </div>
             <!-- <div  class="progress" id = "progress_class" > -->
-            <div id="progress_bar_items" style="display: none;">
+            <div class="progress_bar_class" id="progress_bar_items" style="display: none;">
                 <div id="progressbar" style="height: 20px;display: inline-block;"></div>
                 <br>
             </div>
