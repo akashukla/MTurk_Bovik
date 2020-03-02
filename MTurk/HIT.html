@@ -931,8 +931,8 @@
             var srcc_val = spearman(eval.gscores_ordered.splice(num_golden,num_golden), 
                                     eval.gmeans_ordered.splice(num_golden,num_golden)
                                     );
-            if (srcc_val < srcc_thresh/2) { return '1'; }
-            else { return '0'; }
+            if (srcc_val < srcc_thresh) { return 'fail'; }
+            else { return 'pass'; }
         }
 
 
