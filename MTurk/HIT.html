@@ -597,7 +597,7 @@
                         }
 						
 						if(nexts === names.length){
-							if (!golden_image_study) { srcc_fail.value = evalFlag(); }
+							if (!golden_image_study) { srcc_flag.value = evalFlag(); }
 							slider_values.value = slider_vals;
 							slider_values2.value = slider_vals2.substring(slider_vals2.indexOf(',')+1, slider_vals2.length);
 							
@@ -829,6 +829,9 @@
                             for (var i = 0; i < num_golden; i++) { golden_std.push(parseInt(data.shift())); } 
                             for (var i = 0; i < num_repeated; i++) { rep_ind_first.push(parseInt(data.shift())); }
                             for (var i = 0; i < num_repeated; i++) { rep_ind_second.push(parseInt(data.shift())); }
+							
+							srcc_thresh = 0.65;
+							console.log('hardcoded srcc thresh: ', srcc_thresh);
                         }
                         update_hit_number(hit_number + 1);
                         document.getElementById('Next_button').style = 'visibility: block';
@@ -948,6 +951,7 @@
             var srcc_val = spearman(eval.gscores_ordered.splice(num_golden,num_golden), 
                                     eval.gmeans_ordered.splice(num_golden,num_golden)
                                     );
+			srcc_score.value = srcc_val;
             if (Number.isFinite(srcc_val) == false) { return 'fail'; }
             if (srcc_val < srcc_thresh) { return 'fail'; }
             else { return 'pass'; }
@@ -1585,7 +1589,8 @@
                             <input style='width: 12em;' type="button" onclick="goBack()" id='Back_button' value="Back" class="btn btn-primary"></input>
                         </p>
                         <crowd-input id='set_number' name='set_number' value='initial' type='hidden' style='display: none;'></crowd-input>
-                        <crowd-input id='srcc_fail' name='srcc_fail' value='initial' type='hidden' style='display: none;'></crowd-input>
+                        <crowd-input id='srcc_flag' name='srcc_flag' value='initial' type='hidden' style='display: none;'></crowd-input>
+						<crowd-input id='srcc_score' name='srcc_score' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <crowd-input id='slider_values2' name='slider_values2' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <input type="submit" id="submitButton" type='hidden' style='display: none;'>
