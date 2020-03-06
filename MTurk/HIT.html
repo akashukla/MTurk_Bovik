@@ -106,7 +106,7 @@
 		first_rep_scores1.fill(-1);
         var golden_scores = new Array(num_golden);
         golden_scores.fill(-1);
-        var wait_time = 3500;
+        var wait_time = 0;//3500;
         var second_slider = false;
         var flag = false;
         var golden_image_study = false;
@@ -494,6 +494,8 @@
 
             // if showing non-tutorial images
             else if (phase === 'study') {
+                console.log(slider_vals);
+                console.log(slider_vals2);
 
                 // normal operation 
                 if (first_image === false) {
@@ -1098,12 +1100,41 @@
             return result_image_obj;
         };
 
-        function findVAR(input){
+        function find_variance(input,start_index,end_index){
+            if(input.length == 0){return 0.0;}
+            var input_to_arr = [];
+            var input_arr_to_float = [];
+           
+            input_to_arr = input.split(',').slice(0,input.split(',').length-1); 
+                        //slider_vals.split(',').slice(0,slider_vals.split(',').length-1)
+
+            input.forEach(element => {
+                input_to_double.push(parseFloat(element))
+            });
+
+            input_to_double = input_to_double.splice(start_index,end_index+1);
+
             
+            var mean = 0.0;
+            var total = 0.0;
+            for(val in input_to_double){
+                total += val;
+            }
+            mean = total/input_to_double.length;
+
+            var squared_diff_total = 0.0
+            for(val in input_to_double){
+                var diff = mean - val;
+                squared_diff_total += (dif ** 2);
+            }
+
+            return squared_diff_total/input_to_double.length;
         }
 
-        function findSTD(input){
-
+        function find_std(input,start_index,end_index){
+            if(input.length == 0){return 0;}
+            var variance = findVAR(input,start_index,end_index);
+            return (variance ** .5);
         }
 
         function toDataURL(url, callback) {
