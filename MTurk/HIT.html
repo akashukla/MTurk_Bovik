@@ -374,6 +374,15 @@
                 disableNext();
                 phase = 'begin_class';
             }
+            // else if(phase == 'get_set'){
+            //     // hideClass('failed_quiz');
+            //     // showClass('begin_class');
+            //     // disableNext();
+            //     get_set();
+            //     slider_vals='';
+            //     slider_vals2='';
+            //     phase = 'study';
+            // }
 
 
             // if showing tutorial
@@ -388,6 +397,7 @@
                     hideClass('tutorial_text_class');
                     phase = 'study';
                     second_slider = false;
+
                     get_set();
 
                     // if showing a tutorial image
@@ -451,6 +461,8 @@
                         $("#jpeg_encode_quality").val($("#slider2").slider("value"));
                         tutorial_nexts = tutorial_nexts + 1;
                         second_slider = false;
+                        // slider_vals='';
+                        // slider_vals2='';
 
                     } else {
 
@@ -487,6 +499,8 @@
                         // console.log(document.getElementById('slider2'));//.setAttribute("disabled", "disabled");
                         // tutorial_nexts = tutorial_nexts+1;
                         second_slider = true;
+                        // slider_vals='';
+                        // slider_vals2='';
                     }
                 }
                 //setTimeout(1000);
@@ -499,18 +513,24 @@
 
                 // normal operation 
                 if (first_image === false) {
+                    console.log('first image');
                     // slider_vals = slider_vals + $("#slider").slider("value").toString() + ',';
                     // slider_vals = slider_vals + $("#slider2").slider("value").toString() + ',';
-                    // only runs when transitioning from 'end of tutorial' screen to 'actual study' screen    
+                    // only runs when transitioning from 'end of tutorial' screen to 'actual study' screen  
+                    // slider_vals='';
+                    // slider_vals2=''; 
                 } else {
-                    first_image = false;
+                    console.log('FIRST image');
+                    slider_vals='';
+                    slider_vals2='';  
+                    //first_image = false;
                     hideClass('tutorial_complete_class');
                     showClass('image_class');
                     showClass('slider_class');
                 }
 
                 if (second_slider == true) {
-                    console.log($('#slider').val());
+                   // console.log($('#slider').val());
                     if(first_image != true){
                          slider_vals = slider_vals + $("#slider").slider("value").toString() + ',';
                     }
@@ -576,14 +596,19 @@
                     //         })
                     //     }
                     // });
+                    
+                    //console.log(standard_dev);
                     nexts = nexts + 1;
                     second_slider = false;
-                } else {
+                } else { //this section is run whenever image changes
                     if(first_image !=true){
+                        console.log('WOWOWO');
 						var first_slider_val = $("#slider1").slider("value");
                         var second_slider_val = $("#slider2").slider("value");
+                        
                         // Second slider value is saved
                         slider_vals2 = slider_vals2 + second_slider_val.toString() + ',';
+                        
                         // For golden case
                         if (golden_i.indexOf(nexts-1) != -1 && !golden_image_study) {
                             golden_scores[golden_i.indexOf(nexts-1)] = second_slider_val;
@@ -602,7 +627,7 @@
 						if(nexts === names.length){
 							if (!golden_image_study) { srcc_fail.value = evalFlag(); }
 							slider_values.value = slider_vals;
-							slider_values2.value = slider_vals2.substring(slider_vals2.indexOf(',')+1, slider_vals2.length);
+							slider_values2.value = slider_vals2;//.substring(slider_vals2.indexOf(',')+1, slider_vals2.length);
 							
 							  
 							hideClass('image_class');
@@ -614,9 +639,21 @@
 							document.getElementById('Next_button').style = 'display: none;';
 							return
 						}
+                        
 
                     }
                     second_slider = true;
+                    
+                    var standard_dev = find_std(slider_vals,0,slider_vals.length);
+                    var standard_dev2 = find_std(slider_vals2,0,slider_vals.length);
+
+                    console.log('standard_dev', standard_dev);
+                    console.log('standard dev2', standard_dev2);
+
+
+                    
+
+
                     // updating image
                     document.getElementById('result_image').crossOrigin = 'anonymous';
                     document.getElementById('source_image').crossOrigin = 'anonymous';
@@ -658,7 +695,7 @@
                     });
                     document.getElementById('slider2').style.width = document.getElementById('slider').style.width;
                     // $("#jpeg_encode_quality").val($("#slider2").slider("value"));
-
+                    first_image=false;
                     // end screen
                     // if(nexts === names.length){ 
                     //     slider_values.value = slider_vals;
@@ -787,7 +824,8 @@
                     url: proxy_url + hit_data_url,
                     dataType: "text",
                     success: function(response) {
-
+                        slider_vals='';
+                        slider_vals2=''
                         var set_number = document.getElementById("set_number"); // the element that will export the set number in the results csv
                         set_number.value = hit_number;
                         hit_sets = $.csv.toArrays(response);
@@ -833,6 +871,7 @@
                             for (var i = 0; i < num_repeated; i++) { rep_ind_first.push(parseInt(data.shift())); }
                             for (var i = 0; i < num_repeated; i++) { rep_ind_second.push(parseInt(data.shift())); }
                         }
+                        first_image=true;
                         update_hit_number(hit_number + 1);
                         document.getElementById('Next_button').style = 'visibility: block';
                     }
@@ -1099,42 +1138,51 @@
             result_image_obj.src = newImageData;
             return result_image_obj;
         };
-
+//window size =15
+//step = 5
         function find_variance(input,start_index,end_index){
             if(input.length == 0){return 0.0;}
             var input_to_arr = [];
-            var input_arr_to_float = [];
+            var input_to_double = [];
            
-            input_to_arr = input.split(',').slice(0,input.split(',').length-1); 
+            input_to_arr = input.split(',');
+            //console.log('inputtoarr',input_to_arr);
+            input_to_arr = input_to_arr.slice(0,input.split(',').length-1); 
                         //slider_vals.split(',').slice(0,slider_vals.split(',').length-1)
-
-            input.forEach(element => {
-                input_to_double.push(parseFloat(element))
+            //console.log('inputtoarr after slice',input_to_arr);
+            input_to_arr.forEach(element => {
+                input_to_double.push(+(parseFloat(element).toFixed(2)));
             });
-
+            //console.log('input double',input_to_double);
             input_to_double = input_to_double.splice(start_index,end_index+1);
-
+            //console.log('input double',input_to_double);
             
             var mean = 0.0;
             var total = 0.0;
-            for(val in input_to_double){
-                total += val;
+            for(var i=0;i<input_to_double.length;i++){
+                //console.log('val',input_to_double[i]);
+                total += input_to_double[i];
+                //console.log('totoal',total);
             }
             mean = total/input_to_double.length;
 
-            var squared_diff_total = 0.0
-            for(val in input_to_double){
-                var diff = mean - val;
-                squared_diff_total += (dif ** 2);
-            }
+            //console.log('mean',mean);
 
-            return squared_diff_total/input_to_double.length;
+            var squared_diff_total = 0.0
+            for(var i=0;i<input_to_double.length;i++){
+                val = input_to_double[i];
+                var diff = mean - val;
+                squared_diff_total += (diff ** 2);
+            }
+            var vari = +((squared_diff_total/(input_to_double.length)).toFixed(2));
+            console.log('variance',vari);
+            return vari;
         }
 
         function find_std(input,start_index,end_index){
-            if(input.length == 0){return 0;}
-            var variance = findVAR(input,start_index,end_index);
-            return (variance ** .5);
+            if(input.length == 0){return 0.0;}
+            var variance = find_variance(input,start_index,end_index);
+            return +((variance ** .5).toFixed(2));//round to 2 decimal places dont ask how this works it just does because javascript and i dont want to explain
         }
 
         function toDataURL(url, callback) {
