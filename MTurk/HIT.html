@@ -635,7 +635,6 @@
 						
 						if(nexts === names.length){
 							if (!golden_image_study) { srcc_fail.value = evalFlag(); }
-							srcc_score.value = srcc_val;
 							slider_values.value = slider_vals;
 							slider_values2.value = slider_vals2;//.substring(slider_vals2.indexOf(',')+1, slider_vals2.length);
 							quiz_attempts_csv.value = quiz_attempts;
@@ -1030,6 +1029,7 @@
             var srcc_val = spearman(eval.gscores_ordered.splice(num_golden,num_golden), 
                                     eval.gmeans_ordered.splice(num_golden,num_golden)
                                     );
+			srcc_score.value = srcc_val;
             if (Number.isFinite(srcc_val) == false) { return 'fail'; }
             if (srcc_val < srcc_thresh) { return 'fail'; }
             else { return 'pass'; }
