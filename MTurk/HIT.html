@@ -86,6 +86,7 @@
         }
     </style>
     <script>
+        var STD_check = .75;
         var study_second_slider_checker = false;
         var golden_i = [];
         var golden_mu = [];
@@ -124,7 +125,11 @@
         var hit_sets;
         var hit_number;
         var slider_vals = '';
-        var slider_vals2 = ''
+        var slider_vals2 = '';
+        var window_size = 15;
+        var window_shift = 5;
+        var slider1_window_stds = [];
+        var slider2_window_stds = [];
         var phase = 'begin_class';//var phase = 'beginning';
         var tutorial_names = ['AVA__809598.jpg', 'EMOTIC__COCO_train2014_000000154329.jpg', 'EMOTIC__COCO_train2014_000000128826.jpg'] // 'EMOTIC__COCO_train2014_000000104079.jpg', 
         var golden_names = ['AVA__20278.jpg', 'EMOTIC__4wl5mafxcb0nacmnzr.jpg', 'EMOTIC__COCO_train2014_000000571644.jpg',
@@ -631,11 +636,25 @@
                     }
                     second_slider = true;
                     
-                    var standard_dev = find_std(slider_vals,0,slider_vals.length);
-                    var standard_dev2 = find_std(slider_vals2,0,slider_vals.length);
+                    if(nexts == window_size){
+                        console.log('nexts',nexts);
+                        var standard_dev = find_std(slider_vals,(nexts + 1 - window_size),window_size);
+                        slider1_window_stds.push(standard_dev);
+                        console.log('standard_dev',standard_dev);
 
-                    console.log('standard_dev', standard_dev);
-                    console.log('standard dev2', standard_dev2);
+                        var standard_dev2 = find_std(slider_vals2,(nexts + 1 - window_size),window_size);
+                        slider2_window_stds.push(standard_dev2);
+                        window_size = window_size + window_shift
+                        console.log('standard_dev2',standard_dev2);
+
+                        if(standard_dev < STD_check || standard_dev2 < STD_check){
+                            phase = 'reject';
+
+                        }
+
+                    }
+                    // console.log('standard_dev', standard_dev);
+                    // console.log('standard dev2', standard_dev2);
 
 
                     
@@ -1134,7 +1153,7 @@
            
             input_to_arr = input.split(',');
             //console.log('inputtoarr',input_to_arr);
-            input_to_arr = input_to_arr.slice(0,input.split(',').length-1); 
+            input_to_arr = input_to_arr.slice(0,input.split(',').length-1); //dont want comma
                         //slider_vals.split(',').slice(0,slider_vals.split(',').length-1)
             //console.log('inputtoarr after slice',input_to_arr);
             input_to_arr.forEach(element => {
