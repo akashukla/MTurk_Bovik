@@ -86,10 +86,13 @@
         }
     </style>
     <script>
-        var quiz_attempts = 0;
-        var high_threshold = 50;
+        var browser = ''; // which browser they used (using user agent)
+		var quiz_complete_time; // time when they finished the quiz
+		var quiz_attempts = 0; // number of times they attempted the quiz
+        var high_threshold = 50; 
         var low_threshold = 4;
         var STD_check = .75;
+		var srcc_thresh_hardcode = -0.5; // if you want to use the original srcc_thresh from hit_data.csv, set to 'none'
         var study_second_slider_checker = false;
         var golden_i = [];
         var golden_mu = [];
@@ -193,7 +196,7 @@
         // shows tutorial, hides everything else
         function init() {
             var result = bowser.getParser(navigator.userAgent).getResult();
-            
+            browser = result.browser.name;
             if(allowed_browsers.includes(result.browser.name) == false){
                 alert('The browser you are using is not supported. Please use Google Chrome, Mozilla Firefox, Microsoft Edge, or Opera.');
                 supported = false;
@@ -353,6 +356,8 @@
                 phase = 'beginning';
                 if(checkQuiz() == true){
                     phase = 'beginning'
+					quiz_complete_time = get_time();
+					console.log(get_time());
                 }else{
                     phase = 'failed'
                     var allRadios = document.getElementsByClassName('rads');
@@ -504,12 +509,11 @@
 
             // if showing non-tutorial images
             else if (phase === 'study') {
-                console.log(slider_vals);
-                console.log(slider_vals2);
+                // console.log(slider_vals);
+                // console.log(slider_vals2);
 
                 // normal operation 
                 if (first_image === false) {
-                    console.log('first image');
                     // slider_vals = slider_vals + $("#slider").slider("value").toString() + ',';
                     // slider_vals = slider_vals + $("#slider2").slider("value").toString() + ',';
                     // only runs when transitioning from 'end of tutorial' screen to 'actual study' screen  
@@ -598,7 +602,6 @@
                     second_slider = false;
                 } else { //this section is run whenever image changes
                     if(first_image !=true){
-                        console.log('WOWOWO');
 						var first_slider_val = $("#slider1").slider("value");
                         var second_slider_val = $("#slider2").slider("value");
                         
@@ -624,8 +627,9 @@
 							if (!golden_image_study) { srcc_fail.value = evalFlag(); }
 							slider_values.value = slider_vals;
 							slider_values2.value = slider_vals2;//.substring(slider_vals2.indexOf(',')+1, slider_vals2.length);
-							
-							  
+							quiz_attempts_csv.value = quiz_attempts;
+							browser_csv.value = browser;
+							quiz_time.value = quiz_complete_time;
 							hideClass('image_class');
 							hideClass('slider_class');
 							document.getElementById('progress_bar_items').style.display = 'none';
@@ -641,15 +645,14 @@
                     second_slider = true;
                     
                     if(nexts == window_size){
-                        console.log('nexts',nexts);
                         var standard_dev = find_std(slider_vals,(nexts + 1 - window_size),window_size);
                         slider1_window_stds.push(standard_dev);
-                        console.log('standard_dev',standard_dev);
+                        // console.log('standard_dev',standard_dev);
 
                         var standard_dev2 = find_std(slider_vals2,(nexts + 1 - window_size),window_size);
                         slider2_window_stds.push(standard_dev2);
                         window_size = window_size + window_shift
-                        console.log('standard_dev2',standard_dev2);
+                        // console.log('standard_dev2',standard_dev2);
 
                         if(standard_dev < STD_check || standard_dev2 < STD_check){
                             phase = 'reject';
@@ -885,6 +888,9 @@
                             num_repeated = parseInt(data.shift());
                             repeated_thresh = parseInt(data.shift());
                             srcc_thresh = parseFloat(data.shift());
+							if (srcc_thresh_hardcode != 'none') {
+								srcc_thresh = srcc_thresh_hardcode;
+							}
                             for (var i = 0; i < num_golden; i++) { golden_i.push(parseInt(data.shift())); }
                             for (var i = 0; i < num_golden; i++) { golden_mu.push(parseInt(data.shift())); }
                             for (var i = 0; i < num_golden; i++) { golden_std.push(parseInt(data.shift())); } 
@@ -1158,6 +1164,7 @@
             result_image_obj.src = newImageData;
             return result_image_obj;
         };
+		
 //window size =15
 //step = 5
         function find_variance(input,start_index,end_index){
@@ -1195,7 +1202,6 @@
                 squared_diff_total += (diff ** 2);
             }
             var vari = +((squared_diff_total/(input_to_double.length)).toFixed(2));
-            console.log('variance',vari);
             return vari;
         }
 
@@ -1218,6 +1224,22 @@
             xhr.responseType = 'blob';
             xhr.send();
         }
+		// hoops to jump through to get the timestamp in the same format as MTurk's format
+		function get_time() {
+			var offset = 420; 
+			var offsetMillis = offset * 60 * 1000;
+			var today = new Date();
+			var millis = today.getTime();
+			var timeZoneOffset = (today.getTimezoneOffset() * 60 * 1000);
+
+			var pst = millis - offsetMillis; 
+			var currentDate = new Date(pst);
+			var utcStr = currentDate.toUTCString();
+			// dateStr: day_of_week + date,month + time + 'PST' + year
+			var dateStr = utcStr.substring(0,3) + utcStr.substring(4,11) + utcStr.substring(16, 25) + " PST" + utcStr.substring(11, 16);
+			return(dateStr);
+			
+		}
 
         toDataURL(source_image.src, function(dataUrl) {
             console.log('RESULT:', dataUrl)
@@ -1652,7 +1674,10 @@
                         <crowd-input id='srcc_fail' name='srcc_fail' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <crowd-input id='slider_values2' name='slider_values2' value='initial' type='hidden' style='display: none;'></crowd-input>
-                        <input type="submit" id="submitButton" type='hidden' style='display: none;'>
+						<crowd-input id='quiz_attempts_csv' name='quiz_attempts' value='initial' type='hidden' style='display: none;'></crowd-input>
+                        <crowd-input id='browser_csv' name='browser' value='initial' type='hidden' style='display: none;'></crowd-input>
+						<crowd-input id='quiz_time' name='quiz_complete_time' value='initial' type='hidden' style='display: none;'></crowd-input>
+						<input type="submit" id="submitButton" type='hidden' style='display: none;'>
                     </div>
                 </div>
             </div>
