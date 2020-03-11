@@ -86,6 +86,7 @@
         }
     </style>
     <script>
+        var quiz_attempts = 0;
         var high_threshold = 50;
         var low_threshold = 4;
         var STD_check = .75;
@@ -347,6 +348,7 @@
                 disableNext();
                 window.scrollTo(0,0);
             } else if (phase === 'quiz') {
+                quiz_attempts = quiz_attempts+1;
                 hideClass('quiz_class');
                 phase = 'beginning';
                 if(checkQuiz() == true){
