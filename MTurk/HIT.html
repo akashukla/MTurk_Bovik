@@ -635,6 +635,7 @@
 						
 						if(nexts === names.length){
 							if (!golden_image_study) { srcc_fail.value = evalFlag(); }
+							srcc_score.value = srcc_val;
 							slider_values.value = slider_vals;
 							slider_values2.value = slider_vals2;//.substring(slider_vals2.indexOf(',')+1, slider_vals2.length);
 							quiz_attempts_csv.value = quiz_attempts;
@@ -649,8 +650,6 @@
 							document.getElementById('Next_button').style = 'display: none;';
 							return
 						}
-                        
-
                     }
                     second_slider = true;
                     
@@ -1687,6 +1686,7 @@
                         </p>
                         <crowd-input id='set_number' name='set_number' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <crowd-input id='srcc_fail' name='srcc_fail' value='initial' type='hidden' style='display: none;'></crowd-input>
+						<crowd-input id='srcc_score' name='srcc_score' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <crowd-input id='slider_values' name='slider_values' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <crowd-input id='slider_values2' name='slider_values2' value='initial' type='hidden' style='display: none;'></crowd-input>
 						<crowd-input id='quiz_attempts_csv' name='quiz_attempts' value='initial' type='hidden' style='display: none;'></crowd-input>
