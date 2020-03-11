@@ -86,6 +86,8 @@
         }
     </style>
     <script>
+        var high_threshold = 50;
+        var low_threshold = 4;
         var STD_check = .75;
         var study_second_slider_checker = false;
         var golden_i = [];
@@ -663,6 +665,16 @@
                         if(standard_dev < STD_check || standard_dev2 < STD_check){
                             phase = 'reject';
 
+                        }
+
+                        if(slider_vals.includes(high_threshold) || slider_vals2.includes(high_threshold)){
+                            phase = 'reject';
+                        }
+
+                        for(var i=0;i<parseInt(low_threshold);i++){
+                            if(slider_vals.includes(i.toString()) || slider_vals2.includes(i.toString())){
+                                phase = 'reject';
+                            }
                         }
 
                     }
