@@ -620,6 +620,12 @@
                         // For golden case
                         if (golden_i.indexOf(nexts-1) != -1 && !golden_image_study) {
                             golden_scores[golden_i.indexOf(nexts-1)] = second_slider_val;
+							if (Math.max(...golden_i) == (nexts-1)) { 
+								srcc_fail.value = evalFlag(); 
+								if (srcc_fail.value == 'fail'){
+									phase = 'reject';
+								}
+							} 
                         }
                         // For repeated case first instance
 						console.log('nexts: ', nexts);
@@ -634,7 +640,8 @@
                         }
 						
 						if(nexts === names.length){
-							if (!golden_image_study) { srcc_fail.value = evalFlag(); }
+							// moved srcc check to point where second slider saved for last golden image
+							// if (!golden_image_study) { srcc_fail.value = evalFlag();}
 							slider_values.value = slider_vals;
 							slider_values2.value = slider_vals2;//.substring(slider_vals2.indexOf(',')+1, slider_vals2.length);
 							quiz_attempts_csv.value = quiz_attempts;
@@ -908,6 +915,7 @@
 							console.log('rep_ind_first: ', rep_ind_first);
 							console.log('rep_ind_second: ', rep_ind_second);
 							console.log('golden_i: ', golden_i);
+							console.log(Math.max(...golden_i));
 							console.log('golden_mu: ', golden_mu);
                         }
                         first_image=true;
