@@ -628,7 +628,6 @@
 							} 
                         }
                         // For repeated case first instance
-						console.log('nexts: ', nexts);
                         if (rep_ind_first.indexOf(nexts-1) != -1 && !golden_image_study) {
                              first_rep_scores[rep_ind_first.indexOf(nexts-1)] = second_slider_val;
 							 first_rep_scores1[rep_ind_first.indexOf(nexts-1)] = first_slider_val;
@@ -912,11 +911,11 @@
                             for (var i = 0; i < num_golden; i++) { golden_std.push(parseInt(data.shift())); } 
                             for (var i = 0; i < num_repeated; i++) { rep_ind_first.push(parseInt(data.shift())); }
                             for (var i = 0; i < num_repeated; i++) { rep_ind_second.push(parseInt(data.shift())); }
-							console.log('rep_ind_first: ', rep_ind_first);
-							console.log('rep_ind_second: ', rep_ind_second);
-							console.log('golden_i: ', golden_i);
-							console.log(Math.max(...golden_i));
-							console.log('golden_mu: ', golden_mu);
+							// console.log('rep_ind_first: ', rep_ind_first);
+							// console.log('rep_ind_second: ', rep_ind_second);
+							// console.log('golden_i: ', golden_i);
+							// console.log(Math.max(...golden_i));
+							// console.log('golden_mu: ', golden_mu);
                         }
                         first_image=true;
                         update_hit_number(hit_number + 1);
