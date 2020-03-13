@@ -1282,161 +1282,145 @@
             <crowd-instructions style="display: none;" link-text="View instructions" link-type="button" id="crowd-instr">
                 <br>
                 <short-summary>
+					<br>
+					<h2>Instructions:</h2>
+					<p>
+						You will be shown a series of images with <u>two</u> slider bars underneath each
+						image. Each slider bar controls the quality of the image.
+						<div>
+							<ol style="width: 40em;display: inline-block;text-align: left;">
+								<li>Use the first slider bar to indicate the point furthest to the left where
+									the image still looks identical to the original image.</li>
+									<br>
+								<li>Use the second slider to indicate the point where you notice a decrease in quality of the resulting image.</li>
+							</ol>
+						</div>
 
-                <h2>Instructions:</h2>
-                <p>
-                    In our task, you will be shown a series of images with two slider bars underneath each
-                    image. Each slider bar controls the quality of the image by way of compression. For each
-                    image, please use the first slider bar to indicate the point furthest to the left where
-                    the resulting compressed image looks identical to the original image. Then, please use 
-                    the second slider to indicate the point right before the resulting image becomes 
-                    different enough from the original image to cause a slight drop in image quality.
-                    <br>
-                    <br>
-                    The highest quality value is 50, and the lowest quality value is 0. Moving the sliders to the left will decrease 
-                    the quality of the image. Each slider should be moved to its particular point, which will 
-                    be explained in more detail in later pages in the instructions. 
-                    The first slider will be the only one active until a value is selected and the "next" button is pressed. 
-                    Then, the first slider will be disabled and the second slider will be activated.
-                    After a value is chosen for the second slider, click "next" to proceed to the next image. 
-                    <br>
-                    <br>
-                    Please read the instructions on the next few pages carefully! There will be a <b>short quiz</b> 
-                    at the end of the instructions to make sure you understand how to complete our task. Once you
-                    have passed the quiz and started the task, the instructions will always be available to you.
-                    <br>
-                    <br>
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/complete.gif"> 
-                    <!-- gif of both sliders in action -->
-                </p> 
+						<br>
+						Notice that 1. and 2. are not the same. The highest quality value is 50, and the lowest quality value is 0. Moving the sliders to the left will decrease 
+						the quality of the image.
+						The first slider will be the only one active until a value is selected and the "next" button is pressed. 
+						Then, the second slider will be activated.
+						After a value is chosen for the second slider, click "next" to proceed to the next image. 
+						<br>
+						<br>
+						Please read the instructions carefully! There will be a <b>short quiz</b> 
+						at the end to make sure you understand how to complete the task. Once you
+						have started the task, the instructions will always be available to you.
+						<br>
+						<br>
+						We appreciate you taking the time to complete this study.
+						<br>
+						<br>
+						<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/complete_new.gif"> 
+						<!-- gif of both sliders in action -->
+					</p> 
                 </short-summary>
 
                 <detailed-instructions>
    
                     <p>
-                        <h3>First Slider</h3>
-                        For the first slider bar, adjust the slider and try to find the point <b>furthest to the left where the
-                        image still looks identical to the original image</b>. In other words, try to find the point right before 
-                        any distortion, or change between the resulting and original image, becomes noticeable. Below 
-                        are one good example and two bad examples. 
-                        <br>
-                        <br>
-                        <h5>Good Example</h5>
-                        In the good example shown below, the slider is moved as far to the left as possible without causing any noticeable changes
-                        in the image. Moving the slider any more to the left will cause a distortion in the resulting image, while moving the slider
-                        to any point to the right of the current position will result in an image that looks the same as the original.
-                        In particular, moving the slider any more to the left causes changes that can be seen in the 
-                        cat's fur and in the blanket.
-                        <br>
-                        <br>
-                        <!-- gif of good first slider, gif of first slider moving to point of first distortion and then pressing next -->
-                        <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/good1_full.gif"> 
-                        <br>    
-                        <br>
-                        <br>
-                        <h5>Bad Example 1</h5>
-                        In this first bad example, the slider is not moved enough to the left. 
-                        <br>
-                        <br>
-                        <!-- first slider at 50,  then compressed a little--> 
-                        <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/too_high_1.gif"> 
-                        <br>
-                        <br>
-                        The resulting image looks identical to the original image, even after moving the slider 
-                        a bit more to the left. This means that you should move the slider more to the left, since
-                        the first slider should be moved as far to the left as possible while the resulting compressed
-                        image still looks identical to the original image. 
-                        <br>
-                        <br>
-                        <!-- continuing from prev gif, first slider moves from "compressed a little" point to point of first distortion--> 
-                        <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/too_high_2.gif"> 
-                        <br>
-                        <br>
-                        <h5>Bad Example 2</h5>
-                        In the second bad example, the slider is moved too far to the left. The resulting image already 
-                        looks different than the original image before reaching this compression (slider) value.
-                        <br>
-                        <br>
-                        <!-- gif of first slider moving from 50 to point where image heavily distorted--> 
-                        <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/too_low_1.gif"> 
-                        <br>
-                        <br>
-                        The slider is too far to the left and should be moved to the right to a higher quality, where the resulting compressed 
-                        image looks exactly like the original image.
-                        <br>
-                        <br>
-                        <!-- continuing from prev gif, first slider moves from "compressed too much" to point of first distortion-->  
-                        <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/too_low_2.gif"> 
-                    </p>
+						<h3>First Slider</h3>
+						Using the first slider bar, try to find the point <b>right where 
+						any change becomes noticeable</b>. In other words, try to find the point 
+						<u>furthest to the left</u> where the image still looks identical to the original image. Below 
+						are one good example and two bad examples. 
+						<br>
+						<br>
+						<h5><font color="green">GOOD</font> Example</h5>
+						In the good example shown below, the slider is moved as far to the left as possible without causing any noticeable changes.
+						For example, moving the slider further left causes changes in the cat's fur and in the blanket.
+						<br>
+						<br>
+						<!-- gif of good first slider, gif of first slider moving to point of first distortion and then pressing next -->
+						<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/firstGood.gif"> 
+						<br>    
+						<br>
+						<br>
+						<h5><font color="red">BAD</font> Example 1</h5>
+						In this first bad example, the slider is not moved enough to the left. 
+						<br>
+						<br>
+						<!-- first slider at 50,  then compressed a little--> 
+						<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/firstBad11.gif"> 
+						<br>
+						<br>
+						The resulting image looks identical to the original image. This means that you should move the slider more to the left.
+						<br>
+						<br>
+						<!-- continuing from prev gif, first slider moves from "compressed a little" point to point of first distortion--> 
+						<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/firstBad12.gif"> 
+						<br>
+						<br>
+						<h5><font color="red">BAD</font> Example 2</h5>
+						In the second bad example, the slider is moved too far to the left. The resulting image already 
+						looked different before reaching this slider value.
+						<br>
+						<br>
+						<!-- gif of first slider moving from 50 to point where image heavily distorted--> 
+						<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/firstBad21.gif"> 
+						<br>
+						<br>
+						The slider is too far to the left and should be moved to the right to the point where the resulting 
+						image looks exactly like the original image.
+						<br>
+						<br>
+						<!-- continuing from prev gif, first slider moves from "compressed too much" to point of first distortion-->  
+						<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/firstBad22.gif"> 
+					</p>
 
-                <p>
-                    <!-- SECOND SLIDER INSTRUCTIONS -->
-                    <h3>Second Slider</h3>
-                    For the second slider, adjust the slider and try to find the point right before where the slider
-                    <b>just begins to compromise the quality of the image</b>. The difference between the first and 
-                    second sliders is that the resulting image and the original image can look different while having 
-                    the same quality. The first slider asks you to find the point where the resulting and original images
-                    look different but have the same quality, and the second slider asks you to find the location right 
-                    before the point where the difference is large enough so that the quality of the resulting image is 
-                    now slightly worse than the original quality. 
-                    However, do <b>not</b> move the slider so much that the quality becomes bad. The compressed
-                    image should have a quality that is only slightly worse than the original quality. Below are one 
-                    good example and two bad examples.
-                    <br>
-                    <br>
-                    <h5>Good Example</h5>
-                    In the good example shown below, the slider is moved as far to the left as possible without causing a change in image
-                    quality. Moving the slider slightly to the left will cause the resulting image's quality to drop, while moving the slider
-                    to any point to the right will result in an image that may look different but has the same quality. Notice that differences
-                    between the resulting image and the original image are noticeable but are not significant enough to cause a change in quality
-                    from the original image to the resulting image.
-                    <br>
-                    <br>
-                    <!-- gif of good example of slider -->
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_good.gif"> 
-                    <br>
-                    <br>
-                    <br>
-                    <h5>Bad Example 1</h5>
-                    In the first bad example, the slider value is too high, since the image can be compressed further
-                    (the slider can move more to the left) without changing the quality of the image. 
-                    <br>
-                    <br>
-                    <!-- gif of second slider at starting point,  then compressed a little--> 
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_bad_1_ver2.gif"> 
-                    <br>
-                    <br>
-                    The resulting image's quality is similar to the original image's quality even after moving the slider 
-                    a bit more to the left, as shown below. This means that you should keep moving the slider further to 
-                    the left, since 26 is too high. 
-                    <br>
-                    <br>
-                    <!-- continuing from prev gif, slider moves from "compressed a little" point to left and both images look same/have same quality--> 
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_bad_2.gif"> 
-                    <br>
-                    <br>
-                    <h5>Bad Example 2</h5>
-                    In the second bad example, the slider is moved too far to the left, since there is a large drop in quality
-                    in the resulting image when compared to the original. 
-                    <br>
-                    <br>
-                    <!-- gif of second slider at starting point, then compressing too much--> 
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_toolow_1.gif"> 
-                    <br>
-                    <br>
-                    In this case, the slider is too far to the left and should be moved back to the right. 
-                    <br>
-                    <br>
-                    <!-- continuing from prev gif, slider moves from "compressed too much" to proper spot -->
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_toolow_2_rev2.gif"> 
-                    <br>
-                    <br>
-                    <b>Note:</b> The images may start off with different initial qualities. Because of this, base your 
-                    answer <b>relative to the original image</b> (i.e. when the slider bar is all the way to the 
-                    right at 50). With some images, you may need to move the sliders a lot before seeing changes in the 
-                    images. With others, you may not need to move the sliders too much before noticing a 
-                    change. Your task is <b>not</b> to rate the aesthetic appeal of the content of the image. 
-                </p>
+					<p>
+						<!-- SECOND SLIDER INSTRUCTIONS -->
+						<h3>Second Slider</h3>
+						Now you will adjust the second slider to the point right where you notice that 
+						 
+						 <b>the quality of the image gets worse.</b>
+						While the purpose of the first slider was to find any change, the purpose of the second slider is to find where the picture quality gets worse.
+
+						<br>
+						<br>
+						<h5><font color="green">GOOD</font> Example</h5>
+						Here, the slider is moved as far left as possible until it causes a change in image
+						quality.
+						<br>
+						<br>
+						<!-- gif of good example of slider -->
+						<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/secondGood.gif"> 
+						<br>
+						<br>
+						<br>
+						<h5><font color="red">BAD</font> Example 1</h5>
+						In the first bad example, the slider value is too high, since the slider can move further left without changing the quality of the image. 
+						<br>
+						<br>
+						<!-- gif of second slider at starting point,  then compressed a little--> 
+						<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/secondBad11.gif"> 
+						<br>
+						<br>
+						The new image quality is similar to the original image quality even after moving the slider. 
+						This means that you should keep moving the slider further to the left.
+						<br>
+						<br>
+						<!-- continuing from prev gif, slider moves from "compressed a little" point to left and both images look same/have same quality--> 
+						<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/secondBad12.gif"> 
+						<br>
+						<br>
+						<h5><font color="red">BAD</font> Example 2</h5>
+						In the second bad example, the slider is moved too far to the left, since the change in quality happened further to the right.
+						<br>
+						<br>
+						<!-- gif of second slider at starting point, then compressing too much--> 
+						<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/secondBad21.gif"> 
+						<br>
+						<br>
+						In this case, the slider is too far to the left and should be moved back to the right. 
+						<br>
+						<br>
+						<!-- continuing from prev gif, slider moves from "compressed too much" to proper spot -->
+						<img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/secondBad22.gif"> 
+						<br>
+						<br>
+					</p>
                 </detailed-instructions>
             
             <br>
@@ -1479,7 +1463,7 @@
                     We appreciate you taking the time to complete this study.
                     <br>
                     <br>
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/complete.gif"> 
+                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/complete_new.gif"> 
                     <!-- gif of both sliders in action -->
                 </p> 
             </div>
@@ -1499,7 +1483,7 @@
                     <br>
                     <br>
                     <!-- gif of good first slider, gif of first slider moving to point of first distortion and then pressing next -->
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/good1_full.gif"> 
+                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/firstGood.gif"> 
                     <br>    
                     <br>
                     <br>
@@ -1508,14 +1492,14 @@
                     <br>
                     <br>
                     <!-- first slider at 50,  then compressed a little--> 
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/too_high_1.gif"> 
+                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/firstBad11.gif"> 
                     <br>
                     <br>
                     The resulting image looks identical to the original image. This means that you should move the slider more to the left.
                     <br>
                     <br>
                     <!-- continuing from prev gif, first slider moves from "compressed a little" point to point of first distortion--> 
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/too_high_2.gif"> 
+                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/firstBad12.gif"> 
                     <br>
                     <br>
                     <h5><font color="red">BAD</font> Example 2</h5>
@@ -1524,7 +1508,7 @@
                     <br>
                     <br>
                     <!-- gif of first slider moving from 50 to point where image heavily distorted--> 
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/too_low_1.gif"> 
+                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/firstBad21.gif"> 
                     <br>
                     <br>
                     The slider is too far to the left and should be moved to the right to the point where the resulting 
@@ -1532,8 +1516,8 @@
                     <br>
                     <br>
                     <!-- continuing from prev gif, first slider moves from "compressed too much" to point of first distortion-->  
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/too_low_2.gif"> 
-                
+                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/firstBad22.gif"> 
+                </p>
             </div>
             
             <div class="begin3_class"style="display: none;">
@@ -1553,7 +1537,7 @@
                     <br>
                     <br>
                     <!-- gif of good example of slider -->
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_good.gif"> 
+                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/secondGood.gif"> 
                     <br>
                     <br>
                     <br>
@@ -1562,7 +1546,7 @@
                     <br>
                     <br>
                     <!-- gif of second slider at starting point,  then compressed a little--> 
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_bad_1_ver2.gif"> 
+                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/secondBad11.gif"> 
                     <br>
                     <br>
                     The new image quality is similar to the original image quality even after moving the slider. 
@@ -1570,7 +1554,7 @@
                     <br>
                     <br>
                     <!-- continuing from prev gif, slider moves from "compressed a little" point to left and both images look same/have same quality--> 
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_bad_2.gif"> 
+                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/secondBad12.gif"> 
                     <br>
                     <br>
                     <h5><font color="red">BAD</font> Example 2</h5>
@@ -1578,14 +1562,14 @@
                     <br>
                     <br>
                     <!-- gif of second slider at starting point, then compressing too much--> 
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_toolow_1.gif"> 
+                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/secondBad21.gif"> 
                     <br>
                     <br>
                     In this case, the slider is too far to the left and should be moved back to the right. 
                     <br>
                     <br>
                     <!-- continuing from prev gif, slider moves from "compressed too much" to proper spot -->
-                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/second_toolow_2_rev2.gif"> 
+                    <img style="text-indent: 25px;" src="https://snako.s3.us-east-2.amazonaws.com/secondBad22.gif"> 
                     <br>
                     <br>
                 </p>
