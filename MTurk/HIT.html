@@ -133,8 +133,8 @@
         var hit_data_url = "https://snako.s3.us-east-2.amazonaws.com/1_hit_data.csv"
         var key = "1_hit_number0.txt";
         var hit_number_url = bucket_url + key;
-        var proxy_url = "https://cors-anywhere.herokuapp.com/";
-        // var proxy_url = "";
+        //var proxy_url = "https://cors-anywhere.herokuapp.com/";
+        var proxy_url = "";
         var allText;
         var hit_sets;
         var hit_number;
@@ -640,8 +640,7 @@
                         }
 						
 						// after last image
-						//if(nexts === names.length){
-					 	  if(nexts === 7) {
+						if(nexts === names.length){
 							// subject rejection check for final window
 							var end_fail = false;
 							var maybe_fail = 'false';
@@ -664,7 +663,6 @@
                                 var cnt = 0;
                                 for (var j = 0; j < check_slider_vals.length; j++) {
                                     if (parseInt(check_slider_vals[j]) === high_threshold) {
-                                     	console.log('FOUND A 50: ' + check_slider_vals[j]);
 					cnt+=1;
 				    }
                                 }
