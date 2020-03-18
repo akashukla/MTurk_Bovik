@@ -659,9 +659,13 @@
 							}
 							
 							for(var i=parseInt(high_threshold);i<n_slider_levels+1;i++){
+                                var cnt = 0;
 								if(slider_vals.split(',').includes(i.toString()) || slider_vals2.split(',').includes(i.toString())){
-									end_fail = true;
+									cnt+=1;
 								}
+                                if (cnt >= 2) {
+                                    end_fail = true;
+                                }
 							}
 
 							for(var i=0;i<parseInt(low_threshold);i++){
@@ -729,12 +733,15 @@
                         if(standard_dev < STD_check || standard_dev2 < STD_check){
                             phase = 'reject';
                         }
-						
+
+					// We want to check fro 2 50s now
+                    /*
 						for(var i=parseInt(high_threshold);i<n_slider_levels+1;i++){
                             if(slider_vals.split(',').includes(i.toString()) || slider_vals2.split(',').includes(i.toString())){
                                 phase = 'reject';
                             }
                         }
+                    */
 
                         for(var i=0;i<parseInt(low_threshold);i++){
                             if(slider_vals.split(',').includes(i.toString()) || slider_vals2.split(',').includes(i.toString())){
