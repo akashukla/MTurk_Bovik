@@ -657,15 +657,21 @@
 							if(standard_dev < STD_check || standard_dev2 < STD_check){
 								end_fail = true;
 							}
-							
+					
+
 							for(var i=parseInt(high_threshold);i<n_slider_levels+1;i++){
+							    var check_slider_vals = slider_vals.split(',');
                                 var cnt = 0;
-								if(slider_vals.split(',').includes(i.toString()) || slider_vals2.split(',').includes(i.toString())){
-									cnt+=1;
-								}
+                                for (var j = 0; j < check_slider_vals; j++) {
+                                    if (parseInt(check_slider_vals[j]) == high_threshold)
+                                        cnt+=1;
+                                }
                                 if (cnt >= 2) {
                                     end_fail = true;
                                 }
+                                //if(slider_vals.split(',').includes(i.toString()) || slider_vals2.split(',').includes(i.toString())){
+								//}
+                           
 							}
 
 							for(var i=0;i<parseInt(low_threshold);i++){
