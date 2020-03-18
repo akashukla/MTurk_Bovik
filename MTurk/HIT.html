@@ -641,7 +641,7 @@
 						
 						// after last image
 						//if(nexts === names.length){
-					 	  if(nexts === 15) {
+					 	  if(nexts === 7) {
 							// subject rejection check for final window
 							var end_fail = false;
 							var maybe_fail = 'false';
@@ -662,8 +662,8 @@
 							for(var i=parseInt(high_threshold);i<n_slider_levels+1;i++){
 							    var check_slider_vals = slider_vals.split(',');
                                 var cnt = 0;
-                                for (var j = 0; j < check_slider_vals; j++) {
-                                    if (parseInt(check_slider_vals[j]) == high_threshold) {
+                                for (var j = 0; j < check_slider_vals.length; j++) {
+                                    if (parseInt(check_slider_vals[j]) === high_threshold) {
                                      	console.log('FOUND A 50: ' + check_slider_vals[j]);
 					cnt+=1;
 				    }
