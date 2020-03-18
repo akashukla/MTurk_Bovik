@@ -142,6 +142,7 @@
         var slider_vals2 = '';
         var window_size = 15;
         var window_shift = 5;
+		var i_subject_reject = window_size; // the indices that trigger a subject rejection check
         var slider1_window_stds = [];
         var slider2_window_stds = [];
         var phase = 'begin_class';//var phase = 'beginning';
@@ -638,35 +639,92 @@
 							 evalRejection(first_slider_val, nexts-1, slider=1);
                         }
 						
+						// after last image
 						if(nexts === names.length){
-							// moved srcc check to point where second slider saved for last golden image
-							// if (!golden_image_study) { srcc_fail.value = evalFlag();}
-							slider_values.value = slider_vals;
-							slider_values2.value = slider_vals2;//.substring(slider_vals2.indexOf(',')+1, slider_vals2.length);
-							quiz_attempts_csv.value = quiz_attempts;
-							browser_csv.value = browser;
-							quiz_time.value = quiz_complete_time;
-							hideClass('image_class');
-							hideClass('slider_class');
-							document.getElementById('progress_bar_items').style.display = 'none';
-							showClass('end_class');
 							
-							document.getElementById('submitButton').style = 'display: block;';
-							document.getElementById('Next_button').style = 'display: none;';
-							return
+							// subject rejection check for final window
+							var end_fail = false;
+							var maybe_fail = 'false';
+							
+							// check if last few images fail subject rejection checks
+							var standard_dev = find_std(slider_vals,(nexts - window_size),nexts - 1);
+							slider1_window_stds.push(standard_dev);
+
+							var standard_dev2 = find_std(slider_vals2,(nexts - window_size),nexts - 1);
+							slider2_window_stds.push(standard_dev2);
+							window_size = window_size + window_shift
+
+							if(standard_dev < STD_check || standard_dev2 < STD_check){
+								end_fail = true;
+							}
+							
+							for(var i=parseInt(high_threshold);i<n_slider_levels+1;i++){
+								if(slider_vals.split(',').includes(i.toString()) || slider_vals2.split(',').includes(i.toString())){
+									end_fail = true;
+								}
+							}
+
+							for(var i=0;i<parseInt(low_threshold);i++){
+								if(slider_vals.split(',').includes(i.toString()) || slider_vals2.split(',').includes(i.toString())){
+									end_fail = true;
+								}
+							}
+							
+							// checking for borderline failing cases
+							if((Math.min(...slider1_window_stds) < (STD_check + 1)) || (Math.min(...slider2_window_stds) < (STD_check + 1))){
+								maybe_fail = 'true';
+								console.log('maybe, std');
+							}
+							
+							for(var i=(parseInt(high_threshold)-5);i<parseInt(high_threshold);i++){
+								if(slider_vals.split(',').includes(i.toString()) || slider_vals2.split(',').includes(i.toString())){
+									maybe_fail = 'true';
+									console.log('maybe, high');
+								}
+							}
+
+							for(var i=(parseInt(low_threshold)+1);i<(parseInt(low_threshold)+5);i++){
+								if(slider_vals.split(',').includes(i.toString()) || slider_vals2.split(',').includes(i.toString())){
+									maybe_fail = 'true';
+									console.log('maybe, low');
+								}
+							}
+							console.log('slider_vals: ', slider_vals);
+							console.log('slider_vals2: ', slider_vals2);
+							if(end_fail == true) {
+								hideClass('image_class');
+								hideClass('slider_class');
+								showClass('reject');
+								document.getElementById('Next_button').style = 'display: none;';
+								document.getElementById('progress_bar_items').style.display = 'none';
+							} else {							
+								slider_values.value = slider_vals;
+								slider_values2.value = slider_vals2;//.substring(slider_vals2.indexOf(',')+1, slider_vals2.length);
+								maybe_fail_flag.value = maybe_fail;
+								quiz_attempts_csv.value = quiz_attempts;
+								browser_csv.value = browser;
+								quiz_time.value = quiz_complete_time;
+								hideClass('image_class');
+								hideClass('slider_class');
+								document.getElementById('progress_bar_items').style.display = 'none';
+								showClass('end_class');
+								
+								document.getElementById('submitButton').style = 'display: block;';
+								document.getElementById('Next_button').style = 'display: none;';
+								return
+							}
 						}
                     }
                     second_slider = true;
-                    
-                    if(nexts == window_size){
-                        var standard_dev = find_std(slider_vals,(nexts + 1 - window_size),window_size);
+						
+					// subject reject check, runs for every window
+                    if(nexts == i_subject_reject){
+                        var standard_dev = find_std(slider_vals,(nexts - window_size),nexts - 1);
                         slider1_window_stds.push(standard_dev);
-                        // console.log('standard_dev',standard_dev);
 
-                        var standard_dev2 = find_std(slider_vals2,(nexts + 1 - window_size),window_size);
+                        var standard_dev2 = find_std(slider_vals2,(nexts - window_size),nexts - 1);
                         slider2_window_stds.push(standard_dev2);
-                        window_size = window_size + window_shift
-                        // console.log('standard_dev2',standard_dev2);
+                        i_subject_reject = i_subject_reject + window_shift;
 
                         if(standard_dev < STD_check || standard_dev2 < STD_check){
                             phase = 'reject';
@@ -1305,7 +1363,9 @@
 						<br>
 						<br>
 						Please read the instructions carefully! There will be a <b>short quiz</b> 
-						at the end to make sure you understand how to complete the task. Once you
+						at the end to make sure you understand how to complete the task. Furthermore, 
+						there will be quality checks throughout the task to make sure you are paying
+						attention to the task. Once you
 						have started the task, the instructions will always be available to you.
 						<br>
 						<br>
@@ -1374,8 +1434,8 @@
 						<h3>Second Slider</h3>
 						Now you will adjust the second slider to the point right where you notice that 
 						 
-						 <b>the quality of the image gets worse.</b>
-						While the purpose of the first slider was to find any change, the purpose of the second slider is to find where the picture quality gets worse.
+						 <b>the quality of the image gets slightly worse.</b>
+						While the purpose of the first slider was to find any change, the purpose of the second slider is to find where the picture quality gets slightly worse.
 
 						<br>
 						<br>
@@ -1456,7 +1516,9 @@
                     <br>
                     <br>
                     Please read the instructions carefully! There will be a <b>short quiz</b> 
-                    at the end to make sure you understand how to complete the task. Once you
+                    at the end to make sure you understand how to complete the task. Furthermore, 
+					there will be quality checks throughout the task to make sure you are paying
+					attention to the task. Once you
                     have started the task, the instructions will always be available to you.
                     <br>
                     <br>
@@ -1526,8 +1588,8 @@
                     <h3>Second Slider</h3>
                     Now you will adjust the second slider to the point right where you notice that 
                      
-                     <b>the quality of the image gets worse.</b>
-                    While the purpose of the first slider was to find any change, the purpose of the second slider is to find where the picture quality gets worse.
+                     <b>the quality of the image gets slightly worse.</b>
+                    While the purpose of the first slider was to find any change, the purpose of the second slider is to find where the picture quality gets slightly worse.
 
                     <br>
                     <br>
@@ -1683,6 +1745,8 @@
 						<crowd-input id='quiz_attempts_csv' name='quiz_attempts' value='initial' type='hidden' style='display: none;'></crowd-input>
                         <crowd-input id='browser_csv' name='browser' value='initial' type='hidden' style='display: none;'></crowd-input>
 						<crowd-input id='quiz_time' name='quiz_complete_time' value='initial' type='hidden' style='display: none;'></crowd-input>
+						<crowd-input id='maybe_fail_flag' name='maybe_fail_flag' value='initial' type='hidden' style='display: none;'></crowd-input>
+						
 						<input type="submit" id="submitButton" type='hidden' style='display: none;'>
                     </div>
                 </div>
