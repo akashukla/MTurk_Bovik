@@ -1058,6 +1058,17 @@
 
                 document.getElementById('Next_button').style = 'visibility: visible';
 
+                var val = $('#slider').slider("option", "value");
+                if(val >= 45){
+                    document.getElementById("warning_text").innerHTML = "Too high!";
+                    document.getElementById("warning_text").style.visibility = "visible";
+                }else if(val <= 5){
+                    document.getElementById("warning_text").innerHTML = "Too low!";
+                    document.getElementById("warning_text").style.visibility =  "visible";
+                }else{
+                    document.getElementById("warning_text").style.visibility = "hidden";
+                }
+
             });
 
             $("#jpeg_encode_quality").val($("#slider2").slider("value"));
@@ -1099,6 +1110,7 @@
 				console.log('Error in evalRejection, did not recognize "slider" param');
 			}
         }
+
 
         // Evaluates whether a participant is to be flagged for 
         // not meeting srcc thresholds
@@ -1737,6 +1749,7 @@
             <div class='row'>
                 <div class='col-9 ' >
                     <div class="slider_class float-right" >
+                        <div id="warning_text"><span style="text-align: center; vertical-align: top; visibility: hidden;">Hello</span></div>
                         <div id="slider"></div>
                         <br>
                         <div id="slider2"></div>
