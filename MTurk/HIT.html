@@ -337,6 +337,7 @@
         // runs when "Next" button is pressed
         // note: tutorial_nexts and nexts increment at end of function
         function setImageb(button) {
+            document.getElementById("warning_text").style.visibility = "hidden";
             if (phase === 'begin_class') {
                 document.getElementById('Back_button').style.display = "";
                 hideClass('begin_class');
@@ -1062,7 +1063,7 @@
                 if(val >= 45){
                     document.getElementById("warning_text").innerHTML = "Too high!";
                     document.getElementById("warning_text").style.visibility = "visible";
-                }else if(val <= 5){
+                }else if(val <= 10){
                     document.getElementById("warning_text").innerHTML = "Too low!";
                     document.getElementById("warning_text").style.visibility =  "visible";
                 }else{
@@ -1087,6 +1088,17 @@
                 result_image.src = compress(source_image, quality, output_format).src;
 
                 document.getElementById('Next_button').style = 'visibility: visible';
+
+                var val = $('#slider2').slider("option", "value");
+                if(val >= 45){
+                    document.getElementById("warning_text").innerHTML = "Too high!";
+                    document.getElementById("warning_text").style.visibility = "visible";
+                }else if(val <= 5){
+                    document.getElementById("warning_text").innerHTML = "Too low!";
+                    document.getElementById("warning_text").style.visibility =  "visible";
+                }else{
+                    document.getElementById("warning_text").style.visibility = "hidden";
+                }
 
             });
         });
