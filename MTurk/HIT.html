@@ -94,7 +94,8 @@
         }
     </style>
     <script>
-        var browser = ''; // which browser they used (using user agent)
+        var debug = true;
+		var browser = ''; // which browser they used (using user agent)
 		var quiz_complete_time; // time when they finished the quiz
 		var quiz_attempts = 0; // number of times they attempted the quiz
         var high_threshold = 50; 
@@ -661,15 +662,27 @@
 
 							for(var i=parseInt(high_threshold);i<n_slider_levels+1;i++){
 							    var check_slider_vals = slider_vals.split(',');
+								var check_slider_vals2 = slider_vals2.split(',');
                                 var cnt = 0;
-                                for (var j = 0; j < check_slider_vals.length; j++) {
-                                    if (parseInt(check_slider_vals[j]) === high_threshold) {
-					cnt+=1;
-				    }
-                                }
-                                if (cnt >= 2) {
-                                    end_fail = true;
-                                }
+
+								// allow people to put 50 twice
+								if (i === 50) {
+									for (var j = 0; j < check_slider_vals.length; j++) {
+										if (parseInt(check_slider_vals[j]) === high_threshold) {
+											cnt+=1;
+										}
+										if (parseInt(check_slider_vals2[j]) === high_threshold) {
+											cnt+=1;
+										}
+									}
+									if (cnt >= 2) {
+										end_fail = true;
+									}
+								} else { // fail people if they put any other value greater than or equal to high_threshold
+									if(slider_vals.split(',').includes(i.toString()) || slider_vals2.split(',').includes(i.toString())){
+										end_fail = true;
+									}
+								}
                                 //if(slider_vals.split(',').includes(i.toString()) || slider_vals2.split(',').includes(i.toString())){
 								//}
                            
@@ -684,24 +697,41 @@
 							// checking for borderline failing cases
 							if((Math.min(...slider1_window_stds) < (STD_check + 1)) || (Math.min(...slider2_window_stds) < (STD_check + 1))){
 								maybe_fail = 'true';
-								console.log('maybe, std');
+								if(debug===true){
+									console.log('maybe, std');
+								}
 							}
 							
-							for(var i=(parseInt(high_threshold)-5);i<parseInt(high_threshold);i++){
+							for(var i=(parseInt(high_threshold)-3);i<(parseInt(high_threshold)+1);i++){
 								if(slider_vals.split(',').includes(i.toString()) || slider_vals2.split(',').includes(i.toString())){
 									maybe_fail = 'true';
-									console.log('maybe, high');
+									if(debug===true){
+										console.log('maybe, high');
+									}
 								}
 							}
 
 							for(var i=(parseInt(low_threshold)+1);i<(parseInt(low_threshold)+5);i++){
 								if(slider_vals.split(',').includes(i.toString()) || slider_vals2.split(',').includes(i.toString())){
 									maybe_fail = 'true';
-									console.log('maybe, low');
+									if(debug===true){
+										console.log('maybe, low');
+									}
 								}
 							}
-							console.log('slider_vals: ', slider_vals);
-							console.log('slider_vals2: ', slider_vals2);
+							
+							console.log('srcc: ', srcc_score.value);
+							if (srcc_score.value<(srcc_thresh+0.2)){
+								maybe_fail = 'true';
+								if(debug===true){	
+									console.log('maybe, srcc');
+								}
+							}
+							
+							if(debug===true){
+								console.log('slider_vals: ', slider_vals);
+								console.log('slider_vals2: ', slider_vals2);
+							}
 							if(end_fail == true) {
 								hideClass('image_class');
 								hideClass('slider_class');
