@@ -42,7 +42,6 @@ b3 = pd.read_csv('batch3_results.csv')
 #np.count_nonzero(b1.loc[:,'Answer.set_number']=='initial')
 
 
-
 #
 # Calculate thresholds
 #
@@ -115,9 +114,10 @@ num_images = images.shape[0]            # total number of images in 8k dataset
 
 
 ##Reprocessing Loop
-b1 = pd.read_csv('batch1_results.csv')
-b2 = pd.read_csv('batch2_results.csv')
-b3 = pd.read_csv('batch3_results.csv')
+b1 = b1[b1.loc[:,'AssignmentStatus'] == 'Approved']
+b2 = b2[b2.loc[:,'AssignmentStatus'] == 'Approved']
+b3 = b3[b3.loc[:,'AssignmentStatus'] == 'Approved']
+
 b1sn = b1.loc[:,'Answer.set_number'][~(b1.loc[:,'Answer.set_number']=='initial')].astype('int64')
 b2sn = b2.loc[:,'Answer.set_number'][~(b2.loc[:,'Answer.set_number']=='initial')].astype('int64')
 b3sn = b3.loc[:,'Answer.set_number'][~(b3.loc[:,'Answer.set_number']=='initial')].astype('int64')
