@@ -720,7 +720,9 @@
 								}
 							}
 							
-							console.log('srcc: ', srcc_score.value);
+							if(debug===true){
+								console.log('srcc: ', srcc_score.value);
+							}
 							if (srcc_score.value<(srcc_thresh+0.2)){
 								maybe_fail = 'true';
 								if(debug===true){	
