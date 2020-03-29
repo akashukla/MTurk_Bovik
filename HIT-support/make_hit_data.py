@@ -34,6 +34,13 @@ datI = np.asarray([golden_resI.loc[:,'Answer.slider_values'][i].split(',')
 datII = np.asarray([golden_resII.loc[:,'Answer.slider_values'][i].split(',') 
     for i in range(len(golden_resII.loc[:,'Answer.slider_values']))])[:,:-1].astype(int)
 
+###Load Batch 1-3 data for reprocessing
+b1 = pd.read_csv('batch1_results.csv')
+b2 = pd.read_csv('batch2_results.csv')
+b3 = pd.read_csv('batch3_results.csv')
+#Get rid of if Answer.set_number == 'initial' or AssignmentStatus = 'Rejected'
+#np.count_nonzero(b1.loc[:,'Answer.set_number']=='initial')
+
 
 
 #
@@ -92,7 +99,8 @@ num_images = images.shape[0]            # total number of images in 8k dataset
 set_size = 45                           # number of images per set
 num_golden = 5                          # number of goldens per set
 num_repeat = 5                          # number of repeats per set
-data_points = 30                        # number of responses per image
+#data_points = 30                        # number of responses per image
+data_points = 20                        # Changed to 20 for reprocessing
 num_total_sets = (num_images*data_points)/set_size   # total number of sets
 
 rep_first_min = 0                       # Lower end of first repeated window
@@ -101,8 +109,33 @@ rep_second_min = 20                     # Lower end of second repeated window
 rep_second_max = 30                     # Upper end of second repeated window
 
 ginx = [np.argwhere(images == golden_names[i])[0,0] for i in range(len(golden_names))]
-images = images[np.delete(np.arange((images.shape[0])),ginx)]
+images_orig=images.copy()
+images = images[np.delete(np.arange((images.shape[0])),ginx)] # remove goldens before set building
 num_images = images.shape[0]            # total number of images in 8k dataset
+
+
+##Reprocessing Loop
+b1 = pd.read_csv('batch1_results.csv')
+b2 = pd.read_csv('batch2_results.csv')
+b3 = pd.read_csv('batch3_results.csv')
+b1sn = b1.loc[:,'Answer.set_number'][~(b1.loc[:,'Answer.set_number']=='initial')].astype('int64')
+b2sn = b2.loc[:,'Answer.set_number'][~(b2.loc[:,'Answer.set_number']=='initial')].astype('int64')
+b3sn = b3.loc[:,'Answer.set_number'][~(b3.loc[:,'Answer.set_number']=='initial')].astype('int64')
+ball = np.append(b1sn, b2sn)
+ball = np.append(ball, b3sn)
+
+hit_data_orig=np.genfromtxt('hit_data_orig.csv',delimiter=',',dtype='str')[:,1:56]
+
+dic={}
+for im in images_orig:
+    dic[im]=0
+
+for sn in ball:
+    hd_sn=hit_data_orig[sn]
+    for im_n in hd_sn:
+        dic[im_n]+=1
+        
+
 
 cnt_top = 0
 cnt_eightk = 0
@@ -113,6 +146,9 @@ final_data = []
 ids=np.arange(num_images)
 # Main HIT creation loop
 while(cnt_top < num_total_sets):
+    num_images=images.shape[0]
+    if(num_images<set_size):
+        break
     # Overall counter 
     cnt_top+=1
     # Resets at 8k
@@ -133,6 +169,16 @@ while(cnt_top < num_total_sets):
     # Local names for this set loop
     set_names=images[hit_ids]
 
+    #Loop for reprocessing, remove image if hits 20
+    for sname in set_names:
+        dic[sname]+=1
+        if(dic[sname]==20):
+            images=images[images!=sname]
+            ids = ids[ids!=ids.max()]
+            print("removing")
+
+
+    
     rep_ind_first = np.sort(np.random.choice(np.arange(rep_first_min,rep_first_max), num_repeat,replace=False))
     rep_names = set_names[rep_ind_first]
     rep_ind_second = np.random.choice(np.arange(rep_second_min,rep_second_max), num_repeat,replace=False)
@@ -156,8 +202,10 @@ while(cnt_top < num_total_sets):
     #hit_names.append(np.r_[set_size+num_golden+num_repeat, set_names,gic_ind,gsm_c.round().astype('int'), gss_c.round().astype('int'), rep_ind_b,rep_ind_e])
     set_write = np.r_[set_size+num_golden+num_repeat, set_names, num_golden, num_repeat, repeated_thresh, srcc_thresh, contra_mu_ind, contra_mu, contra_std, rep_ind_first, rep_ind_second]
     final_data.append(set_write)
+
  
 np.savetxt('./gen/hit_data.csv',final_data,delimiter=',',fmt='%s')
+np.savetxt('./hit_data.csv',final_data,delimiter=',',fmt='%s')
 
 
     ### TODO: take the golden images we need to use
