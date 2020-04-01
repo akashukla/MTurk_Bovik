@@ -279,3 +279,4 @@ model_conv = train_model(model_conv, criterion, optimizer_conv, exp_lr_scheduler
 visualize_model(model_conv)
 
 plt.show()
+torch.save(model_conv,'tenor.pt')
