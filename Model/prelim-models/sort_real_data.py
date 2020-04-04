@@ -91,17 +91,3 @@ def load_batch_data():
     return svals_all, sval_avg
         
                 
-# x = np.zeros((len(sval_avg),375, 500, 3),dtype='int8')
-# #x_path = np.zeros((len(sval_avg)),dtype='str')
-# x_path=[]
-# y = np.zeros(len(sval_avg),dtype='float64')
-# i=0
-# for sv in sval_avg:
-#     x_path.append('8k_data/'+sv)
-#     x[i]=plt.imread(('8k_data/'+sv))
-#     y[i]=sval_avg[sv]
-#     i+=1
-# x_path=np.array(x_path)
-# np.save('x_path',x_path)
-# np.save('x',x)
-# np.save('y',y)
