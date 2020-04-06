@@ -52,9 +52,9 @@ data = (ImageList
  .normalize(imagenet_stats))
 
 learn = cnn_learner(data, models.resnet50, metrics=[accuracy], true_wd=False)
-# learn.loss = MSELossFlat
+learn.loss = MSELossFlat
 # #learn.loss = L1LossFlat
-# learn.fit(1)
+learn.fit(1)
 
 class MSELossFlat(nn.MSELoss): 
 #“Same as `nn.MSELoss`, but flattens input and target.”
