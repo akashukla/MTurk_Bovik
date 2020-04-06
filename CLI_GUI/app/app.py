@@ -16,12 +16,19 @@ def page():
 
 @app.route('/upload',methods=['POST']) #use this to upload images to compress
 def upload_image():
+    try:
     # image = request.data
     # nparr = np.fromstring(image,np.uint8)
     # return str(nparr)
-    image = request.files
-    print(image)
-    return image
+        #print(request.files['file'])
+        print(request.files)
+        image_name = request.files['file'].filename
+        image = request.files['file']
+        print(image)
+        return "got image"
+    except Exception as e:
+        print(e)
+        return str(e)
 
 
 

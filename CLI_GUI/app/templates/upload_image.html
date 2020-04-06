@@ -21,7 +21,7 @@
     <body>
    
 
-        <input type="file" class="form-control-file border" id='file'>
+        <input type="file" name-"file[]" class="form-control-file border" id='file' multiple>
             <button type="button" class="btn btn-primary" id ='ssubmit'>Basic</button>
 
         
@@ -31,15 +31,21 @@
             alert('wow');
 
             var fd = new FormData();
-            var files = $('#file')[0].files[0];
-            fd.append('file',files);
+            var files = $('#file')[0].files;
+            console.log(files);
+            for (var i = 0; i < files.length; i++) {
+                console.log(files[i]);
+                fd.append('file',files[i]);
+            }
+            
 
             $.ajax({
                 url : 'upload',
                 type : 'post',
-                data : 'fd',
+                data : fd,
                 contentType: false,
                 processData: false,
+                enctype:"multipart/form-data",
 
                 success: function( data, textStatus, jQxhr ){
                    alert('it worked');
