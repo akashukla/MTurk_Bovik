@@ -52,9 +52,9 @@ def load_batch_data():
     b3_svals=np.array([np.fromstring(np.array(b3.loc[:,'Answer.slider_values'])[i],dtype='int',sep=',') for i in range(b3.shape[0])])
     #batch_svals=np.append(np.append(b1_svals,b2_svals),b3_svals)
     batch_svals=np.row_stack((b1_svals,b2_svals,b3_svals))
+   
     
-    
-    hdo=np.genfromtxt('batch-data/hit_data_orig.csv',delimiter=',',dtype='str')[:,1:56]
+    hdo=np.genfromtxt('hit_set_data/hit_data_orig.csv',delimiter=',',dtype='str')[:,1:56]
     sval_dict = {}
     svals_all = {}
     sval_count = {}
@@ -88,6 +88,34 @@ def load_batch_data():
             sval_avg[set_name] = sval_dict[set_name]/sval_count[set_name]
             
     sval_avg.pop('AVA__330138.jpg')
-    return svals_all, sval_avg
+    svals_all.pop('AVA__330138.jpg')
+    #return svals_all, sval_avg
+    image_scores=[]
+    image_names=[]
+    for key, val in svals_all.items():
+            temp = [key,val]
+            image_names.append(key)
+            image_scores.append(val)
+
+    image_avgs=[]
+    for key, val in sval_avg.items():
+            temp = [key,val]
+            image_avgs.append(val)
+    return image_names,image_scores,image_avgs,svals_all,sval_avg
+
         
-                
+                 
+# x = np.zeros((len(sval_avg),375, 500, 3),dtype='int8')
+# #x_path = np.zeros((len(sval_avg)),dtype='str')
+# x_path=[]
+# y = np.zeros(len(sval_avg),dtype='float64')
+# i=0
+# for sv in sval_avg:
+#     x_path.append('8k_data/'+sv)
+#     x[i]=plt.imread(('8k_data/'+sv))
+#     y[i]=sval_avg[sv]
+#     i+=1
+# x_path=np.array(x_path)
+# np.save('x_path',x_path)
+# np.save('x',x)
+# np.save('y',y)
