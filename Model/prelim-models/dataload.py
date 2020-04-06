@@ -13,11 +13,9 @@ import pandas as pd
 #
 # Returns:
 #   single numpy array with all data
-#   for preprocessing
+#   for preprocessing and a dictionary
+#   with image results
 #
-
-csv_files = ['batch-data/batch1_results.csv','batch-data/batch2_results.csv','batch-data/batch3_results.csv']
-column_headers = ['AssignmentStatus','Answer.set_number','WorkerId','Answer.slider_values','Answer.slider_values2']
 
 def make_predata(csv_files, column_headers):
     dataDF = []
@@ -67,4 +65,8 @@ def make_predata(csv_files, column_headers):
 
     return im_dict, data
         
+csv_files = ['batch-data/batch1_results.csv','batch-data/batch2_results.csv','batch-data/batch3_results.csv']
+column_headers = ['AssignmentStatus','Answer.set_number','WorkerId','Answer.slider_values','Answer.slider_values2']
+
+im_dict, data = make_predata(csv_files,column_headers)
 
