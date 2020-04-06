@@ -45,10 +45,10 @@ def make_predata(csv_files, column_headers):
         slider1_vals = np.asarray(data.loc[w,'Answer.slider_values'].split(','))[:-1].astype('int64')
         slider2_vals = np.asarray(data.loc[w,'Answer.slider_values2'].split(','))[:-1].astype('int64')
        
-        if int(data.loc[w,'HitDataFile']) == 0:
-            set_names = hit_data_orig[set_num-1]
-        else:
-            set_names = hit_data[set_num-1]
+        #if int(data.loc[w,'HitDataFile']) == 0:
+        set_names = hit_data_orig[set_num-1]
+        #else:
+        #    set_names = hit_data[set_num-1]
 
         for n in range(len(set_names)):
             if im_dict[set_names[n]] is None:
@@ -60,15 +60,17 @@ def make_predata(csv_files, column_headers):
                                                   [worker_id,
                                                    slider1_vals[n],
                                                    slider2_vals[n]]))
-        for im in im_dict:
-            if im_dict[im] is not None and im_dict[im].ndim == 1:
-                im_dict[im] = np.reshape(im_dict[im],(len(im_dict[im]),1))
+    for im in im_dict:
+        if im_dict[im] is not None: 
+            if im_dict[im].ndim == 1:
+                im_dict[im] = np.reshape(im_dict[im],(1,len(im_dict[im])))
                 
 
     return im_dict, data
-        
-csv_files = ['batch-data/batch1_results.csv','batch-data/batch2_results.csv','batch-data/batch3_results.csv']
-column_headers = ['AssignmentStatus','Answer.set_number','WorkerId','Answer.slider_values','Answer.slider_values2']
 
-im_dict, data = make_predata(csv_files,column_headers)
+#csv_files = ['batch-data/batch1_results.csv','batch-data/batch2_results.csv','batch-data/batch3_results.csv']
+#column_headers = ['AssignmentStatus','Answer.set_number','WorkerId','Answer.slider_values','Answer.slider_values2']
+#
+#im_dict, data = make_predata(csv_files,column_headers)
+
 
