@@ -15,64 +15,81 @@ import pandas as pd
 #   for preprocessing
 #
 
+
 def make_predata(csv_files, column_headers):
-    b1 = pd.read_csv('batch-data/batch1_results.csv')
-    b2 = pd.read_csv('batch-data/batch2_results.csv')
-    b3 = pd.read_csv('batch-data/batch3_results.csv')
-    b1 = b1[b1.loc[:,'AssignmentStatus'] == 'Approved']
-    b2 = b2[b2.loc[:,'AssignmentStatus'] == 'Approved']
-    b3 = b3[b3.loc[:,'AssignmentStatus'] == 'Approved']
-    b1 = b1[b1.loc[:,'Answer.set_number'] != 'initial']
-    b2 = b2[b2.loc[:,'Answer.set_number'] != 'initial']
-    b3 = b3[b3.loc[:,'Answer.set_number'] != 'initial']
-    
-    b1_setnum=b1.loc[:,'Answer.set_number']
-    b2_setnum=b2.loc[:,'Answer.set_number']
-    b3_setnum=b3.loc[:,'Answer.set_number']
-    batch_setnums = np.append(np.append(b1_setnum,b2_setnum),b3_setnum).astype('int64')
-    
-    
-    b1_svals=np.array([np.fromstring(np.array(b1.loc[:,'Answer.slider_values'])[i],dtype='int',sep=',') for i in range(b1.shape[0])])
-    b2_svals=np.array([np.fromstring(np.array(b2.loc[:,'Answer.slider_values'])[i],dtype='int',sep=',') for i in range(b2.shape[0])])
-    b3_svals=np.array([np.fromstring(np.array(b3.loc[:,'Answer.slider_values'])[i],dtype='int',sep=',') for i in range(b3.shape[0])])
-    #batch_svals=np.append(np.append(b1_svals,b2_svals),b3_svals)
-    batch_svals=np.row_stack((b1_svals,b2_svals,b3_svals))
-    
-    
-    hdo=np.genfromtxt('batch-data/hit_data_orig.csv',delimiter=',',dtype='str')[:,1:56]
-    sval_dict = {}
-    svals_all = {}
-    sval_count = {}
-    sval_avg = {}
-    for i in range(len(batch_setnums)):
-        setnum = batch_setnums[i]
-        set_svals = batch_svals[i]
-        set_names = hdo[setnum-1]
-        for j in range(len(set_names)):
-            set_name = set_names[j]
-            svals_all[set_name] = []
-            sval_dict[set_name] = 0
-            sval_count[set_name] = 0
-            
-    for i in range(len(batch_setnums)):
-        setnum=batch_setnums[i]
-        set_svals = batch_svals[i]
-        set_names = hdo[setnum-1]
-        for j in range(len(set_names)):
-            set_name=set_names[j]
-            svals_all[set_name].append(set_svals[j])
-            sval_dict[set_name]+=set_svals[j]
-            sval_count[set_name]+=1
-    
-    for i in range(len(batch_setnums)):
-        setnum=batch_setnums[i]
-        set_svals = batch_svals[i]
-        set_names = hdo[setnum-1]
-        for j in range(len(set_names)):
-            set_name = set_names[j]
-            sval_avg[set_name] = sval_dict[set_name]/sval_count[set_name]
-            
-    sval_avg.pop('AVA__330138.jpg')
-    return svals_all, sval_avg
+    #dataDF = pd.DataFrame()
+    featues = dict((c,None) for c in column_headers)
+    for f in csv_files:
+        df = pd.read_csv(f)
+        df = df[df.loc[:,'AssignmentStatus'] == 'Approved']
+        df = df[df.loc[:,'Answer.set_number'] != 'initial']
+        df = df.loc[:,column_headers] 
+        dataDF.append(df) 
+    data = pd.concat(dataDF,ignore_index=True)
+   
+
+dataDF = []
+csv_files = ['batch-data/batch1_results.csv','batch-data/batch2_results.csv','batch-data/batch3_results.csv']
+column_headers = ['AssignmentStatus','Answer.set_number']
+make_predata(csv_files, column_headers)
+
+#    b1 = pd.read_csv('batch-data/batch1_results.csv')
+#    b2 = pd.read_csv('batch-data/batch2_results.csv')
+#    b3 = pd.read_csv('batch-data/batch3_results.csv')
+#    b1 = b1[b1.loc[:,'AssignmentStatus'] == 'Approved']
+#    b2 = b2[b2.loc[:,'AssignmentStatus'] == 'Approved']
+#    b3 = b3[b3.loc[:,'AssignmentStatus'] == 'Approved']
+#    b1 = b1[b1.loc[:,'Answer.set_number'] != 'initial']
+#    b2 = b2[b2.loc[:,'Answer.set_number'] != 'initial']
+#    b3 = b3[b3.loc[:,'Answer.set_number'] != 'initial']
+#    
+#    b1_setnum=b1.loc[:,'Answer.set_number']
+#    b2_setnum=b2.loc[:,'Answer.set_number']
+#    b3_setnum=b3.loc[:,'Answer.set_number']
+#    batch_setnums = np.append(np.append(b1_setnum,b2_setnum),b3_setnum).astype('int64')
+#    
+#    
+#    b1_svals=np.array([np.fromstring(np.array(b1.loc[:,'Answer.slider_values'])[i],dtype='int',sep=',') for i in range(b1.shape[0])])
+#    b2_svals=np.array([np.fromstring(np.array(b2.loc[:,'Answer.slider_values'])[i],dtype='int',sep=',') for i in range(b2.shape[0])])
+#    b3_svals=np.array([np.fromstring(np.array(b3.loc[:,'Answer.slider_values'])[i],dtype='int',sep=',') for i in range(b3.shape[0])])
+#    #batch_svals=np.append(np.append(b1_svals,b2_svals),b3_svals)
+#    batch_svals=np.row_stack((b1_svals,b2_svals,b3_svals))
+#    
+#    
+#    hdo=np.genfromtxt('batch-data/hit_data_orig.csv',delimiter=',',dtype='str')[:,1:56]
+#    sval_dict = {}
+#    svals_all = {}
+#    sval_count = {}
+#    sval_avg = {}
+#    for i in range(len(batch_setnums)):
+#        setnum = batch_setnums[i]
+#        set_svals = batch_svals[i]
+#        set_names = hdo[setnum-1]
+#        for j in range(len(set_names)):
+#            set_name = set_names[j]
+#            svals_all[set_name] = []
+#            sval_dict[set_name] = 0
+#            sval_count[set_name] = 0
+#            
+#    for i in range(len(batch_setnums)):
+#        setnum=batch_setnums[i]
+#        set_svals = batch_svals[i]
+#        set_names = hdo[setnum-1]
+#        for j in range(len(set_names)):
+#            set_name=set_names[j]
+#            svals_all[set_name].append(set_svals[j])
+#            sval_dict[set_name]+=set_svals[j]
+#            sval_count[set_name]+=1
+#    
+#    for i in range(len(batch_setnums)):
+#        setnum=batch_setnums[i]
+#        set_svals = batch_svals[i]
+#        set_names = hdo[setnum-1]
+#        for j in range(len(set_names)):
+#            set_name = set_names[j]
+#            sval_avg[set_name] = sval_dict[set_name]/sval_count[set_name]
+#            
+#    sval_avg.pop('AVA__330138.jpg')
+#    return svals_all, sval_avg
         
 
