@@ -1,0 +1,61 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.71/jquery.csv-0.71.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bowser@2.5.3/es5.js"></script>
+    <script src="2-bowser.js"></script> -->
+    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" media="all" rel="stylesheet" type="text/css">
+    <link href="https://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" media="all" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <style>
+    </style>
+   
+    </head>
+    <body>
+   
+
+        <input type="file" name-"file[]" class="form-control-file border" id='file' multiple>
+            <button type="button" class="btn btn-primary" id ='ssubmit'>Basic</button>
+
+        
+    </body>
+    <script>
+        $('#ssubmit').on('click',function(){
+            alert('wow');
+
+            var fd = new FormData();
+            var files = $('#file')[0].files;
+            console.log(files);
+            for (var i = 0; i < files.length; i++) {
+                console.log(files[i]);
+                fd.append('file',files[i]);
+            }
+            
+
+            $.ajax({
+                url : 'upload',
+                type : 'post',
+                data : fd,
+                contentType: false,
+                processData: false,
+                enctype:"multipart/form-data",
+
+                success: function( data, textStatus, jQxhr ){
+                   alert('it worked');
+                },
+                error: function( jqXhr, textStatus, errorThrown ){
+                    alert('oh no');
+                    console.log( errorThrown );
+    }
+            })
+
+        });
+    </script>
+</html>
