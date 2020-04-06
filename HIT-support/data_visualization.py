@@ -4,8 +4,6 @@
 # inspect the data from the 
 # golden image study.
 #
-# For bugs contact Author: MK Swaminathan
-#
 
 import os, sys
 import cv2

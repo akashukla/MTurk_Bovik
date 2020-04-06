@@ -12,9 +12,8 @@ import pandas as pd
 #   list of column headers
 #
 # Returns:
-#   single numpy array with all data
-#   for preprocessing and a dictionary
-#   with image results
+#   numpy ndarray with all data
+#   dictionary with image results per workerID
 #
 
 def make_predata(csv_files, column_headers):
@@ -24,7 +23,7 @@ def make_predata(csv_files, column_headers):
         df = df[df.loc[:,'AssignmentStatus'] == 'Approved']
         df = df[df.loc[:,'Answer.set_number'] != 'initial']
         df = df.loc[:,column_headers] 
-        if re.match(r'.*batch[1-3]', f) != None:
+        if re.match(r'.*batch[1-3]', f) is None:
             df['HitDataFile'] = np.repeat(0,len(df))
         else: 
             df['HitDataFile'] = np.repeat(1,len(df))
@@ -61,6 +60,9 @@ def make_predata(csv_files, column_headers):
                                                   [worker_id,
                                                    slider1_vals[n],
                                                    slider2_vals[n]]))
+        for im in im_dict:
+            if im_dict[im] is not None and im_dict[im].ndim == 1:
+                im_dict[im] = np.reshape(im_dict[im],(len(im_dict[im]),1))
                 
 
     return im_dict, data
