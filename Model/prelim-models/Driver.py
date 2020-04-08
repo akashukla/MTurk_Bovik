@@ -4,6 +4,9 @@ import urllib
 import os, sys
 import numpy as np
 import pandas as pd
+import scipy as sc
+import scipy.stats
+
 
 from dataload import *
         
@@ -13,6 +16,6 @@ column_headers = ['AssignmentStatus','Answer.set_number','WorkerId','Answer.slid
 im_dict, data = make_predata(csv_files,column_headers)
 
 from denoise import *
-denoise(im_dict, data)
+#denoise(im_dict, data)
 
 

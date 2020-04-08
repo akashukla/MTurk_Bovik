@@ -30,6 +30,25 @@ def correlation_denoising(im_dict, data):
     #        s1_std = np.std(im_dict[im][:,1].astype('int64'))
     #        s2_std = np.std(im_dict[im][:,2].astype('int64'))
     #        
+    worker_dict={}
+    for imk,imv in im_dict.items():
+        if(np.any(imv==None)):
+            continue
+        print(imv[:,0])
+    worker_dict={}
+    for imk,imv in im_dict.items():
+        if(np.any(imv==None)):
+            #print(imv)
+            continue
+        #print(imv[:,0])
+        worker_names=imv[:,0]
+        #sliders=imv[:,1:]
+        slider_1 = imv[:,1].astype('int')
+        for i in range(len(worker_names)):
+        worker_dict[worker_names[i]] = slider_1[i], slider_1
+         #[ their 55 scores, avg 55 scores]
+ 
+    return 1
 
 def outlier_denoising(im_dict, data):
     # Take each worker and map out their 55 image scores with all the
@@ -38,3 +57,7 @@ def outlier_denoising(im_dict, data):
     # Give worker a pentalty score according to how off from the std they are
     # Rank workers in terms of these penalty scores and choose elimination threshold
     # Eliminate worker responses that are above this elimination penalty score
+    return 1
+   
+    
+
