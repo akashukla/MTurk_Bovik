@@ -30,7 +30,7 @@ def make_predata(csv_files, column_headers):
         dataDF.append(df) 
     
     data = pd.concat(dataDF,ignore_index=True)
-    
+
     hit_data_orig = np.genfromtxt('batch-data/hit_data_orig.csv',delimiter=',',dtype='str')[:,1:56]
     #hit_data = np.genfromtxt('batch-data/hit_data.csv',delimiter=',',dtype='str')[:,1:56]
     im_names = pd.read_csv('../data/8k_image_names.csv', 
@@ -49,7 +49,7 @@ def make_predata(csv_files, column_headers):
         set_names = hit_data_orig[set_num-1]
         #else:
         #    set_names = hit_data[set_num-1]
-
+        
         for n in range(len(set_names)):
             if im_dict[set_names[n]] is None:
                 im_dict[set_names[n]] = np.asarray([worker_id,
