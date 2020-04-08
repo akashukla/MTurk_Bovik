@@ -50,7 +50,7 @@ def correlation_denoising(im_dict, data):
  
     return 1
 
-def outlier_denoising(im_dict, data):
+def outlier_denoising(im_dict, data, percentile):
     # Take each worker and map out their 55 image scores with all the
     # other responses for those 55 images
     # Then hold out thier scores and calculate mean and std for all 55 images
@@ -98,9 +98,8 @@ def outlier_denoising(im_dict, data):
     #
     # Pick threshold for eliminating workers
     #
-    cut_off_percentile = 95
     penalties = np.fromiter(workers.values(), dtype=float)
-    threshold = np.percentile(penalties,cut_off_percentile)
+    threshold = np.percentile(penalties,percentile)
     
     workers2 = workers.copy()
     # Remove bad workers
@@ -122,6 +121,7 @@ def outlier_denoising(im_dict, data):
      #           print('appending row' + str(iteration))
             idx = data.index[data['WorkerId'] == all_workers].tolist()
             data = data.drop(idx, axis='index')
+            data = data.reset_index(drop=True)
 
     return data
 
