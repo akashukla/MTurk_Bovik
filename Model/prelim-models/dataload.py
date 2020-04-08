@@ -90,8 +90,8 @@ def format_data(data):
                               usecols=[0])
     im_names = (im_names.loc[:,0]).tolist()
     im_dict = {keys: None for keys in im_names}
-    scores1_dict = {keys: None for keys in im_names}
-    scores2_dict = {keys: None for keys in im_names}
+    scores1_dict = {}
+    scores2_dict = {}
  
     for w in range(len(data)):
         set_num = int(data.loc[w,'Answer.set_number'])
