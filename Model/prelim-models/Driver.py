@@ -4,6 +4,9 @@ import urllib
 import os, sys
 import numpy as np
 import pandas as pd
+import scipy as sc
+import scipy.stats
+
 
 from dataload import *
         
@@ -14,4 +17,5 @@ im_dict, data = make_predata(csv_files,column_headers)
 
 from denoise import *
 workers = outlier_denoising(im_dict, data)
+
 

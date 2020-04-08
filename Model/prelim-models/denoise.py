@@ -14,7 +14,6 @@ import pandas as pd
 #   cleaned data
 #
 def correlation_denoising(im_dict, data):
-    pass
     # Take each worker and map out their 55 image scores with all the other
     # responses for those 55 images
     # Then hold out their score and calculate the mean for all 55 images
@@ -23,6 +22,34 @@ def correlation_denoising(im_dict, data):
     # Do this for all workers and rank them all by SRCC scores
     # Pick a reasonable threshold and eliminate all bad worker responses
     
+    #workers = {keys: None for keys in np.asarray(data.loc[:,'WorkerId'])}
+    #for im in im_dict:
+    #    if im_dict[im] is not None:
+    #        s1_mu = np.mean(im_dict[im][:,1].astype('int64'))
+    #        s2_mu = np.mean(im_dict[im][:,2].astype('int64'))
+    #        s1_std = np.std(im_dict[im][:,1].astype('int64'))
+    #        s2_std = np.std(im_dict[im][:,2].astype('int64'))
+    #        
+    worker_dict={}
+    for imk,imv in im_dict.items():
+        if(np.any(imv==None)):
+            continue
+        print(imv[:,0])
+    worker_dict={}
+    for imk,imv in im_dict.items():
+        if(np.any(imv==None)):
+            #print(imv)
+            continue
+        #print(imv[:,0])
+        worker_names=imv[:,0]
+        #sliders=imv[:,1:]
+        slider_1 = imv[:,1].astype('int')
+        for i in range(len(worker_names)):
+        worker_dict[worker_names[i]] = slider_1[i], slider_1
+         #[ their 55 scores, avg 55 scores]
+ 
+    return 1
+
 def outlier_denoising(im_dict, data):
     # Take each worker and map out their 55 image scores with all the
     # other responses for those 55 images
@@ -71,5 +98,4 @@ def outlier_denoising(im_dict, data):
     return workers        
 
             
-
 
