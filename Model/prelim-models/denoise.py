@@ -45,7 +45,7 @@ def correlation_denoising(im_dict, data):
         #sliders=imv[:,1:]
         slider_1 = imv[:,1].astype('int')
         for i in range(len(worker_names)):
-        worker_dict[worker_names[i]] = slider_1[i], slider_1
+            worker_dict[worker_names[i]] = slider_1[i], slider_1
          #[ their 55 scores, avg 55 scores]
  
     return 1
@@ -94,8 +94,37 @@ def outlier_denoising(im_dict, data):
                     s2_penalty = 0.0
 
                 workers[im_dict[im][worker_i,0]] += (s1_penalty + s2_penalty)
-                
-    return workers        
+
+    #
+    # Pick threshold for eliminating workers
+    #
+    cut_off_percentile = 95
+    penalties = np.fromiter(workers.values(), dtype=float)
+    threshold = np.percentile(penalties,cut_off_percentile)
+    
+    workers2 = workers.copy()
+    # Remove bad workers
+    for worker in workers:
+        if workers[worker] > threshold:
+            del workers2[worker]
+    
+    # Remove from all the data
+    #clean_data = pd.DataFrame()
+    #iteration = 0
+    for all_workers in data['WorkerId']:
+        if workers2.get(all_workers, None) == None:
+     #       iteration+=1
+     #       if clean_data.empty:
+     #           clean_data = data.loc[data['WorkerId'] == all_workers]
+     #           print('appending row' + str(iteration))
+     #       else:
+     #           pd.concat([clean_data, data.loc[data['WorkerId'] == all_workers]], axis='index')
+     #           print('appending row' + str(iteration))
+            idx = data.index[data['WorkerId'] == all_workers].tolist()
+            data = data.drop(idx, axis='index')
+
+    return data
+
 
             
 

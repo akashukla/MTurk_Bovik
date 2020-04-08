@@ -16,6 +16,6 @@ column_headers = ['AssignmentStatus','Answer.set_number','WorkerId','Answer.slid
 im_dict, data = make_predata(csv_files,column_headers)
 
 from denoise import *
-workers = outlier_denoising(im_dict, data)
+cleaned_data = outlier_denoising(im_dict, data)
 
 
