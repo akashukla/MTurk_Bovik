@@ -80,7 +80,7 @@ def make_predata(csv_files, column_headers):
 #   dataframe with cleaned data
 #
 # Output:
-#   dataframe with image arrays and scores to train on
+#   image arrays and scores to train on
 #
 def format_data(data):
     hit_data_orig = np.genfromtxt('batch-data/hit_data_orig.csv',delimiter=',',dtype='str')[:,1:56]
@@ -139,7 +139,8 @@ def format_data(data):
     scores_s1 = np.asarray(list(scores1_dict.values())).astype('float32')
     scores_s2 = np.asarray(list(scores2_dict.values())).astype('float32')
 
-    return images_arr_s1, scores_s1, scores_s2
+    # Image arrays 1 and 2 end up being the same
+    return images_arr_s1, images_s1, scores_s1, scores_s2
 
 def image_to_ndarray(image_list):
     converted_images = []

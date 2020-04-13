@@ -109,62 +109,79 @@ fc = nn.Sequential(
 model.classifier = fc
 criterion = nn.NLLLoss()
 
+
+# batch_size
+batch_size = 128
+
+# extracting features for train data
+data_x = []
+label_x = []
+
+inputs,labels = train_x, train_y
+
+for i in tqdm(range(int(train_x.shape[0]/batch_size)+1)):
+    input_data = inputs[i*batch_size:(i+1)*batch_size]
+    label_data = labels[i*batch_size:(i+1)*batch_size]
+    input_data , label_data = Variable(torch.from_numpy(np.asarray(input_data))),Variable(torch.from_numpy(np.asarray(label_data.cuda())))
+    x = model.features(input_data)
+    data_x.extend(x.data.cpu().numpy())
+    label_x.extend(label_data.data.cpu().numpy())
+
 # Choose optimizer
 optimizer = torch.optim.Adam(model.classifier.parameters(), lr=0.003)
 
-model.to(device)
 
-epochs = 1
-valid_loss_min = np.Inf
-
-import time
-for epoch in range(epochs):
-    start = time.time()
-
-    model.train()
-
-    train_loss = 0.0
-    valid_loss = 0.0
-
-    for inputs, labels in zip(train_X, train_y):
-        # Send to available device
-        #inputs, labels = inputs.to(device), labels.to(device)
-        inputs = inputs.unsqueeze(0)
-        inputs, labels = Variable(torch.from_numpy(np.asarray(inputs))), Variable(torch.from_numpy(np.asarray(labels)))
-        optimizer.zero_grad()
-        
-        logps = model(inputs)
-        loss = criterion(logps, labels)
-        loss.backward()
-        optimizer.step()
-
-        train_loss += loss.item()
-        model.eval()
-
-    with torch.no_grad():
-        accuracy = 0
-        
-        for inputs, labels in zip(test_X, test_y):
-            #inputs, labels = inputs.to(device), labels.to(device)
-            inputs = inputs.unsqueeze(0)
-            inputs, labels = Variable(torch.from_numpy(np.asarray(inputs))), Variable(torch.from_numpy(np.asarray(labels)))
-            logps = model.forward(inputs)
-            batch_loss = criterion(logps, labels)
-            valid_loss += batch_loss.item()
-            ps = torch.exp(logps)
-            top_p, top_class = ps.topk(1, dim=1)
-            equals = top_class == labels.view(*top_class.shape)
-            accuracy += torch.mean(equals.type(torch.FloatTensor)).item()
-
-
-    train_loss = train_loss/len(train_X)
-    valid_loss = valid_loss/len(test_X)
-    valid_accuracy = accuracy/len(test_X) 
-    
-    # print training/validation statistics
-    print('Epoch: {} \tTraining Loss: {:.6f} \tValidation Loss: {:.6f} \tValidation Accuracy: {:.6f}'.format(epoch + 1, train_loss, valid_loss, valid_accuracy))
-
-
-    print(f"Time per epoch: {(time.time() - start):.3f} seconds")
+#model.to(device)
+#
+#epochs = 1
+#valid_loss_min = np.Inf
+#
+#import time
+#for epoch in range(epochs):
+#    start = time.time()
+#
+#    model.train()
+#
+#    train_loss = 0.0
+#    valid_loss = 0.0
+#
+#    for inputs, labels in zip(train_X, train_y):
+#        # Send to available device
+#        #inputs, labels = inputs.to(device), labels.to(device)
+#        inputs, labels = Variable(torch.from_numpy(np.asarray(inputs))), Variable(torch.from_numpy(np.asarray(labels)))
+#        optimizer.zero_grad()
+#        
+#        logps = model(inputs)
+#        loss = criterion(logps, labels)
+#        loss.backward()
+#        optimizer.step()
+#
+#        train_loss += loss.item()
+#        model.eval()
+#
+#    with torch.no_grad():
+#        accuracy = 0
+#        
+#        for inputs, labels in zip(test_X, test_y):
+#            #inputs, labels = inputs.to(device), labels.to(device)
+#            inputs, labels = Variable(torch.from_numpy(np.asarray(inputs))), Variable(torch.from_numpy(np.asarray(labels)))
+#            logps = model.forward(inputs)
+#            batch_loss = criterion(logps, labels)
+#            valid_loss += batch_loss.item()
+#            ps = torch.exp(logps)
+#            top_p, top_class = ps.topk(1, dim=1)
+#            equals = top_class == labels.view(*top_class.shape)
+#            accuracy += torch.mean(equals.type(torch.FloatTensor)).item()
+#
+#
+#    train_loss = train_loss/len(train_X)
+#    valid_loss = valid_loss/len(test_X)
+#    valid_accuracy = accuracy/len(test_X) 
+#    
+#    # print training/validation statistics
+#    print('Epoch: {} \tTraining Loss: {:.6f} \tValidation Loss: {:.6f} \tValidation Accuracy: {:.6f}'.format(epoch + 1, train_loss, valid_loss, valid_accuracy))
+#
+#
+#    print(f"Time per epoch: {(time.time() - start):.3f} seconds")
 
 
