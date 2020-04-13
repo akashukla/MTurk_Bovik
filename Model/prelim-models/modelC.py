@@ -54,7 +54,7 @@ im_dict, data = make_predata(csv_files,column_headers)
 percentile = 90
 cleaned_data = outlier_denoising(im_dict, data, percentile)
 # X contains the image names
-Images, X, y1, y2 = format_data(cleaned_data)
+X, y1, y2 = format_data(cleaned_data)
 
 
 # Split the data into test and train set
@@ -101,7 +101,7 @@ data_test = (ImageList
  .normalize(imagenet_stats))
 
 
-learn = cnn_learner(data, models.resnet50, metrics=[accuracy])
+learn = create_cnn(data, models.resnet50, metrics=[accuracy])
 learn.fit_one_cycle(5)
 learn.save('base_test')
 
