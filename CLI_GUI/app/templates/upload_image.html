@@ -16,17 +16,31 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <style>
     </style>
-   
-    </head>
-    <body>
-   
 
-        <input type="file" name-"file[]" class="form-control-file border" id='file' multiple>
-            <button type="button" class="btn btn-primary" id ='ssubmit'>Basic</button>
+</head>
 
-        
-    </body>
-    <script>
+<body>
+
+    <div class='container'style="text-align: center;" >
+        <h1 style="text-align: center;" class="display-4">Image Compression Page</h1>
+        <br>
+        <input type="file" name- "file[]" class="form-control-file border" id='file' multiple>
+        <br>
+        <button type="button" class="btn btn-primary" id='ssubmit'>Compress Image</button>
+        <br>
+        <div style="display: none;">
+            <button type="button" class="btn btn-primary" id="show_image">Got image, show?</button>
+        </div>
+        <div id="image_class" style="display: none;">
+            <h4>Compressed Image:</h1>
+
+        </div>
+    </div>
+</body>
+<script>
+    $('#show_image').on('click',function(){
+
+        });
         $('#ssubmit').on('click',function(){
             alert('wow');
 
@@ -34,8 +48,8 @@
             var files = $('#file')[0].files;
             console.log(files);
             for (var i = 0; i < files.length; i++) {
-                console.log(files[i]);
-                fd.append('file',files[i]);
+                var n = 'file'+String(i);
+                fd.append(n,files[i]);
             }
             
 
@@ -49,6 +63,20 @@
 
                 success: function( data, textStatus, jQxhr ){
                    alert('it worked');
+                   console.log(data);
+                   //console.log(btoa(data));
+                   var num_images = data['num_images'];
+                   var image_strings = data['image_strings'];
+                   console.log(encodeURI(data));
+                   //console.log(btoa(encodeURI(data)));
+                   for(var i=0;i<num_images;i++){
+                    $('#image_class').append('<img src="data:image/jpg;base64,' + encodeURI(data['image_strings'][i]) + '"/>');
+                   }
+                   
+
+                    //$('#image_class').html('<img src="data:image/jpg;base64,' + encodeURI(data) + '"/>');
+                   //document.getElementById('image_class').style.display = 'block';
+                   $("#image_class").show();
                 },
                 error: function( jqXhr, textStatus, errorThrown ){
                     alert('oh no');
@@ -57,5 +85,6 @@
             })
 
         });
-    </script>
+</script>
+
 </html>
