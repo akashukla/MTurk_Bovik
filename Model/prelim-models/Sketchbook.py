@@ -13,7 +13,7 @@ from tqdm import tqdm
 # for reading and displaying images
 from skimage.io import imread
 from skimage.transform import resize
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 # for creating validation set
 from sklearn.model_selection import train_test_split
@@ -34,13 +34,6 @@ from torch.utils.data import Dataset
 
 # torchvision for pre-trained models
 from torchvision import datasets, transforms, models
-
-# fastai
-import fastai
-from fastai.vision import *
-from fastai.metrics import error_rate
-from fastai.imports import *
-
 
 
 
@@ -100,8 +93,9 @@ from torch.utils import data
 tensor_x = torch.Tensor(X_train)
 tensor_y = torch.Tensor(y1_train)
 
+import multiprocessing as mp
 dataset = data.TensorDataset(tensor_x, tensor_y)
-dataloader = data.DataLoader(dataset)
+dataloader = data.DataLoader(dataset, num_workers=mp.cpu_count(), batch_size=64, shuffle=True)
 
 #class Dataset(data.Dataset):
 #  'Characterizes a dataset for PyTorch'
@@ -175,14 +169,29 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 model = models.resnet18(pretrained=True)
+for param in model.parameters():
+    param.requires_grad = False
+
+
 num_ftrs = model.fc.in_features
-model.fc = nn.Linear(num_ftrs, 2)
+#model.fc = nn.Linear(num_ftrs, 1)
+#model = model.to(device)
+
+def init_weights(m):
+    if type(m) == nn.Linear:
+        torch.nn.init.xavier_uniform(m.weight)
+        m.bias.data.fill_(0.01)
+
+net = nn.Sequential(nn.Linear(num_ftrs,50), nn.Linear(50, 1))
+net.apply(init_weights)
+model.fc = net
 model = model.to(device)
+
 
 criterion = nn.MSELoss()
 
 # Observe that all parameters are being optimized
-optimizer = optim.Adam(model.parameters(), lr=0.003)
+optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 # Decay LR by a factor of 0.1 every 7 epochs
 from torch.optim import lr_scheduler
@@ -238,12 +247,13 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
-                running_corrects += torch.sum(preds == labels.data)
+                #running_corrects += torch.sum(preds == labels.data)
+                running_corrects += torch.sum(abs(preds - labels.data) > 5)
             if phase == 'train':
                 scheduler.step()
 
-            epoch_loss = running_loss / dataset_sizes[phase]
-            epoch_acc = running_corrects.double() / dataset_sizes[phase]
+            epoch_loss = running_loss / len(dataset)
+            epoch_acc = running_corrects.double() / len(dataset)
 
             print('{} Loss: {:.4f} Acc: {:.4f}'.format(
                 phase, epoch_loss, epoch_acc))
@@ -269,7 +279,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 model = train_model(model, criterion, optimizer, exp_lr_scheduler,
                        num_epochs=2)
 
-
+torch.save(model.state_dict(), 'secondtacc')
 
 
 
