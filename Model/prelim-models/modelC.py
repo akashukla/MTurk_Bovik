@@ -91,7 +91,6 @@ data_train = (ImageList
 df_test = pd.DataFrame(np.array([X_test, y1_test]).T, columns=['names', 'scores'])
 df_test.scores = df_test.scores.astype('float')
 
-img_path = '../data/8k_data/'
 data_test = (ImageList
  .from_df(path=img_path,df=df_test)
  .split_by_rand_pct()
@@ -101,7 +100,7 @@ data_test = (ImageList
  .normalize(imagenet_stats))
 
 
-learn = create_cnn(data, models.resnet50, metrics=[accuracy])
+learn = cnn_learner(data_train, models.resnet50, metrics=[accuracy], true_wd=False)
 learn.fit_one_cycle(5)
 learn.save('base_test')
 
