@@ -167,7 +167,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 
-
+# MODEL 1
 model = models.resnet18(pretrained=True)
 for param in model.parameters():
     param.requires_grad = False
@@ -188,14 +188,38 @@ model.fc = net
 model = model.to(device)
 
 
+# FOR MODEL 2
+model2 = models.resnet18(pretrained=True)
+for param in model2.parameters():
+    param.requires_grad = False
+
+num_ftrs = model2.fc.in_features
+net2 = nn.Sequential(nn.Linear(num_ftrs, 100), 
+                    nn.ReLU(),
+                    nn.Linear(100,50), 
+                    nn.ReLU(),
+                    nn.Linear(50,10), 
+                    nn.ReLU(),
+                    nn.Linear(10,1))
+net2.apply(init_weights)
+model2.fc = net2
+model2 = model2.to(device)
+
+
+
+
+
+#
+# General Training
+#
 criterion = nn.MSELoss()
 
 # Observe that all parameters are being optimized
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+optimizer = optim.Adam(model.parameters(), lr=0.005)
 
 # Decay LR by a factor of 0.1 every 7 epochs
 from torch.optim import lr_scheduler
-exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
+exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.0001)
 
 
 
@@ -211,6 +235,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        print('LR: ' , scheduler.get_lr())
         print('-' * 10)
 
         # Each epoch has a training and validation phase
@@ -277,10 +302,10 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 
 
 model = train_model(model, criterion, optimizer, exp_lr_scheduler,
-                       num_epochs=2)
+                       num_epochs=20)
+torch.save(model, 'newarch1')
 
-torch.save(model.state_dict(), 'secondtacc')
-
-
+model2 = train_model(model2, criterion, optimizer, exp_lr_scheduler, num_epochs=10)
+torch.save(model2, 'newarch2')
 
 
