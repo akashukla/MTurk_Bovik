@@ -18,19 +18,42 @@
 #!/bin/bash
 
 COMMIT_OBJ=$@
+MSG=""
 echo "Using MK's easy commit script. Warning: if empty target, this will auto add all untracked objects and commit those along with pre-staged changes to the current branch head."
 
-if [ -z "$@" ]; then
-    echo "Empty target."
-else 
-    # Adding all your files or commit objects
-    echo "Adding your commit objects..."
-    for co in $COMMIT_OBJ; do
-        git add "$co"
-    done
-    git commit -a -m "Testing MK's auto commit script."
-   
-fi
+while getopts ":c:m:" opt; do
+    case ${opt} in
+        c )
+            echo "Adding your commit objects..."
+            # Adding all your files or commit objects
+            for co in ${OPTARG}; do
+                git add "$co"
+                echo "$co"
+            done
+            ;;
+        m )
+            echo "Adding your commit message ..."
+            MSG=${OPTARG}
+            echo "$MSG"
+            ;;
+        \? )
+            echo "Invalid option -${OPTARG}" >&2
+            ;;
+        : )
+            echo "Option -${OPTARG} requires an argument." >&2
+            exit 1
+            ;;
+    esac
+done
+
+echo "Performing commit"
+git commit -a -m "$MSG: Using MK's auto commit tool."
+
+#if [ -z "$@" ]; then
+#    echo "Empty target."
+#else 
+#fi
+
 echo "Pulling latest changes from current head..."
 git pull
 
