@@ -35,3 +35,6 @@
 *.vimrc
 *.DS_Store
 *.localized
+
+# Saved Models
+*.pth
