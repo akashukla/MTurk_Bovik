@@ -45,6 +45,7 @@ from torchvision import datasets, transforms, models
 #from denoise import *
 #from normalize import *
 from lib.preparedata import *
+from lib.evalmodel import *
 
 #csv_files = ['batch-data/batch1_results.csv',
 #             'batch-data/batch2_results.csv',
@@ -241,4 +242,4 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 #torch.save(model2, 'newarch2')
 
 
-
+#y, yhat = evaluate_model(X_test, y1_test, model=model)
