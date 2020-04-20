@@ -145,18 +145,24 @@ def format_data(data):
     images_s1 = np.asarray(list(scores1_dict.keys()))
     images_s2 = np.asarray(list(scores2_dict.keys()))
 
-    images_arr_s1 = image_to_ndarray(images_s1)
-    # images_arr_s2 = image_to_ndarray(images_s2)
+    images_arr_s1 = image_to_ndarray(images_s1, normalize=True)
     scores_s1 = np.asarray(list(scores1_dict.values())).astype('float32')
     scores_s2 = np.asarray(list(scores2_dict.values())).astype('float32')
 
     # Image arrays 1 and 2 end up being the same
     return images_arr_s1, images_s1, scores_s1, scores_s2
 
-def image_to_ndarray(image_list):
+def image_to_ndarray(image_list, normalize):
     converted_images = []
+    base = '../data/8k_data/'
+    first_im = imread(base + image_list[0])
+    first_im = resize(first_im, output_shape=(224,224,3), mode='constant', anti_aliasing=True)
+    first_im = first_im.astype('float32')
+
+    mu = np.zeros(np.shape(first_im)) 
+
     for name in image_list:
-        image_path = '../data/8k_data/' + name
+        image_path = base + name
         image = imread(image_path)
         
         # Resizing image
@@ -164,6 +170,12 @@ def image_to_ndarray(image_list):
         image = image.astype('float32')
 
         converted_images.append(image)
+        mu += image
+
+    mu = mu/len(image_list)
+    if normalize: 
+        for i in converted_images:
+            i = i - mu
 
     return np.asarray(converted_images)
 
