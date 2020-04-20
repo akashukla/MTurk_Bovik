@@ -78,7 +78,8 @@ ordered_means = np.sort(golden_mu)
 avg_corr = (1/len(golden_dat))*np.sum([sp.stats.spearmanr(ordered_means,golden_dat[i,:])[0] for i in range(len(golden_dat))]) 
 
 # Select most contrasted mean values
-contra_mu_names=['JPEGImages__2008_006461.jpg', 'VOC2012__2009_003324.jpg','JPEGImages__2011_004079.jpg','EMOTIC__COCO_val2014_000000147471.jpg','VOC2012__2011_003123.jpg']
+#contra_mu_names=['JPEGImages__2008_006461.jpg', 'VOC2012__2009_003324.jpg','JPEGImages__2011_004079.jpg','EMOTIC__COCO_val2014_000000147471.jpg','VOC2012__2011_003123.jpg']
+contra_mu_names=['JPEGImages__2010_003648.jpg', 'VOC2012__2009_000802.jpg', 'JPEGImages__2011_000180.jpg', 'VOC2012__2011_002173.jpg', 'JPEGImages__2008_005266.jpg']
 #contra_mu_i = [0,8,49,64]
 contra_mu_i=[np.argwhere(golden_names==contra_mu_names[i])[0,0] for i in range(len(contra_mu_names))]
 #contra_mu = ordered_means[contra_mu_i]
@@ -204,8 +205,8 @@ while(cnt_top < num_total_sets):
     final_data.append(set_write)
 
  
-np.savetxt('./gen/hit_data.csv',final_data,delimiter=',',fmt='%s')
-np.savetxt('./hit_data.csv',final_data,delimiter=',',fmt='%s')
+#np.savetxt('./gen/hit_data.csv',final_data,delimiter=',',fmt='%s')
+#np.savetxt('./hit_data.csv',final_data,delimiter=',',fmt='%s')
 
 
     ### TODO: take the golden images we need to use
