@@ -102,25 +102,6 @@ net2.apply(init_weights)
 model2.fc = net2
 model2 = model2.to(device)
 
-
-
-
-
-#
-# General Training
-#
-criterion = nn.MSELoss()
-
-# Observe that all parameters are being optimized
-optimizer = optim.Adam(model.parameters(), lr=0.005)
-
-# Decay LR by a factor of 0.1 every 7 epochs
-from torch.optim import lr_scheduler
-exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.0001)
-
-
-
-
 import time
 import copy
 def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
@@ -129,6 +110,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 
     best_model_wts = copy.deepcopy(model.state_dict())
     best_acc = 0.0
+    best_lr = 0.0
 
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
@@ -184,8 +166,10 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
             if phase == 'val' and epoch_acc > best_acc:
                 best_acc = epoch_acc
                 best_model_wts = copy.deepcopy(model.state_dict())
+                best_lr = lr
 
         print()
+        # End epoch iterations
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(
@@ -198,12 +182,25 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 
 
 
-model = train_model(model, criterion, optimizer, exp_lr_scheduler,
-                       num_epochs=10)
-torch.save(model, 'newarch1')
 
-y, yhat = evaluate_model(X1_test, y1_test, model=model)
+# ################################################### #
+#                                                     #
+#                 General Training                    #
+#                                                     #
+# ################################################### #
 
-#model2 = train_model(model2, criterion, optimizer, exp_lr_scheduler, num_epochs=10)
-#torch.save(model2, 'newarch2')
+from torch.optim import lr_scheduler
 
+def train_with_param(params):
+    criterion = nn.MSELoss()
+    optimizer = optim.Adam(model.parameters(), lr=params)
+    
+    exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.0001)
+    
+    model = train_model(model, criterion, optimizer, exp_lr_scheduler,
+                           num_epochs=10)
+    
+    y, yhat = evaluate_model(X1_test, y1_test, model=model)
+
+torch.save(model, 'best_model')
+    
