@@ -40,10 +40,14 @@ from torchvision import datasets, transforms, models
 #
 # GENERATE DATA
 #
-# Note this part may take some time the first time you run this
-# All sequential runs will be faster
-from lib.preparedata import *
 from lib.evalmodel import *
+
+
+
+# Prepare all the data
+from lib.preparedata import *
+
+
 
 #
 # Set up data format for regression based tl
@@ -194,12 +198,12 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 
 
 
-#model = train_model(model, criterion, optimizer, exp_lr_scheduler,
-#                       num_epochs=20)
-#torch.save(model, 'newarch1')
+model = train_model(model, criterion, optimizer, exp_lr_scheduler,
+                       num_epochs=10)
+torch.save(model, 'newarch1')
+
+y, yhat = evaluate_model(X1_test, y1_test, model=model)
 
 #model2 = train_model(model2, criterion, optimizer, exp_lr_scheduler, num_epochs=10)
 #torch.save(model2, 'newarch2')
 
-
-#y, yhat = evaluate_model(X1_test, y1_test, model=model)

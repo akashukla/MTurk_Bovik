@@ -38,9 +38,25 @@ from torchvision import datasets, transforms, models
 
 
 #
-# GENERATE DATA
+# GENERATE DATA IF NOT DONE ALREADY
 #
 # Note this part may take some time
+
+import os.path
+
+if os.path.isfile(os.getcwd()+'/X1_train.npy'):
+    print('Fetching data ...')
+    X1_train = np.load('X1_train.npy')
+    X2_train = np.load('X2_train.npy')
+    X1_test = np.load('X1_test.npy')
+    X2_test = np.load('X2_test.npy')
+    y1_train = np.load('y1_train.npy')
+    y2_train = np.load('y2_train.npy')
+    y1_test = np.load('y1_test.npy')
+    y2_test = np.load('y2_test.npy')
+    sys.exit()
+
+
 from lib.dataload import *
 from lib.denoise import *
 from lib.normalize import *
@@ -67,15 +83,24 @@ Images = Images.reshape(Images.shape[0], Images.shape[-1], Images.shape[1], Imag
 
 # Split the data into test and train set
 test_size = 0.2
-X_train, X_test, y1_train, y1_test = train_test_split(Images, 
+X1_train, X1_test, y1_train, y1_test = train_test_split(Images, 
                                                       y1, 
                                                       test_size=test_size, 
                                                       random_state=123)
-X_train, X_test, y2_train, y2_test = train_test_split(Images, 
+X2_train, X2_test, y2_train, y2_test = train_test_split(Images, 
                                                       y2, 
                                                       test_size=test_size, 
                                                       random_state=123)
 
+
+np.save('X1_train', X1_train)
+np.save('X2_train', X2_train)
+np.save('X1_test', X1_test)
+np.save('X2_test', X2_test)
+np.save('y1_train', y1_train)
+np.save('y2_train', y2_train)
+np.save('y1_test', y1_test)
+np.save('y2_test', y2_test)
 
 print("Done preparing data")
 

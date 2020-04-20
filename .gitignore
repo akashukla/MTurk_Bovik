@@ -38,3 +38,6 @@
 
 # Saved Models
 *.pth
+
+# Numpy outputs
+*.npy
