@@ -43,6 +43,9 @@ from torchvision import datasets, transforms, models
 # Note this part may take some time
 
 import os.path
+from lib.dataload import *
+from lib.denoise import *
+from lib.normalize import *
 
 if os.path.isfile(os.getcwd()+'/X1_train.npy'):
     print('Fetching data ...')
@@ -54,56 +57,51 @@ if os.path.isfile(os.getcwd()+'/X1_train.npy'):
     y2_train = np.load('y2_train.npy')
     y1_test = np.load('y1_test.npy')
     y2_test = np.load('y2_test.npy')
-    sys.exit()
 
-
-from lib.dataload import *
-from lib.denoise import *
-from lib.normalize import *
-
-csv_files = ['lib/batch-data/batch1_results.csv',
-             'lib/batch-data/batch2_results.csv',
-             'lib/batch-data/batch3_results.csv',
-             'lib/batch-data/batch4_results.csv',
-             'lib/batch-data/batch5_results.csv',
-             'lib/batch-data/batch6_results.csv']
-
-column_headers = ['AssignmentStatus','Answer.set_number','WorkerId','Answer.slider_values','Answer.slider_values2']
-
-im_dict, data = make_predata(csv_files,column_headers)
-
-# Denoise and get cleaned data
-percentile = 90
-cleaned_data = outlier_denoising(im_dict, data, percentile)
-
-# X contains the image names
-Images, X, y1, y2 = format_data(cleaned_data)
-
-Images = Images.reshape(Images.shape[0], Images.shape[-1], Images.shape[1], Images.shape[2])
-
-# Split the data into test and train set
-test_size = 0.2
-X1_train, X1_test, y1_train, y1_test = train_test_split(Images, 
-                                                      y1, 
-                                                      test_size=test_size, 
-                                                      random_state=123)
-X2_train, X2_test, y2_train, y2_test = train_test_split(Images, 
-                                                      y2, 
-                                                      test_size=test_size, 
-                                                      random_state=123)
-
-
-np.save('X1_train', X1_train)
-np.save('X2_train', X2_train)
-np.save('X1_test', X1_test)
-np.save('X2_test', X2_test)
-np.save('y1_train', y1_train)
-np.save('y2_train', y2_train)
-np.save('y1_test', y1_test)
-np.save('y2_test', y2_test)
-
-print("Done preparing data")
-
+else:
+    csv_files = ['lib/batch-data/batch1_results.csv',
+                 'lib/batch-data/batch2_results.csv',
+                 'lib/batch-data/batch3_results.csv',
+                 'lib/batch-data/batch4_results.csv',
+                 'lib/batch-data/batch5_results.csv',
+                 'lib/batch-data/batch6_results.csv']
+    
+    column_headers = ['AssignmentStatus','Answer.set_number','WorkerId','Answer.slider_values','Answer.slider_values2']
+    
+    im_dict, data = make_predata(csv_files,column_headers)
+    
+    # Denoise and get cleaned data
+    percentile = 90
+    cleaned_data = outlier_denoising(im_dict, data, percentile)
+    
+    # X contains the image names
+    Images, X, y1, y2 = format_data(cleaned_data)
+    
+    Images = Images.reshape(Images.shape[0], Images.shape[-1], Images.shape[1], Images.shape[2])
+    
+    # Split the data into test and train set
+    test_size = 0.2
+    X1_train, X1_test, y1_train, y1_test = train_test_split(Images, 
+                                                          y1, 
+                                                          test_size=test_size, 
+                                                          random_state=123)
+    X2_train, X2_test, y2_train, y2_test = train_test_split(Images, 
+                                                          y2, 
+                                                          test_size=test_size, 
+                                                          random_state=123)
+    
+    
+    np.save('X1_train', X1_train)
+    np.save('X2_train', X2_train)
+    np.save('X1_test', X1_test)
+    np.save('X2_test', X2_test)
+    np.save('y1_train', y1_train)
+    np.save('y2_train', y2_train)
+    np.save('y1_test', y1_test)
+    np.save('y2_test', y2_test)
+    
+    print("Done preparing data")
+    
 
 
 
