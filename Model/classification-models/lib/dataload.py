@@ -28,9 +28,9 @@ def make_predata(csv_files, column_headers):
         df = df[df.loc[:,'AssignmentStatus'] == 'Approved']
         df = df[df.loc[:,'Answer.set_number'] != 'initial']
         df = df.loc[:,column_headers] 
-        if re.match(r'.*batch[1-3]', f) is not None:
+        if re.match(r'.*batch[1-3]\_', f) is not None:
             df['HitDataFile'] = np.repeat(0,len(df))
-        elif re.match(r'.*batch[4-6]',f) is not None: 
+        elif re.match(r'.*batch[4-6]\_',f) is not None: 
             df['HitDataFile'] = np.repeat(1,len(df))
         else:
             df['HitDataFile'] = np.repeat(2,len(df))
@@ -55,11 +55,11 @@ def make_predata(csv_files, column_headers):
         slider2_vals = np.asarray(data.loc[w,'Answer.slider_values2'].split(','))[:-1].astype('int64')
        
         if int(data.loc[w,'HitDataFile']) == 0:
-            set_names = hit_data_orig[set_num-1]
+            set_names = hit_data_orig[(set_num-1)%len(hit_data_orig)]
         elif int(data.loc[w,'HitDataFile']) == 1:
-            set_names = hit_data_electric_boogaloo[set_num-1]
+            set_names = hit_data_electric_boogaloo[(set_num-1)%len(hit_data_electric_boogaloo)]
         else:
-            set_names = hit_data[set_num-1]
+            set_names = hit_data[(set_num-1)%len(hit_data)]
         
         
         for n in range(len(set_names)):
@@ -106,14 +106,15 @@ def format_data(data):
         set_num = int(data.loc[w,'Answer.set_number'])
         slider1_vals = np.asarray(data.loc[w,'Answer.slider_values'].split(','))[:-1].astype('int64')
         slider2_vals = np.asarray(data.loc[w,'Answer.slider_values2'].split(','))[:-1].astype('int64')
+    
       
         if int(data.loc[w,'HitDataFile']) == 0:
-            set_names = hit_data_orig[set_num-1]
+            set_names = hit_data_orig[(set_num-1)%len(hit_data_orig)]
         elif int(data.loc[w,'HitDataFile']) == 1:
-            set_names = hit_data_electric_boogaloo[set_num-1]
+            set_names = hit_data_electric_boogaloo[(set_num-1)%len(hit_data_electric_boogaloo)]
         else:
-            set_names = hit_data[set_num-1]
-        
+            set_names = hit_data[(set_num-1)%len(hit_data)]
+       
         for n in range(len(set_names)):
             if im_dict[set_names[n]] is None:
                 im_dict[set_names[n]] = np.asarray([slider1_vals[n],
