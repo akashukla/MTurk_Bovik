@@ -28,9 +28,9 @@ def make_predata(csv_files, column_headers):
         df = df[df.loc[:,'AssignmentStatus'] == 'Approved']
         df = df[df.loc[:,'Answer.set_number'] != 'initial']
         df = df.loc[:,column_headers] 
-        if re.match(r'.*batch[1-3]\_', f) is not None:
+        if re.match(r'.*batch[1-3]_', f) is not None:
             df['HitDataFile'] = np.repeat(0,len(df))
-        elif re.match(r'.*batch[4-6]\_',f) is not None: 
+        elif re.match(r'.*batch[4-6]_',f) is not None: 
             df['HitDataFile'] = np.repeat(1,len(df))
         else:
             df['HitDataFile'] = np.repeat(2,len(df))
@@ -146,12 +146,10 @@ def format_data(data):
     images_s1 = np.asarray(list(scores1_dict.keys()))
     images_s2 = np.asarray(list(scores2_dict.keys()))
 
-#   images_arr_s1 = image_to_ndarray(images_s1, normalize=True)
     scores_s1 = np.asarray(list(scores1_dict.values())).astype('float32')
     scores_s2 = np.asarray(list(scores2_dict.values())).astype('float32')
 
     # Image arrays 1 and 2 end up being the same
-    #return images_arr_s1, images_s1, scores_s1, scores_s2
     return images_s1, scores_s1, scores_s2
 
 #def image_to_ndarray(image_list, normalize):
