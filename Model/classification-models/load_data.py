@@ -27,6 +27,7 @@ column_headers = ['AssignmentStatus','Answer.set_number','WorkerId','Answer.slid
 #            'another_im.jpg': ['ASBCJEFJ', '34', '21'],
 #               ... etc. }
 im_dict, data = make_predata(csv_files,column_headers)
+images_list, scores_s1, scores_s2 = format_data(data) 
 
-
-
+#if os.path.isfile(os.get.cwd()+'gen/image_arr'):
+fft = im_to_ndarray(images_list, normalize=False)
