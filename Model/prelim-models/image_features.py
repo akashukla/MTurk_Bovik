@@ -79,8 +79,9 @@ def image_features(image):
     u_yb, sig_yb = np.mean(yb), np.std(yb) 
     colorfulness = np.sqrt(sig_rg**2+sig_yb**2) + 0.3*np.sqrt(u_rg**2 + u_yb**2)
     rms_cont = rms_contrast(image)
+    sharpness=variance_of_laplacian(image)
 
-    return l_avg, l_dev, rms_cont, colorfulness
+    return l_avg, l_dev, rms_cont, colorfulness, sharpness
 
 def rms_contrast(image):
     i = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY).astype(float)/255
@@ -92,7 +93,11 @@ def rms_contrast(image):
             sum += (i[m,n] - i_avg) ** 2
     return np.sqrt((1/M*N)*sum)
 
-
+def variance_of_laplacian(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # compute the Laplacian of the image and then return the focus
+    # measure, which is simply the variance of the Laplacian
+    return cv2.Laplacian(gray, cv2.CV_64F).var()
 
 
 #g1_s1 = np.zeros(uq_image.shape[0])
@@ -103,8 +108,8 @@ def rms_contrast(image):
 
 
 image_names = np.load('batch_image_names_arr.npy')
-svals = np.load('batch_svals_arr.npy')
-svals2 = np.load('batch_svals2_arr.npy')
+#svals = np.load('batch_svals_arr.npy')
+#svals2 = np.load('batch_svals2_arr.npy')
 workers = np.load('batch_workers_arr.npy')
 
 uq_image, uq_ind, uq_count = np.unique(image_names,return_index=True, return_counts=True)
@@ -112,13 +117,14 @@ uq_image, uq_ind, uq_count = np.unique(image_names,return_index=True, return_cou
 
 image_svals = np.zeros((uq_image.shape[0], 2), dtype='float64')
 
-##   image_feats = np.zeros((uq_image.shape[0], 4),dtype='float64')
+image_feats = np.zeros((uq_image.shape[0], 5),dtype='float64')
 def gen_svals_features():
     i=0
     for uqi in uq_image:
         if i%100==0:
             print(i)
-        image_svals[i]= np.array([np.mean(svals[image_names==uqi]), np.mean(svals2[image_names==uqi])])
+    ##    image_svals[i]= np.array([np.mean(svals[image_names==uqi]), np.mean(svals2[image_names==uqi])])
+
     ##       #sv1 = batch_svals_arr[batch_image_names_arr==uqi] 
     ##       #sv2 = batch_svals2_arr[batch_image_names_arr==uqi]
     ##       ##w[i] = batch_workers_arr[batch_image_names_arr==uqi]
@@ -132,11 +138,10 @@ def gen_svals_features():
     
         imi=cv2.imread('../data/8k_data/'+uqi)
         image_feats[i] = image_features(imi)
-        image_svals
         i+=1
 
     np.save('image_feats', image_feats)
-    np.save('image_svals', image_svals)
+    #np.save('image_svals', image_svals)
 
-image_feats=np.load('image_feats.npy')
+#image_feats=np.load('image_feats.npy')
 image_svals=np.load('image_svals.npy')
