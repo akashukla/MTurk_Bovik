@@ -1,0 +1,46 @@
+--- /home1/06959/mksn/.local/lib/python3.7/site-packages/torch/nn/modules/conv.py
++++ /home1/06959/mksn/.local/lib/python3.7/site-packages/torch/nn/modules/conv.py
+@@ -70,7 +70,7 @@
+         kernel_size (int or tuple): Size of the convolving kernel
+         stride (int or tuple, optional): Stride of the convolution. Default: 1
+         padding (int or tuple, optional): Zero-padding added to both sides of the input. Default: 0
+-        padding_mode (string, optional): ``'zeros'``, ``'reflect'``, ``'replicate'`` or ``'circular'``. Default: ``'zeros'``
++        padding_mode (string, optional). Accepted values `zeros` and `circular` Default: `zeros`
+         dilation (int or tuple, optional): Spacing between kernel elements. Default: 1
+         groups (int, optional): Number of blocked connections from input channels to output channels. Default: 1
+         bias (bool, optional): If ``True``, adds a learnable bias to the output. Default: ``True``
+@@ -93,11 +93,11 @@
+                          :math:`\text{kernel\_size[0]}, \text{kernel\_size[1]})`.
+                          The values of these weights are sampled from
+                          :math:`\mathcal{U}(-\sqrt{k}, \sqrt{k})` where
+-                         :math:`k = \frac{groups}{C_\text{in} * \prod_{i=0}^{1}\text{kernel\_size}[i]}`
++                         :math:`k = \frac{1}{C_\text{in} * \prod_{i=0}^{1}\text{kernel\_size}[i]}`
+         bias (Tensor):   the learnable bias of the module of shape (out_channels). If :attr:`bias` is ``True``,
+                          then the values of these weights are
+                          sampled from :math:`\mathcal{U}(-\sqrt{k}, \sqrt{k})` where
+-                         :math:`k = \frac{groups}{C_\text{in} * \prod_{i=0}^{1}\text{kernel\_size}[i]}`
++                         :math:`k = \frac{1}{C_\text{in} * \prod_{i=0}^{1}\text{kernel\_size}[i]}`
+ 
+     Examples::
+ 
+@@ -127,14 +127,16 @@
+             in_channels, out_channels, kernel_size, stride, padding, dilation,
+             False, _pair(0), groups, bias, padding_mode)
+ 
+-    def _conv_forward(self, input, weight):
+-        if self.padding_mode != 'zeros':
+-            return F.conv2d(F.pad(input, self._padding_repeated_twice, mode=self.padding_mode),
++    def conv2d_forward(self, input, weight):
++        if self.padding_mode == 'circular':
++            expanded_padding = ((self.padding[1] + 1) // 2, self.padding[1] // 2,
++                                (self.padding[0] + 1) // 2, self.padding[0] // 2)
++            return F.conv2d(F.pad(input, expanded_padding, mode='circular'),
+                             weight, self.bias, self.stride,
+                             _pair(0), self.dilation, self.groups)
+         return F.conv2d(input, weight, self.bias, self.stride,
+                         self.padding, self.dilation, self.groups)
+ 
+     def forward(self, input):
+-        return self._conv_forward(input, self.weight)
++        return self.conv2d_forward(input, self.weight)
+ 

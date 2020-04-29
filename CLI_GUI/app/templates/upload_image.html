@@ -32,8 +32,13 @@
             <button type="button" class="btn btn-primary" id="show_image">Got image, show?</button>
         </div>
         <br>
-        <div id="image_class" style="display: none;">
+        <div id="image_class" style="display: none;text-align: center;align-content: center;">
+            <h4>Original Image:</h4>
+                <img id = 'orig' src = ''>   
+                <br>
             <h4>Compressed Image:</h1>
+                <img id = 'result' src = '' style="display: none;">
+                <br>
             
         </div>
     </div>
@@ -64,16 +69,46 @@
 
                 success: function( data, textStatus, jQxhr ){
                    console.log('it worked');
-                   console.log(data);
+                   
+                   data = data.substring(2,data.length-2);
+                   console.log(parseInt(data));
                    //console.log(btoa(data));
-                   var num_images = data['num_images'];
-                   var image_strings = data['image_strings'];
-                   console.log(encodeURI(data));
+                   //var num_images = data['num_images'];
+                   //var image_strings = data['image_strings'];
+                   //console.log(encodeURI(data));
                    //console.log(btoa(encodeURI(data)));
-                   $('#img').remove();
-                   for(var i=0;i<num_images;i++){
-                    $('#image_class').append('<img id="img" src="data:image/jpg;base64,' + encodeURI(data['image_strings'][i]) + '"/><br>');
-                   }
+                   //$('#img').remove(); 
+                        var mime_type = 'image/jpeg';
+                        // if (output_format === "png") {
+                        //     mime_type = "image/png";
+                        // } else if (output_format === "webp") {
+                        //     mime_type = "image/webp";
+                        // } else {
+                        //     mime_type = "image/jpeg";
+                        // }
+
+                        var source_img_obj =document.getElementById('orig');
+                        source_img_obj.src =  URL.createObjectURL($('#file')[0].files[0]);//new Image($('#file')[0].files);
+                        var result_image_obj = document.getElementById('result');
+                        //result_image_obj.src =source_img_obj.src;
+                        console.log(source_img_obj);
+                        console.log(result_image_obj);
+                        var cvs = document.createElement('canvas');
+                        cvs.width = source_img_obj.naturalWidth;
+                        cvs.height = source_img_obj.naturalHeight;
+                        var ctx = cvs.getContext("2d").drawImage(source_img_obj, 0, 0);
+                        var newImageData = cvs.toDataURL(mime_type, 2 * parseInt(data) / 100);
+                        //var result_image_obj = new Image();
+                        result_image_obj.src = newImageData;
+                        result_image_obj.src = newImageData;
+                        document.getElementById('result').style.display = 'block';
+
+                        document.getElementById('image_class').style.display = 'block';
+                        //return result_image_obj;
+                //    for(var i=0;i<num_images;i++){
+                //        var num = i;
+                //     $('#image_class').append('<img id="img" src="data:image/jpg;base64,' + encodeURI(data['image_strings'][i]) + '"/><br>');
+                //    }
                    
 
                     //$('#image_class').html('<img src="data:image/jpg;base64,' + encodeURI(data) + '"/>');
