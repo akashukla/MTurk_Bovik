@@ -82,7 +82,13 @@ def AVG_Luminance(image):
 
 # Computers 2D FFT of the image
 # Puts image into grayscale
+import numpy.fft
+from numpy.fft import fftshift, fft
 def image_fft(image):
+    #r,g,b = image[:,:,0], image[:,:,1], image[:,:,2]
+    #gray_image = 0.2989*r + 0.587*g + 0.114*b
+    #gray_image = gray_image.astype('uint8')
+    #return np.fft.fftshift(np.fft.fft(gray_image))
     return fft2(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY))
 
 
