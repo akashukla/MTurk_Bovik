@@ -31,9 +31,10 @@
         <div style="display: none;">
             <button type="button" class="btn btn-primary" id="show_image">Got image, show?</button>
         </div>
+        <br>
         <div id="image_class" style="display: none;">
             <h4>Compressed Image:</h1>
-
+            
         </div>
     </div>
 </body>
@@ -42,7 +43,7 @@
 
         });
         $('#ssubmit').on('click',function(){
-            alert('wow');
+            console.log('button clicked');
 
             var fd = new FormData();
             var files = $('#file')[0].files;
@@ -62,15 +63,16 @@
                 enctype:"multipart/form-data",
 
                 success: function( data, textStatus, jQxhr ){
-                   alert('it worked');
+                   console.log('it worked');
                    console.log(data);
                    //console.log(btoa(data));
                    var num_images = data['num_images'];
                    var image_strings = data['image_strings'];
                    console.log(encodeURI(data));
                    //console.log(btoa(encodeURI(data)));
+                   $('#img').remove();
                    for(var i=0;i<num_images;i++){
-                    $('#image_class').append('<img src="data:image/jpg;base64,' + encodeURI(data['image_strings'][i]) + '"/>');
+                    $('#image_class').append('<img id="img" src="data:image/jpg;base64,' + encodeURI(data['image_strings'][i]) + '"/><br>');
                    }
                    
 
