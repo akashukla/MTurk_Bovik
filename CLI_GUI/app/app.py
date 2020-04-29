@@ -21,6 +21,7 @@ from torch.utils import data
 from torchvision import datasets, transforms, models
 import io
 import json
+import cv2
 
 
 app = Flask(__name__)
@@ -63,6 +64,10 @@ def get_compression_level():
             print(compression_level)
             #nn_predicted_image = pred_image(NN, request.files[i],device) #predict compression rate given neural net and image
             compression_levels.append(compression_level)
+
+            # imgg = cv2.imread(img_str)
+            # print(imgg)
+            # cv2.imwrite('', imgg,[cv2.IMWRITE_JPEG_QUALITY, compression_level*2]) #Compression_Ratio is the output of the model
             #print(nn_predicted_image)
             #img_str = base64.b64encode(nn_predicted_image.read())
             #predicted_images.append(img_str.decode('utf-8'))#append to list

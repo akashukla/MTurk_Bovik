@@ -36,14 +36,20 @@
             <h4 id = 'orig_section'>Original Image:</h4>
                 <img id = 'orig' src = ''>   
                 <br>
+                <h5 id = 'size_orig'></h5>
+                <br>
             <h4 id = 'compress_section'>Compressed Image:</h1>
+                <br>
                 <img id = 'result' src = '' style="display: none;">
+                <br>
+                <h5 id = 'size_new'></h5>
                 <br>
             
         </div>
     </div>
 </body>
 <script>
+    var double_click = false;
     $('#show_image').on('click',function(){
 
         });
@@ -57,6 +63,7 @@
             for (var i = 0; i < files.length; i++) {
                 var n = 'file'+String(i);
                 orig_image_size = files[i].size;
+                console.log(files[i]);
                 fd.append(n,files[i]);
             }
             
@@ -69,9 +76,9 @@
                 processData: false,
                 enctype:"multipart/form-data",
 
-                success: function( data, textStatus, jQxhr ){
+                success: function( data, textStatus, request ){
                    console.log('it worked');
-                   
+                   console.log(request.getResponseHeader('Content-Length'))
                    data = data.substring(2,data.length-2);
                    console.log(parseInt(data*2));
                    data = parseInt(data*2)
@@ -89,35 +96,47 @@
                         cvs.height = source_img_obj.naturalHeight;
                         var ctx = cvs.getContext("2d").drawImage(source_img_obj, 0, 0);
                         var newImageData = cvs.toDataURL(mime_type, 2 * parseInt(data/2) / 100);
+                        var oldImageData = cvs.toDataURL(mime_type, 2 * 100 / 100);
+                        //console.log(encodeURI(oldImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1)
+
+                    
+                        // var canvas = document.createElement("canvas");
+                        // canvas.width = source_img_obj.width;
+                        // canvas.height = source_img_obj.height;
+                        // var ctx = canvas.getContext("2d");
+                        // ctx.drawImage(source_img_obj, 0, 0);
+                        // var dataURL = canvas.toDataURL("image/jpg");
+
+
                         //var result_image_obj = new Image();
                         var comp_lvl = document.getElementById('comp_lvl');
                         if(comp_lvl != null){
-                        comp_lvl.parentNode.removeChild(comp_lvl);
+                            comp_lvl.parentNode.removeChild(comp_lvl);
                         }
                         $('#compress_section').append('<h5 id ="comp_lvl">Compression Level: '+data+'/100</h5<br>');
-                        result_image_obj.src = newImageData;
+                        var size_orig = encodeURI(oldImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1
+                        var size_new = encodeURI(newImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1
+                        console.log(encodeURI(oldImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1);
+                        console.log(encodeURI(newImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1);//(encodeURI(newImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1)*8);
                         result_image_obj.src = newImageData;
                         document.getElementById('result').style.display = 'block';
-                        // console.log(source_img_obj.);
-                        // console.log(result_image_obj.files[0].size);
-                        // var url = result_image_obj.src || result_image_obj.href;
-                        // var s;
-                        // if (url && url.length > 0)
-                        // {
-                        //     s = performance.getEntriesByName(url)[0];
-                            
-                        //  }
-                        //  console.log(s.transferSize); //or encodedBodySize, decodedBodySize
                         document.getElementById('image_class').style.display = 'block';
-                        //return result_image_obj;
-                //    for(var i=0;i<num_images;i++){
-                //        var num = i;
-                //     $('#image_class').append('<img id="img" src="data:image/jpg;base64,' + encodeURI(data['image_strings'][i]) + '"/><br>');
-                //    }
-                   
+                        double_click = !double_click
+                        document.getElementById('size_orig').innerHTML = 'Size in Bytes + ~30 Bytes Padding: '+size_orig; 
+                            document.getElementById('size_new').innerHTML = 'Size in Bytes + ~30 Bytes Padding: '+size_new; 
+                        if(double_click ==false){
+                            $('#show_image').mousedown();
+                            s_orig_elem = document.getElementById('size_orig');
+                            s_new_elem = document.getElementById('size_new');
+                            // if(s_orig_elem != null){
+                            //     s_orig_elem.parentNode.removeChild(s_orig_elem);
+                            //     s_new_elem.parentNode.removeChild(s_new_elem);
+                            // }
+                            document.getElementById('size_orig').innerHTML = 'Size in Bytes + Padding: '+size_orig; 
+                            document.getElementById('size_new').innerHTML = 'Size in Bytes + Padding: '+size_new; 
+                        }
+                        double_click = !double_click
 
-                    //$('#image_class').html('<img src="data:image/jpg;base64,' + encodeURI(data) + '"/>');
-                   //document.getElementById('image_class').style.display = 'block';
                    $("#image_class").show();
                 },
                 error: function( jqXhr, textStatus, errorThrown ){
