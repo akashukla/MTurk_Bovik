@@ -88,7 +88,7 @@
                         cvs.width = source_img_obj.naturalWidth;
                         cvs.height = source_img_obj.naturalHeight;
                         var ctx = cvs.getContext("2d").drawImage(source_img_obj, 0, 0);
-                        var newImageData = cvs.toDataURL(mime_type, 2 * parseInt(data) / 100);
+                        var newImageData = cvs.toDataURL(mime_type, 2 * parseInt(data/2) / 100);
                         //var result_image_obj = new Image();
                         var comp_lvl = document.getElementById('comp_lvl');
                         if(comp_lvl != null){
