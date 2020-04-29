@@ -33,18 +33,26 @@
         </div>
         <br>
         <div id="image_class" style="display: none;text-align: center;align-content: center;">
-            <h4 id = 'orig_section'>Original Image:</h4>
-                <img id = 'orig' src = ''>   
-                <br>
-                <h5 id = 'size_orig'></h5>
-                <br>
-            <h4 id = 'compress_section'>Compressed Image:</h1>
-                <br>
-                <img id = 'result' src = '' style="display: none;">
-                <br>
-                <h5 id = 'size_new'></h5>
-                <br>
-            
+            <div class ='row'>
+                <div class = 'col'>
+                    <h4 id = 'orig_section'>Original Image:</h4>
+                    <br>
+                        <img id = 'orig' src = ''>   
+                        <br>
+                        <h5 id = 'size_orig'></h5>
+                        <br>
+                </div>
+                <div class = 'col'>
+                    <h4>Compressed Image:</h4>
+                    <br>
+                        <img id = 'result' src = '' style="display: none;">
+
+                        <h5 id = 'size_new'></h5>
+                        <h5 id ='compress_section'></h5>
+                        <br>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
@@ -113,7 +121,8 @@
                         if(comp_lvl != null){
                             comp_lvl.parentNode.removeChild(comp_lvl);
                         }
-                        $('#compress_section').append('<h5 id ="comp_lvl">Compression Level: '+data+'/100</h5<br>');
+                        //$('#compress_section').append('<h5 id ="comp_lvl">Compression Level: '+data+'/100</h5<br>');
+                        document.getElementById('compress_section').innerHTML = 'Compression Level: '+data+'/100'
                         var size_orig = encodeURI(oldImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1
                         var size_new = encodeURI(newImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1
                         console.log(encodeURI(oldImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1);
