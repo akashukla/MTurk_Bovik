@@ -171,11 +171,11 @@ def gen_svals_features():
 
     #np.save('image_feats', image_feats)
     np.save('image_svals', image_svals)
-    np.save('image_binvals', image_svals)
+    np.save('image_binvals', image_binvals)
     np.save('image_binvals_g1', image_binvals_g1)
-    np.save('image_binvals_g2', image_binvals_g1)
-    np.save('image_svals_g1', image_binvals_g1)
-    np.save('image_svals_g2', image_binvals_g1)
+    np.save('image_binvals_g2', image_binvals_g2)
+    np.save('image_svals_g1', image_svals_g1)
+    np.save('image_svals_g2', image_svals_g2)
 
 image_feats=np.load('image_feats.npy')
 image_svals=np.load('image_svals.npy')
