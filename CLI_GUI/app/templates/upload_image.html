@@ -28,27 +28,52 @@
         <br>
         <button type="button" class="btn btn-primary" id='ssubmit'>Compress Image</button>
         <br>
+        
         <div style="display: none;">
             <button type="button" class="btn btn-primary" id="show_image">Got image, show?</button>
         </div>
-        <div id="image_class" style="display: none;">
-            <h4>Compressed Image:</h1>
+        <br>
+        <h5>Padding: ~2 - 40 KB</h5>
+        <div id="image_class" style="display: none;text-align: center;align-content: center;">
+            <div class ='row'>
+                <div class = 'col'>
+                    <h4 id = 'orig_section'>Original Image:</h4>
+                    <br>
+                        <img id = 'orig' src = ''>   
+                        <br>
+                        <h5 id = 'size_orig'></h5>
+                        <br>
+                </div>
+                <div class = 'col'>
+                    <h4>Compressed Image:</h4>
+                    <br>
+                        <img id = 'result' src = '' style="display: none;">
 
+                        <h5 id = 'size_new'></h5>
+                        <h5 id ='compress_section'></h5>
+                        <br>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
 <script>
+    var double_click = false;
     $('#show_image').on('click',function(){
 
         });
+        var orig_image_size;
         $('#ssubmit').on('click',function(){
-            alert('wow');
+            console.log('button clicked');
 
             var fd = new FormData();
             var files = $('#file')[0].files;
             console.log(files);
             for (var i = 0; i < files.length; i++) {
                 var n = 'file'+String(i);
+                orig_image_size = files[i].size;
+                console.log(files[i]);
                 fd.append(n,files[i]);
             }
             
@@ -61,21 +86,68 @@
                 processData: false,
                 enctype:"multipart/form-data",
 
-                success: function( data, textStatus, jQxhr ){
-                   alert('it worked');
-                   console.log(data);
-                   //console.log(btoa(data));
-                   var num_images = data['num_images'];
-                   var image_strings = data['image_strings'];
-                   console.log(encodeURI(data));
-                   //console.log(btoa(encodeURI(data)));
-                   for(var i=0;i<num_images;i++){
-                    $('#image_class').append('<img src="data:image/jpg;base64,' + encodeURI(data['image_strings'][i]) + '"/>');
-                   }
-                   
+                success: function( data, textStatus, request ){
+                   console.log('it worked');
+                   console.log(request.getResponseHeader('Content-Length'))
+                   data = data.substring(2,data.length-2);
+                   console.log(parseInt(data*2));
+                   data = parseInt(data*2)
+   
+                        var mime_type = 'image/jpeg';
+       
+                        var source_img_obj =document.getElementById('orig');
+                        source_img_obj.src =  URL.createObjectURL($('#file')[0].files[0]);//new Image($('#file')[0].files);
+                        var result_image_obj = document.getElementById('result');
+                        //result_image_obj.src =source_img_obj.src;
+                        // console.log(source_img_obj.files[0].size);
+                        // console.log(result_image_obj.files[0].size);
+                        var cvs = document.createElement('canvas');
+                        cvs.width = source_img_obj.naturalWidth;
+                        cvs.height = source_img_obj.naturalHeight;
+                        var ctx = cvs.getContext("2d").drawImage(source_img_obj, 0, 0);
+                        var newImageData = cvs.toDataURL(mime_type, 2 * parseInt(data/2) / 100);
+                        var oldImageData = cvs.toDataURL(mime_type, 2 * 100 / 100);
+                        //console.log(encodeURI(oldImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1)
 
-                    //$('#image_class').html('<img src="data:image/jpg;base64,' + encodeURI(data) + '"/>');
-                   //document.getElementById('image_class').style.display = 'block';
+                    
+                        // var canvas = document.createElement("canvas");
+                        // canvas.width = source_img_obj.width;
+                        // canvas.height = source_img_obj.height;
+                        // var ctx = canvas.getContext("2d");
+                        // ctx.drawImage(source_img_obj, 0, 0);
+                        // var dataURL = canvas.toDataURL("image/jpg");
+
+
+                        //var result_image_obj = new Image();
+                        var comp_lvl = document.getElementById('comp_lvl');
+                        if(comp_lvl != null){
+                            comp_lvl.parentNode.removeChild(comp_lvl);
+                        }
+                        //$('#compress_section').append('<h5 id ="comp_lvl">Compression Level: '+data+'/100</h5<br>');
+                        document.getElementById('compress_section').innerHTML = 'Compression Level: '+data+'/100'
+                        var size_orig = encodeURI(oldImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1
+                        var size_new = encodeURI(newImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1
+                        console.log(encodeURI(oldImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1);
+                        console.log(encodeURI(newImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1);//(encodeURI(newImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1)*8);
+                        result_image_obj.src = newImageData;
+                        document.getElementById('result').style.display = 'block';
+                        document.getElementById('image_class').style.display = 'block';
+                        double_click = !double_click
+                        document.getElementById('size_orig').innerHTML = 'Size in Bytes + Padding: '+size_orig; 
+                            document.getElementById('size_new').innerHTML = 'Size in Bytes + Padding: '+size_new; 
+                        if(double_click ==false){
+                            $('#show_image').mousedown();
+                            s_orig_elem = document.getElementById('size_orig');
+                            s_new_elem = document.getElementById('size_new');
+                            // if(s_orig_elem != null){
+                            //     s_orig_elem.parentNode.removeChild(s_orig_elem);
+                            //     s_new_elem.parentNode.removeChild(s_new_elem);
+                            // }
+                            document.getElementById('size_orig').innerHTML = 'Size in Bytes + Padding: '+size_orig; 
+                            document.getElementById('size_new').innerHTML = 'Size in Bytes + Padding: '+size_new; 
+                        }
+                        double_click = !double_click
+
                    $("#image_class").show();
                 },
                 error: function( jqXhr, textStatus, errorThrown ){
