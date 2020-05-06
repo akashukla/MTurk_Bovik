@@ -1,0 +1,11 @@
+--- /home1/06959/mksn/.local/lib/python3.7/site-packages/torch/nn/modules/activation.py
++++ /home1/06959/mksn/.local/lib/python3.7/site-packages/torch/nn/modules/activation.py
+@@ -1,7 +1,7 @@
+ class ReLU(Module):
+     r"""Applies the rectified linear unit function element-wise:
+ 
+-    :math:`\text{ReLU}(x) = (x)^+ = \max(0, x)`
++    :math:`\text{ReLU}(x)= \max(0, x)`
+ 
+     Args:
+         inplace: can optionally do the operation in-place. Default: ``False``

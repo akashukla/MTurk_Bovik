@@ -31,7 +31,9 @@ from torch.utils.data import Dataset
 from torchvision import datasets, transforms, models
 import multiprocessing as mp
 
-def evaluate_model(X_test, y_test, model, device):
+def evaluate_model(X_test, y_test, model):
+
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     t_x = torch.Tensor(X_test)
     t_y = torch.Tensor(y_test)
     

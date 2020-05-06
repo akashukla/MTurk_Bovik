@@ -56,8 +56,8 @@ tensor_x = torch.Tensor(X1_train)
 tensor_y = torch.Tensor(y1_train)
 
 import multiprocessing as mp
-dataset = data.TensorDataset(tensor_x, tensor_y)
-dataloader = data.DataLoader(dataset, num_workers=mp.cpu_count(), batch_size=64, shuffle=True)
+dataset = torch.utils.data.TensorDataset(tensor_x, tensor_y)
+dataloader = torch.utils.data.DataLoader(dataset, num_workers=mp.cpu_count(), batch_size=64, shuffle=True)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -108,18 +108,16 @@ model2 = model2.to(device)
 criterion = nn.MSELoss()
 
 # Observe that all parameters are being optimized
-optimizer = optim.Adam(model.parameters(), lr=0.005)
+optimizer = optim.Adam(model.parameters(), lr=0.01)
 
 # Decay LR by a factor of 0.1 every 7 epochs
 from torch.optim import lr_scheduler
-exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.0001)
+#exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=1, gamma=0.0005)
 
-
-
-
+    
 import time
 import copy
-def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
+def train_model(model, criterion, optimizer, num_epochs=25):
     #class_dict=(dataloaders['train'].dataset.class_to_idx)
     since = time.time()
 
@@ -128,7 +126,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
-        print('LR: ' , scheduler.get_lr())
+        #print('LR: ' , scheduler.get_lr())
         print('-' * 10)
 
         # Each epoch has a training and validation phase
@@ -154,10 +152,13 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
                 with torch.set_grad_enabled(phase == 'train'):
                     outputs = model(inputs)
                     _, preds = torch.max(outputs, 1)
-                    print(outputs)
-                    print(labels)
-                    loss = criterion(outputs, labels)
-
+                    #print(outputs)
+                    #print(labels)
+                    pred = outputs.view(list(outputs.size())[0])
+                    #print('lsize: ',labels.size())
+                    #print('predsize: ',pred.size())
+                    loss = criterion(pred, labels)
+                    
                     # backward + optimize only if in training phase
                     if phase == 'train':
                         loss.backward()
@@ -167,8 +168,8 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
                 running_loss += loss.item() * inputs.size(0)
                 #running_corrects += torch.sum(preds == labels.data)
                 running_corrects += torch.sum(abs(preds - labels.data) > 5)
-            if phase == 'train':
-                scheduler.step()
+            #if phase == 'train':
+            #    scheduler.step()
 
             epoch_loss = running_loss / len(dataset)
             epoch_acc = running_corrects.double() / len(dataset)
@@ -181,7 +182,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
                 best_acc = epoch_acc
                 best_model_wts = copy.deepcopy(model.state_dict())
 
-        print()
+        #print()
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(
@@ -194,12 +195,16 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
 
 
 
-#model = train_model(model, criterion, optimizer, exp_lr_scheduler,
-#                       num_epochs=20)
-#torch.save(model, 'newarch1')
+model = train_model(model, criterion, optimizer,
+                       num_epochs=12)
+torch.save(model, 'final-model')
 
 #model2 = train_model(model2, criterion, optimizer, exp_lr_scheduler, num_epochs=10)
 #torch.save(model2, 'newarch2')
 
 
-#y, yhat = evaluate_model(X1_test, y1_test, model=model)
+y, yhat = evaluate_model(X1_test, y1_test, model=model)
+np.save('y-final.npy',y)
+np.save('yhat-final.npy',yhat)
+mse = ((y-yhat)**2).mean(axis=0)
+print('Test MSE Loss: ', mse)
