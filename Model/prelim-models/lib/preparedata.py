@@ -60,7 +60,6 @@ if os.path.isfile(os.getcwd()+'/X1_train.npy'):
 
 else:
     csv_files = glob.glob('batch-data/batch*')
-column_headers = ['AssignmentStatus','Answer.set_number','WorkerId','Answer.slider_values','Answer.slider_values2']
 
     column_headers = ['AssignmentStatus','Answer.set_number','WorkerId','Answer.slider_values','Answer.slider_values2']
     
