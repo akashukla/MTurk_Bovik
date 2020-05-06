@@ -53,8 +53,8 @@ from lib.preparedata import *
 tensor_x = torch.Tensor(X1_train)
 tensor_y = torch.Tensor(y1_train)
 
-dataset = data.TensorDataset(tensor_x, tensor_y)
-dataloader = data.DataLoader(dataset, num_workers=mp.cpu_count(), batch_size=64, shuffle=True)
+dataset = torch.utils.data.TensorDataset(tensor_x, tensor_y)
+dataloader = torch.utils.data.DataLoader(dataset, num_workers=mp.cpu_count(), batch_size=64, shuffle=True)
 
 # FOR MODEL 2
 #model2 = models.resnet18(pretrained=True)
@@ -153,7 +153,7 @@ def train_model(model, criterion, optimizer, scheduler, device, num_epochs=25):
 
 
 # ERROR EVALUATIONS
-def custom_err(y, yhat, thresh=5):
+def custom_err(y, yhat, thresh=0):
     diffs = y.reshape(y.shape[0]) - yhat.reshape(yhat.shape[0])
     diffs = np.abs(diffs)
     err = float(float(np.count_nonzero(diffs > thresh))/float(len(diffs)))
@@ -162,7 +162,7 @@ def custom_err(y, yhat, thresh=5):
 
 def srcc_err(y, yhat):
     y,yhat = y.reshape(y.shape[0]), yhat.reshape(yhat.shape[0])
-    corr = ss.spearmanr(y, yhat)
+    corr = ss.spearmanr(y, yhat)[0]
     return corr
 
 # ################################################### #
@@ -211,8 +211,8 @@ def train_with_param(params):
     test_spr = srcc_err(y_test, yhat_test)
  
     # Uncomment if you wnat to use custom evaluation
-    # return train_error, test_error, train_spr, test_spr
-    return y_test, yhat_test, y_train, yhat_train
+    return train_error, test_error, train_spr, test_spr
+    #return y_test, yhat_test, y_train, yhat_train
 
 
 # ############################# #
@@ -240,7 +240,7 @@ class MyPool(multiprocessing.pool.Pool):
 # Cross Validation
 if __name__ == '__main__':
     # cores = mp.cpu_count() # Generally works if ltos of memory available
-    # cores = 8 # Uncoment this line and reassign if memory runs out
+    cores = 8 # Uncoment this line and reassign if memory runs out
     start = -5
     stop = 0
     step = (stop-start)/cores
