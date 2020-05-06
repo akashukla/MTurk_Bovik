@@ -33,7 +33,7 @@
             <button type="button" class="btn btn-primary" id="show_image">Got image, show?</button>
         </div>
         <br>
-        <h5>Padding: ~2 - 40 KB</h5>
+        <!-- <h5>Padding: ~2 - 40 KB</h5> -->
         <div id="image_class" style="display: none;text-align: center;align-content: center;">
             <div class ='row'>
                 <div class = 'col'>
@@ -127,14 +127,24 @@
                         document.getElementById('compress_section').innerHTML = 'Compression Level: '+data+'/100'
                         var size_orig = encodeURI(oldImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1
                         var size_new = encodeURI(newImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1
+
+                        const k = 1024;
+            
+                        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+                        const i = Math.floor(Math.log(size_orig) / Math.log(k));
+                        console.log('orig SIZE: ',parseFloat((size_orig / Math.pow(k, i).toFixed(2))) + ' ' + sizes[i]);
+
+                        size_orig = parseFloat((size_orig / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+                        size_new = parseFloat((size_new / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
                         console.log(encodeURI(oldImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1);
                         console.log(encodeURI(newImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1);//(encodeURI(newImageData).split(/%(?:u[0-9A-F]{2})?[0-9A-F]{2}|./).length - 1)*8);
                         result_image_obj.src = newImageData;
                         document.getElementById('result').style.display = 'block';
                         document.getElementById('image_class').style.display = 'block';
                         double_click = !double_click
-                        document.getElementById('size_orig').innerHTML = 'Size in Bytes + Padding: '+size_orig; 
-                            document.getElementById('size_new').innerHTML = 'Size in Bytes + Padding: '+size_new; 
+                        document.getElementById('size_orig').innerHTML = 'Size + Padding: '+size_orig; 
+                            document.getElementById('size_new').innerHTML = 'Size + Padding: '+size_new; 
                         if(double_click ==false){
                             $('#show_image').mousedown();
                             s_orig_elem = document.getElementById('size_orig');
