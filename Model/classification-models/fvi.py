@@ -291,3 +291,11 @@ srcc1 = srcc1/float(epochs)
 srcc2 = srcc2/float(epochs)
 
 
+dpath='../data/8k_data/'
+names=total_names
+image_array=np.zeros((len(names),375,500,3),dtype='float64')
+for i in range(image_array.shape[0]):
+    if(i%10==0):
+        print(i)
+    image_array[i] = imread(dpath+names[i])
+np.save('image_array', image_array)
